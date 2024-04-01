@@ -29,13 +29,13 @@ namespace eventPlannerBack.BLL.Service
         {
             string[] roles = { "admin", "user" };
 
-            foreach (string rol in roles)
+            foreach (string role in roles)
             {
                 try
                 {
-                    var existeRol = await roleManager.RoleExistsAsync(roleName: rol);
+                    var roleExist = await roleManager.RoleExistsAsync(roleName: role);
 
-                    if (!existeRol) await roleManager.CreateAsync(new IdentityRole(roleName: rol));
+                    if (!roleExist) await roleManager.CreateAsync(new IdentityRole(roleName: role));
 
                 }
                 catch (Exception)
@@ -57,13 +57,13 @@ namespace eventPlannerBack.BLL.Service
 
                 if (admin != null) return;
 
-                var nuevoAdmin = new User { UserName = email, Email = email };
+                var newAdmin = new User { UserName = email, Email = email };
 
-                var resultado = await userManager.CreateAsync(nuevoAdmin, "Admin123!");
+                var response = await userManager.CreateAsync(newAdmin, "Admin123!");
 
-                if (!resultado.Succeeded) throw new Exception("No se pudo crear el usuario administrador");
+                if (!response.Succeeded) throw new Exception("No se pudo crear el usuario administrador");
 
-                var resultadoRol = await userManager.AddToRoleAsync(nuevoAdmin, "admin");
+                var roleResponse = await userManager.AddToRoleAsync(newAdmin, "admin");
 
             }
             catch (Exception)
