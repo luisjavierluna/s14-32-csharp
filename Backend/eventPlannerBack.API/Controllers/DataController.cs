@@ -68,9 +68,18 @@ namespace eventPlannerBack.API.Controllers
         [HttpPost("InsertData")]
         public async Task<ActionResult<DataDTO>>SingIn(DataCreationDTO model) 
         {
-            var data = await _dataService.SignIn(model);
+            try
+            {
+                var data = await _dataService.SignIn(model);
 
-            return Ok(data);
+                return Ok(data);
+
+            }
+            catch (Exception e)
+            {
+
+                return StatusCode(500, e.Message);
+            }
         }
 
 

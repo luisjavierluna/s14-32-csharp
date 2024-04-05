@@ -1,27 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace eventPlannerBack.Models.VModels
 {
-    
+
     public class UserCreationDTO
     {
-        [Required]
-        [EmailAddress(ErrorMessage ="El correo registrado no es Valido")]
+        //[Required]
+        //[EmailAddress(ErrorMessage ="El correo registrado no es Valido")]
         public string Email {  get; set; }
 
-        [Required]
+        // [Required]
         public string Name { get; set; }
 
-        [Required]
+        // [Required]
         public string Surname { get;set; }
 
-        [Required]
+        //[Required]
         public string Password { get; set; }
+
+        public string ConfirmPassword { get; set; }
      
     }
 }
