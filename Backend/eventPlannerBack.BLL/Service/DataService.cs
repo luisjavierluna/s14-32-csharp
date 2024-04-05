@@ -1,32 +1,32 @@
 ﻿using AutoMapper;
+using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.DatosDTO;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace eventPlannerBack.BLL.Service
 {
     public class DataService : IGenericService<DataCreationDTO, DataDTO>, IDataService
     {
         private readonly IGenericRepository<DataCreationDTO, DataDTO, Data> _dataRepo;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
+        private readonly ValidationBehavior<DataCreationDTO> _validationBehavior;
 
-        public DataService(IGenericRepository<DataCreationDTO, DataDTO, Data> dataRepo, IMapper mapper)
+        public DataService(
+            IGenericRepository<DataCreationDTO, DataDTO, Data> dataRepo, 
+            IMapper mapper,
+            ValidationBehavior<DataCreationDTO> validationBehavior)
         {
             _dataRepo = dataRepo;
-            this.mapper = mapper;
+            _mapper = mapper;
+            _validationBehavior = validationBehavior;
         }
 
         public async Task<DataDTO> SignIn(DataCreationDTO model)
         {
+            await _validationBehavior.ValidateFields(model);
             return await _dataRepo.Insert(model);
         }
 
@@ -49,7 +49,7 @@ namespace eventPlannerBack.BLL.Service
         {
           var query = await _dataRepo.GetAll();                    
           var list = await query.ToListAsync();
-            return mapper.Map<IEnumerable<DataDTO>>(list);
+            return _mapper.Map<IEnumerable<DataDTO>>(list);
         }
        
     }
