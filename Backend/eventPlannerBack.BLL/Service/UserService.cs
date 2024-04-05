@@ -1,15 +1,9 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using eventPlannerBack.BLL.Behaviors;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Service
 {
@@ -17,11 +11,15 @@ namespace eventPlannerBack.BLL.Service
     {
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
+        private readonly ValidationBehavior<UserCreationDTO> _validationBehavior;
 
-        public UserService( IUserRepository userRepository, ITokenService tokenService)
+        public UserService(IUserRepository userRepository, 
+            ITokenService tokenService,
+            ValidationBehavior<UserCreationDTO> validationBehavior)
         {
             _userRepository = userRepository;
             this._tokenService = tokenService;
+            this._validationBehavior = validationBehavior;
         }
 
         public Task<bool> Update(User model)
@@ -46,6 +44,8 @@ namespace eventPlannerBack.BLL.Service
 
         public async Task<bool> SignIn(UserCreationDTO model)
         {
+            await _validationBehavior.ValidateFields(model);
+
             User User = new User()
             {
                 UserName = model.Email,

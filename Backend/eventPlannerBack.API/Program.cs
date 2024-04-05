@@ -12,6 +12,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using FluentValidation;
+using System.Reflection;
+using eventPlannerBack.Models.VModels;
+using eventPlannerBack.BLL.Validators;
+using eventPlannerBack.BLL.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -94,6 +99,9 @@ builder.Services.AddSwaggerGen(options =>
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
+//Configuracion FluentValidation
+builder.Services.AddTransient(typeof(ValidationBehavior<>));
+builder.Services.AddTransient<IValidator<UserCreationDTO>, UserCreationDTOValidator>();
 
 //Inyeccion de Dependencia
 

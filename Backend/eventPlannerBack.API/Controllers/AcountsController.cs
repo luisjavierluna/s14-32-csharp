@@ -3,18 +3,12 @@ using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
 using eventPlannerBack.Models.VModels.DatosDTO;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace eventPlannerBack.API.Controllers
 {
-
-    
     [EnableCors("ReglasCors")]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,7 +19,11 @@ namespace eventPlannerBack.API.Controllers
         private readonly ITokenService _tokenService;
         private readonly IGenericService<DataCreationDTO, DataDTO> _dataService;
 
-        public AcountsController(IUserService userService,SignInManager<User> signInManager, ITokenService tokenService, IGenericService<DataCreationDTO, DataDTO> dataService)
+        public AcountsController(
+            IUserService userService,
+            SignInManager<User> signInManager, 
+            ITokenService tokenService, 
+            IGenericService<DataCreationDTO, DataDTO> dataService)
         {
             this._userService = userService;
             this._signInManager = signInManager;
@@ -39,12 +37,10 @@ namespace eventPlannerBack.API.Controllers
             try
             {
                 bool Result = await _userService.SignIn(model);
-               if (!Result) 
+                if (!Result) 
                 { 
-
                     return BadRequest("No se pudo agregar su User");
                 }
-
            
                 DataCreationDTO datas = new DataCreationDTO()
                 {
@@ -67,10 +63,10 @@ namespace eventPlannerBack.API.Controllers
                 return Ok(authResponse);
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, e.Message);
             }
         }
 
