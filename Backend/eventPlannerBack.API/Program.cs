@@ -126,8 +126,13 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 //Data Seeder
 builder.Services.AddScoped<IDataSeeder, DataSeeder>();
 
+//Event
+builder.Services.AddScoped<IEventRepository, EventRepository>();
+builder.Services.AddScoped<IEventService, EventService>();
 
-
+//City-Province
+builder.Services.AddScoped<ICityRepository, CityRepository>();
+builder.Services.AddScoped<ICityService, CityService>();
 
 var app = builder.Build();
 
