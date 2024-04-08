@@ -1,6 +1,7 @@
 ﻿using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
+using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
@@ -50,15 +51,22 @@ namespace eventPlannerBack.BLL.Service
             {
                 UserName = model.Email,
                 Email = model.Email,
-                CreationData = DateTime.Now,
+                CreatedAt = DateTime.Now,
+
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                ProfileImage = model.ProfileImage,
+                IsActive = true,
+                Client = new Client() { TaxCode = "0000000000000", CreatedAt = DateTime.Today, IsDeleted = false },
+                Contractor = new Contractor() { CUIT = "00000000", CreatedAt = DateTime.Today, IsDeleted = false }
             };
             return await _userRepository.SignIn(User, model.Password);
         }
 
-        public async Task<bool> UpdateDataId(int dataId, string email)
+        public async Task<bool> UpdateClientId(int dataId, string email)
         {
             
-            return await _userRepository.UpdateByDataId(dataId, email);
+            return await _userRepository.UpdateByClientId(dataId, email);
         }
 
         public async Task<AuthDTO> GetCredentialsAsync(string email)

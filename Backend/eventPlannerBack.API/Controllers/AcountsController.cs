@@ -2,7 +2,7 @@
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
-using eventPlannerBack.Models.VModels.DatosDTO;
+using eventPlannerBack.Models.VModels.ClientDTO;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +17,18 @@ namespace eventPlannerBack.API.Controllers
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
-        private readonly IGenericService<DataCreationDTO, DataDTO> _dataService;
+        private readonly IGenericService<ClientCreationDTO, ClientDTO> _clientService;
 
         public AcountsController(
             IUserService userService,
             SignInManager<User> signInManager, 
             ITokenService tokenService, 
-            IGenericService<DataCreationDTO, DataDTO> dataService)
+            IGenericService<ClientCreationDTO, ClientDTO> clientService)
         {
             this._userService = userService;
             this._signInManager = signInManager;
             this._tokenService = tokenService;
-            this._dataService = dataService;
+            this._clientService = clientService;
         }
 
         [HttpPost("SignIn")]
@@ -42,16 +42,15 @@ namespace eventPlannerBack.API.Controllers
                     return BadRequest("No se pudo agregar su User");
                 }
            
-                DataCreationDTO datas = new DataCreationDTO()
+                ClientCreationDTO data = new ClientCreationDTO()
                 {
-                    Name = model.Name,
-                    Surname = model.Surname
+                    TaxCode = "000000000000"
                 };
 
-                var registeredData = await _dataService.SignIn(datas);
+                var registeredData = await _clientService.SignIn(data);
 
                 //model.DataId = registeredData.Id;
-                var result = await _userService.UpdateDataId(registeredData.Id, model.Email);
+                var result = await _userService.UpdateClientId(registeredData.Id, model.Email);
 
                 var token = _tokenService.GenerateToken(model.Email, 1);
 
