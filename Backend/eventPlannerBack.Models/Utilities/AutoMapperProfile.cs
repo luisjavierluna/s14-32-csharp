@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using eventPlannerBack.Models.Entities;
-using eventPlannerBack.Models.VModels;
-using eventPlannerBack.Models.VModels.DatosDTO;
+using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.VModels.ClientDTO;
 
 
 namespace eventPlannerBack.Models.Utilities
@@ -11,9 +10,9 @@ namespace eventPlannerBack.Models.Utilities
         public AutoMapperProfile()
         {                    
             
-            CreateMap<DataDTO, Data>().ReverseMap();
+            CreateMap<ClientDTO, Client>().ReverseMap();
             
-            CreateMap<DataCreationDTO, Data>().ReverseMap();
+            CreateMap<ClientCreationDTO, Client>().ReverseMap();
                 
         }
     }

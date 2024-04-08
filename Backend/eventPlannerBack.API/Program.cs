@@ -5,10 +5,13 @@ using eventPlannerBack.BLL.Validators;
 using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.DAL.Repository;
+using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.Utilities;
 using eventPlannerBack.Models.VModels;
-using eventPlannerBack.Models.VModels.DatosDTO;
+using eventPlannerBack.Models.VModels.ClientDTO;
+using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.NotificationDTO;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -102,7 +105,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 #region FluentValidation
 builder.Services.AddTransient(typeof(ValidationBehavior<>));
 builder.Services.AddTransient<IValidator<UserCreationDTO>, UserCreationDTOValidator>();
-builder.Services.AddTransient<IValidator<DataCreationDTO>, DataCreationDTOValidator>();
+builder.Services.AddTransient<IValidator<ClientCreationDTO>, ClientCreationDTOValidator>();
 #endregion
 
 //Inyeccion de Dependencia
@@ -110,11 +113,21 @@ builder.Services.AddTransient<IValidator<DataCreationDTO>, DataCreationDTOValida
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+    
+//Notification
+builder.Services.AddScoped<IGenericRepository<NotificationCreationDTO, NotificationDTO, Notification>, NotificationRepository>();
+builder.Services.AddScoped<IGenericService<NotificationCreationDTO, NotificationDTO>, NotificationService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();    
 
-//Data
-builder.Services.AddScoped<IGenericRepository<DataCreationDTO, DataDTO, Data>, DataRepository>();
-builder.Services.AddScoped<IGenericService<DataCreationDTO, DataDTO>, DataService>();
-builder.Services.AddScoped<IDataService, DataService>();
+// Client
+builder.Services.AddScoped<IGenericRepository<ClientCreationDTO, ClientDTO, Client>, ClientRepository>();
+builder.Services.AddScoped<IGenericService<ClientCreationDTO, ClientDTO>, ClientService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+
+// Contractor
+builder.Services.AddScoped<IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>, ContractorRepository>();
+builder.Services.AddScoped<IGenericService<ContractorCreationDTO, ContractorDTO>, ContractorService>();
+builder.Services.AddScoped<IContractorService, ContractorService>();
 
 
 
@@ -124,7 +137,7 @@ builder.Services.AddScoped<IDataService, DataService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Data Seeder
-builder.Services.AddScoped<IDataSeeder, DataSeeder>();
+builder.Services.AddScoped<IClientSeeder, ClientSeeder>();
 
 //Event
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -147,7 +160,7 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        var dataSeeder = services.GetRequiredService<IDataSeeder>();
+        var dataSeeder = services.GetRequiredService<IClientSeeder>();
         await dataSeeder.CreateRoles();
         await dataSeeder.CreateUserAdmin();        
     }

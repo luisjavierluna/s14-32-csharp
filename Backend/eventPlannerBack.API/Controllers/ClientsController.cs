@@ -1,7 +1,7 @@
 ﻿using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.Entities;
-using eventPlannerBack.Models.VModels.DatosDTO;
+using eventPlannerBack.Models.VModels.ClientDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -14,28 +14,31 @@ namespace eventPlannerBack.API.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class DataController : ControllerBase
+    public class ClientsController : ControllerBase
     {
-        private readonly IGenericService<DataCreationDTO, DataDTO> _dataService;
-        private readonly IDataService _dataService1;
+        private readonly IGenericService<ClientCreationDTO, ClientDTO> _clientService;
+        private readonly IClientService _clientService1;
         private readonly UserManager<User> _userManager;
 
-        public DataController(IGenericService<DataCreationDTO, DataDTO> dataService, IDataService dataService1,UserManager<User> userManager)
+        public ClientsController(
+            IGenericService<ClientCreationDTO, ClientDTO> clientService, 
+            IClientService clientService1,
+            UserManager<User> userManager)
         {
-            _dataService = dataService;
-            _dataService1 = dataService1;
+            _clientService = clientService;
+            _clientService1 = clientService1;
             _userManager = userManager;
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetById")]
-        public async Task<ActionResult<DataDTO>> GetById(int id) 
+        public async Task<ActionResult<ClientDTO>> GetById(int id) 
         {
             try
             {
-                var data = await _dataService.GetById(id);
+                var client = await _clientService.GetById(id);
 
-                return Ok(data);
+                return Ok(client);
             }
             catch (NotFoundException ex)
             {
@@ -50,12 +53,12 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetAll")]
-        public async Task<ActionResult<IEnumerable<DataDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAll()
         {
             try 
             { 
-                var data = await  _dataService.GetAll();
-                return Ok(data);
+                var client = await  _clientService.GetAll();
+                return Ok(client);
             }
             catch (Exception)
             {
@@ -65,14 +68,14 @@ namespace eventPlannerBack.API.Controllers
      
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        [HttpPost("InsertData")]
-        public async Task<ActionResult<DataDTO>>SingIn(DataCreationDTO model) 
+        [HttpPost("CreateClient")]
+        public async Task<ActionResult<ClientDTO>>SingIn(ClientCreationDTO model) 
         {
             try
             {
-                var data = await _dataService.SignIn(model);
+                var client = await _clientService.SignIn(model);
 
-                return Ok(data);
+                return Ok(client);
 
             }
             catch (Exception e)
@@ -84,14 +87,14 @@ namespace eventPlannerBack.API.Controllers
 
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut("UpdateData")]
-        public async Task<ActionResult<DataDTO>>Update(int id, DataCreationDTO model) 
+        [HttpPut("UpdateClient")]
+        public async Task<ActionResult<ClientDTO>>Update(int id, ClientCreationDTO model) 
         {   
             try 
             {
-                var data = await _dataService.Update(id, model);
+                var client = await _clientService.Update(id, model);
 
-                return Ok(data);
+                return Ok(client);
             }
             catch (NotFoundException ex)
             {
@@ -104,12 +107,12 @@ namespace eventPlannerBack.API.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="admin")]
-        [HttpDelete("Delete Data")]
+        [HttpDelete("DeleteClient")]
         public async Task<IActionResult> Delete(int id)
         {
             try 
             { 
-               var resultado = await _dataService.Delete(id);
+               var resultado = await _clientService.Delete(id);
 
                 return NoContent();
             }
@@ -124,16 +127,16 @@ namespace eventPlannerBack.API.Controllers
         }
 
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("MyData")]
-    public async Task<ActionResult<DataDTO>> GetById()
+    [HttpGet("MyClient")]
+    public async Task<ActionResult<ClientDTO>> GetById()
     {
         try
         {
             var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
             var user = await _userManager.FindByIdAsync(claim.Value);                
-            var data = await _dataService.GetById((int)user.DataId);
+            var client = await _clientService.GetById((int)user.ClientId);
 
-            return Ok(data);
+            return Ok(client);
         }
         catch (NotFoundException ex)
         {

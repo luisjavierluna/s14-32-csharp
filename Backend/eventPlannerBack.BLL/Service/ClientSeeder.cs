@@ -1,23 +1,17 @@
 ﻿using eventPlannerBack.BLL.Interfaces;
-using eventPlannerBack.DAL.Interfaces;
+using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Service
 {
-    public class DataSeeder : IDataSeeder
+    public class ClientSeeder : IClientSeeder
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
         
 
-        public DataSeeder(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public ClientSeeder(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;            
@@ -57,7 +51,18 @@ namespace eventPlannerBack.BLL.Service
 
                 if (admin != null) return;
 
-                var newAdmin = new User { UserName = email, Email = email };
+                var newAdmin = new User
+                {
+                    UserName = email,
+                    Email = email,
+                    FirstName = "Admin",
+                    LastName = "Admin",
+                    ProfileImage = "Example",
+                    CreatedAt = DateTime.Today,
+                    IsActive = true,
+                    Client = new Client() { TaxCode = "0000000000000", CreatedAt = DateTime.Today, IsDeleted = false },
+                    Contractor = new Contractor() { CUIT = "00000000", CreatedAt = DateTime.Today, IsDeleted = false }
+                };
 
                 var response = await userManager.CreateAsync(newAdmin, "Admin123!");
 

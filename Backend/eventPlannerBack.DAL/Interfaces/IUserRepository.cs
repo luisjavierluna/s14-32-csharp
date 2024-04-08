@@ -1,9 +1,4 @@
 ﻿using eventPlannerBack.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Interfaces
 {
@@ -11,7 +6,7 @@ namespace eventPlannerBack.DAL.Interfaces
     {
         Task<bool> SignIn(User modelo, string password);
 
-        Task<bool> UpdateByDataId(int datosId, string email);
+        Task<bool> UpdateByClientId(int clientId, string email);
 
         Task<User> GetByEmailAsync(string email);
 

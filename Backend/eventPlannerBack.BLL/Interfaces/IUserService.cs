@@ -1,11 +1,6 @@
 ﻿using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Interfaces
 {
@@ -21,7 +16,7 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<IQueryable<User>> GetAll();
 
-        Task<bool> UpdateDataId(int dataId, string email);
+        Task<bool> UpdateClientId(int clientId, string email);
 
         Task<AuthDTO> GetCredentialsAsync(string email);
 

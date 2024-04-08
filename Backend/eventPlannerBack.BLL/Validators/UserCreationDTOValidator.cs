@@ -12,11 +12,11 @@ namespace eventPlannerBack.BLL.Validators
                 .EmailAddress().WithMessage("The field '{PropertyName}' must be a valid email address")
                 .MaximumLength(100).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
 
-            RuleFor(x => x.Name)
+            RuleFor(x => x.FirstName)
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
                 .MaximumLength(100).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
 
-            RuleFor(x => x.Surname)
+            RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
                 .MaximumLength(100).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
 

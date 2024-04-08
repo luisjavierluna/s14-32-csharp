@@ -1,15 +1,9 @@
 ﻿using eventPlannerBack.API.Exceptions;
-using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.DAL.Dbcontext;
+using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entities;
-using eventPlannerBack.Models.VModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Repository
 {
@@ -49,7 +43,7 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-        public async Task<bool> UpdateByDataId(int dataId, string email)
+        public async Task<bool> UpdateByClientId(int dataId, string email)
         {
             try
             {
@@ -57,7 +51,7 @@ namespace eventPlannerBack.DAL.Repository
 
                 if (user == null) throw new NotFoundException();
 
-                user.DataId= dataId;
+                user.ClientId= dataId;
 
                 _dbcontext.Update(user);
                 await _dbcontext.SaveChangesAsync();
@@ -73,7 +67,7 @@ namespace eventPlannerBack.DAL.Repository
         {
             try
             {
-                var user = await _dbcontext.Users.Where(user => user.Email == email).Include(user => user.Data).FirstOrDefaultAsync();
+                var user = await _dbcontext.Users.Where(user => user.Email == email).Include(user => user.Client).FirstOrDefaultAsync();
 
                 if(user == null) throw new NotFoundException();
 

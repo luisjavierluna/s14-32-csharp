@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.Models.Entities;
+﻿using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,7 +19,7 @@ namespace eventPlannerBack.DAL.Dbcontext
 
         }
 
-        public DbSet<Data> Data { get; set; }
+        public DbSet<Client> Clients { get; set; }
 
     }
 }
