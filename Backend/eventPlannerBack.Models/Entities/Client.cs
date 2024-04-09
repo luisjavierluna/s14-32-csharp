@@ -7,6 +7,6 @@ namespace eventPlannerBack.Models.Entidades
     {
         public User User { get; set; }
         public string TaxCode { get; set; }
-        // public ICollection<Event> OwnEvents { get; set; }
+        public ICollection<Event> Events { get; set; }
     }
 }

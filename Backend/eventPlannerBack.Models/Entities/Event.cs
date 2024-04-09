@@ -11,7 +11,7 @@ namespace eventPlannerBack.Models.Entidades
     public class Event : BaseEntity
     {
         public string ClientId { get; set; } = string.Empty;
-        // public Client Client { get; set; }
+        public Client Client { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
