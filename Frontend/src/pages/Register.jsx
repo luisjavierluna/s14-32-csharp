@@ -1,93 +1,130 @@
-import { Container, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid, IconButton, Popover, PopoverTrigger, PopoverContent, PopoverHeader, PopoverArrow, PopoverCloseButton, PopoverBody, PopoverFooter, ButtonGroup, Button} from '@chakra-ui/react'
+import { IconButton, Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid } from '@chakra-ui/react'
 import LoginButton  from '../components/Login/LoginButton'
 import LoginInput from '../components/Login/LoginInput'
-import { CheckIcon, DeleteIcon } from '@chakra-ui/icons'
+import { IoCheckmarkCircleOutline } from "react-icons/io5"
+import CancelAlert from '../components/Login/CancelAlert'
+import { useState } from 'react'
+import * as Yup from 'yup'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export default function Register () {  
+  const [values, setValues] = useState({ email: '', password: '', password2: '', firstname: '', lastname: '', areacode: 0, phone: 0 })
+  const [errors, setErrors] = useState({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword2, setShowPassword2] = useState(false)
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Correo electrónico inválido').required('Campo requerido'),
+    password: Yup.string().min(8, 'La contraseña debe tener mínimo 8 caracteres')
+      .matches(
+        /^(?=.*[a-z])/,
+        'Debe contener al menos una letra en minúscula'
+      )
+      .matches(
+        /^(?=.*[A-Z])/,
+        'Debe contener al menos una letra en mayúscula'
+      )
+      .matches(
+        /^(?=.*[0-9])/,
+        'Debe contener al menos un número'
+      )
+      .matches(
+        /^(?=.*[!@#/$%/^&/*])/,
+        'Debe contener al menos un caracter especial'
+      )
+      .required('Campo requerido'),
+    password2: Yup.string().oneOf([Yup.ref('password')], 'Las contraseñas no coinciden').required('Campo requerido'),
+    firstname: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
+    lastname: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
+    areacode: Yup.number().min(2, 'Mínimo 2 caractares').required('Campo requerido'),
+    phone: Yup.number().min(5, 'Mínimo 5 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
+  })
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword)
+  }
+  const togglePasswordVisibility2 = () => {
+    setShowPassword2(!showPassword2)
+  }
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setValues({
+      ...values,
+      [name]: value
+    })
+  }
+
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    try {
+      await validationSchema.validate(values, { abortEarly: false })
+      setIsSubmitting(true)
+      // Aquí puedes enviar los valores a tu backend o realizar cualquier otra lógica necesaria
+      console.log(values)
+    } catch (error) {
+      const formErrors = {}
+      error.inner.forEach(err => {
+        formErrors[err.path] = err.message;
+      })
+      setErrors(formErrors)
+    }
+    setIsSubmitting(false)
+  }
   return (
     <Container minW='100%' minH='100vh' padding='2' bg='rgba(157, 213, 212, .2)'>
       <AspectRatio maxW='150px' ratio={823 / 257}>
         <Image src='logo2.png' alt='Logo Event Planner'/>
       </AspectRatio>
       <Box display='flex' justifyContent='center' padding='10' >     
-        <Card color='#263049' flexDirection='column' borderRadius='20' alignItems='center' width='50%' boxShadow='xl'>          
+        <Card color='#263049' flexDirection='column' borderRadius='20' alignItems='center' width='45%' boxShadow='xl'>          
           <CardHeader width='100%' display='flex' justifyContent='space-between' alignItems='center' position='relative'>
             <Center width='100%'>
               <Heading size='lg'>CREAR CUENTA</Heading>
             </Center>
             <Link href='/'><CloseButton position='absolute' right='1rem' top='50%' transform='translateY(-50%)' size='lg'/></Link>
           </CardHeader>
-          <CardBody width='90%'>
-            <Box display='flex' flexDirection='column' gap='4'>         
-                <LoginInput id='email' name='Correo electrónico' type='text' placeholder='juanrodriguez@gmail.com' />              
-                <LoginInput id='password' name='Contraseña' type='text' placeholder='Ingrese su contraseña' />
-                <LoginInput id='password2' name='Confirmar contraseña' type='text' placeholder='Vuelva a ingresar su contraseña' />
-                <Grid 
-                templateRows='repeat(2, 1fr)'
-                templateColumns='repeat(2, 1fr)'
-                gap={4}>
-                    <LoginInput id='name' name='Nombre' type='text' placeholder='Juan' />
-                    <LoginInput id='lastname' name='Apellido' type='text' placeholder='Rodriguez' />
-                    <LoginInput id='areacode' name='Código de area' type='number' placeholder='011' />
-                    <LoginInput id='phone' name='Teléfono' type='number' placeholder='46239758' />
-                </Grid>
-            </Box>  
+          <CardBody width='90%' mt='-4'>
+            <form onSubmit={handleSubmit}>
+              <Box display='flex' flexDirection='column' gap='4'>         
+                  <LoginInput id='email' name='Correo electrónico' type='text' placeholder='juanrodriguez@gmail.com' onChange={handleChange} errors={errors}/>
+                  <Box display='flex' alignItems='end' justifyContent='center'>              
+                    <LoginInput id='password' name='Contraseña' type={showPassword ? 'text' : 'password'} placeholder='Ingrese su contraseña' onChange={handleChange} errors={errors}/> 
+                    <IconButton onClick={togglePasswordVisibility} mx='1' bg='white'>{showPassword ? <FaEye /> : <FaEyeSlash />}</IconButton>
+                  </Box>
+                  <Box display='flex' alignItems='end' justifyContent='center'>
+                    <LoginInput id='password2' name='Confirmar contraseña' type={showPassword2 ? 'text' : 'password'} placeholder='Vuelva a ingresar su contraseña' onChange={handleChange} errors={errors} />
+                    <IconButton onClick={togglePasswordVisibility2} mx='1' bg='white'>{showPassword2 ? <FaEye /> : <FaEyeSlash />}</IconButton>
+                  </Box>
+                  <Grid 
+                  templateRows='repeat(2, 1fr)'
+                  templateColumns='repeat(2, 1fr)'
+                  gap={4}>
+                      <LoginInput id='firstname' name='Nombre' type='text' placeholder='Juan' onChange={handleChange} errors={errors}/>
+                      <LoginInput id='lastname' name='Apellido' type='text' placeholder='Rodriguez'onChange={handleChange} errors={errors}/>
+                      <LoginInput id='areacode' name='Código de area' type='number' placeholder='011' onChange={handleChange} errors={errors}/>
+                      <LoginInput id='phone' name='Teléfono' type='number' placeholder='46239758' onChange={handleChange} errors={errors}/>
+                  </Grid>
+              </Box>
+              <Box textAlign='center' mt='4'>
+                <Flex alignItems='center' justifyContent='center'>
+                  <IoCheckmarkCircleOutline size='20'/> 
+                  <Text fontSize='xs' p='2'>                                         
+                      Acepto {' '}
+                      <Link fontSize='xs' fontWeight='700' color='#263049' href='#'>términos y condiciones.</Link>         
+                  </Text>
+                </Flex>
+                <LoginButton bgcolor='#263049' color='white' name='Confirmar' isLoading={isSubmitting}/>
+                <Text fontSize='xs' p='2'>            
+                    ¿Ya tienes una cuenta? {' '}
+                    <Link fontSize='xs' fontWeight='700' color='#263049' href='/login'>Click aquí para iniciar sesión.</Link>         
+                </Text> 
+              </Box>
+            </form> 
           </CardBody>
-          <CardFooter flexDirection='column' gap='2' width='90%' alignItems='center'>
-            <Text fontSize='xs' padding='2'> 
-                <IconButton
-                  isRound={true}
-                  variant='outline'                  
-                  aria-label='Done'
-                  colorScheme='#263049'
-                  size='xs'
-                  marginX='1'                  
-                  icon={<CheckIcon />}
-                />           
-                Acepto {' '}
-                <Link fontSize='xs' fontWeight='700' color='#263049' href='#'>términos y condiciones.</Link>         
-            </Text>
-            <LoginButton bgcolor='#263049' color='white' name='Confirmar'/>
-            <Text fontSize='xs' padding='2'>            
-                ¿Ya tienes una cuenta? {' '}
-                <Link fontSize='xs' fontWeight='700' color='#263049' href='/login'>Click aquí para iniciar sesión.</Link>         
-            </Text>          
-            <Popover              
-              placement='bottom'
-              closeOnBlur={false}
-            >
-              <PopoverTrigger>
-                <IconButton
-                  isRound={true}
-                  variant='solid'
-                  bgColor='rgba(224, 7, 7, .47)'
-                  color='white'
-                  aria-label='Done'
-                  size='md'
-                  icon={<DeleteIcon />}
-                />
-              </PopoverTrigger>
-              <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
-                <PopoverHeader pt={4} fontWeight='bold' border='0'>
-                  ¿Desea cancelar el registro?
-                </PopoverHeader>
-                <PopoverArrow bg='blue.800' />
-                <PopoverCloseButton />
-                <PopoverBody>
-                  Se perderán todos los datos y deberá volver a cargarlos.
-                </PopoverBody>
-                <PopoverFooter
-                  border='0'
-                  display='flex'
-                  alignItems='center'
-                  justifyContent='center'
-                  pb={4}>                  
-                    <ButtonGroup size='sm'>
-                      <Link href='/'><Button bgColor='#E00707' color='white'>Cancelar Registro</Button></Link>                      
-                    </ButtonGroup>
-                </PopoverFooter>
-              </PopoverContent>
-            </Popover>
+          <CardFooter flexDirection='column' gap='2' width='90%' alignItems='center' mt='-8'>            
+            <CancelAlert />
           </CardFooter>
         </Card>
       </Box>
