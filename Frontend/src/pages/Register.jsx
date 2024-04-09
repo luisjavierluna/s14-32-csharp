@@ -38,7 +38,7 @@ export default function Register () {
     firstname: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
     lastname: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
     areacode: Yup.number().min(2, 'Mínimo 2 caractares').required('Campo requerido'),
-    phone: Yup.number().min(5, 'Mínimo 5 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
+    phone: Yup.number().min(5, 'Mínimo 5 caractares').required('Campo requerido'),
   })
 
   const togglePasswordVisibility = () => {
@@ -59,21 +59,24 @@ export default function Register () {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      await validationSchema.validate(values, { abortEarly: false })
+      const phoneNumber = `${values.areacode}${values.phone}`
+      const newValues = { ...values, phone: phoneNumber }
+
+      await validationSchema.validate(newValues, { abortEarly: false })
       setIsSubmitting(true)
-      // Aquí puedes enviar los valores a tu backend o realizar cualquier otra lógica necesaria
-      console.log(values)
+      // Logica para enviar a backend
+      console.log(newValues)      
     } catch (error) {
       const formErrors = {}
       error.inner.forEach(err => {
-        formErrors[err.path] = err.message;
+        formErrors[err.path] = err.message
       })
       setErrors(formErrors)
     }
     setIsSubmitting(false)
   }
   return (
-    <Container minW='100%' minH='100vh' padding='2' bg='rgba(157, 213, 212, .2)'>
+    <Container minW='100%' minH='100vh' padding='2' bg='rgba(180, 224, 223, .2)'>
       <AspectRatio maxW='150px' ratio={823 / 257}>
         <Image src='logo2.png' alt='Logo Event Planner'/>
       </AspectRatio>
@@ -81,11 +84,11 @@ export default function Register () {
         <Card color='#263049' flexDirection='column' borderRadius='20' alignItems='center' width='45%' boxShadow='xl'>          
           <CardHeader width='100%' display='flex' justifyContent='space-between' alignItems='center' position='relative'>
             <Center width='100%'>
-              <Heading size='lg'>CREAR CUENTA</Heading>
+              <Heading size='lg' fontFamily='heading'>CREAR CUENTA</Heading>
             </Center>
             <Link href='/'><CloseButton position='absolute' right='1rem' top='50%' transform='translateY(-50%)' size='lg'/></Link>
           </CardHeader>
-          <CardBody width='90%' mt='-4'>
+          <CardBody width='90%' mt='-4' fontFamily='body'>
             <form onSubmit={handleSubmit}>
               <Box display='flex' flexDirection='column' gap='4'>         
                   <LoginInput id='email' name='Correo electrónico' type='text' placeholder='juanrodriguez@gmail.com' onChange={handleChange} errors={errors}/>
@@ -98,8 +101,8 @@ export default function Register () {
                     <IconButton onClick={togglePasswordVisibility2} mx='1' bg='white'>{showPassword2 ? <FaEye /> : <FaEyeSlash />}</IconButton>
                   </Box>
                   <Grid 
-                  templateRows='repeat(2, 1fr)'
-                  templateColumns='repeat(2, 1fr)'
+                  templateRows={{base:'repeat(1, 1fr)', lg:'repeat(2, 1fr)'}}
+                  templateColumns={{base:'repeat(1, 1fr)', lg:'repeat(2, 1fr)'}}
                   gap={4}>
                       <LoginInput id='firstname' name='Nombre' type='text' placeholder='Juan' onChange={handleChange} errors={errors}/>
                       <LoginInput id='lastname' name='Apellido' type='text' placeholder='Rodriguez'onChange={handleChange} errors={errors}/>

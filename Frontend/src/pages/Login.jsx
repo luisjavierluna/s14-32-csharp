@@ -21,7 +21,7 @@ export default function Login () {
   })
 
   const handleChange = (event) => {
-    const { name, value } = event.target
+    const { name, value } = event.target  
     setValues({
       ...values,
       [name]: value
@@ -33,7 +33,7 @@ export default function Login () {
     try {
       await validationSchema.validate(values, { abortEarly: false })
       setIsSubmitting(true)
-      // Aquí puedes enviar los valores a tu backend o realizar cualquier otra lógica necesaria
+      // Logica para enviar a backend
       console.log(values)
     } catch (error) {
       const formErrors = {}
@@ -46,7 +46,7 @@ export default function Login () {
   } 
 
   return (
-    <Container minW='100%' minH='100vh' padding='2' bg='rgba(157, 213, 212, .2)'>
+    <Container minW='100%' minH='100vh' padding='2' bg='rgba(180, 224, 223, .2)'>
       <AspectRatio maxW='150px' ratio={823 / 257}>
         <Image src='logo2.png' alt='Logo Event Planner'/>
       </AspectRatio>
