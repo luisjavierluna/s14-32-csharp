@@ -10,13 +10,13 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<bool> Update(User model);
 
-        Task<bool> Delete(int id);
+        Task<bool> Delete(string id);
 
-        Task<User> GetById(int id);
+        Task<User> GetById(string id);
 
         Task<IQueryable<User>> GetAll();
 
-        Task<bool> UpdateClientId(int clientId, string email);
+        Task<bool> UpdateClientId(string clientId, string email);
 
         Task<AuthDTO> GetCredentialsAsync(string email);
 

@@ -28,12 +28,12 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<User> GetById(int id)
+        public Task<User> GetById(string id)
         {
             throw new NotImplementedException();
         }
@@ -63,7 +63,7 @@ namespace eventPlannerBack.BLL.Service
             return await _userRepository.SignIn(User, model.Password);
         }
 
-        public async Task<bool> UpdateClientId(int dataId, string email)
+        public async Task<bool> UpdateClientId(string dataId, string email)
         {
             
             return await _userRepository.UpdateByClientId(dataId, email);

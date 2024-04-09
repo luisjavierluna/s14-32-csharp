@@ -5,7 +5,7 @@ namespace eventPlannerBack.BLL.Service
 {
     public class ContractorService : IGenericService<ContractorCreationDTO, ContractorDTO>, IContractorService
     {
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -15,7 +15,7 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public Task<ContractorDTO> GetById(int id)
+        public Task<ContractorDTO> GetById(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +25,7 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public Task<ContractorDTO> Update(int id, ContractorCreationDTO model)
+        public Task<ContractorDTO> Update(string id, ContractorCreationDTO model)
         {
             throw new NotImplementedException();
         }

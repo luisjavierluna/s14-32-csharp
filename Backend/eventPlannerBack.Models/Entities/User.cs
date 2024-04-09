@@ -11,9 +11,9 @@ namespace eventPlannerBack.Models.Entities
         public string ProfileImage { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
-        public int ContractorId { get; set; }
+        public string ContractorId { get; set; }
         public Contractor Contractor { get; set; }
-        public int ClientId { get; set; }
+        public string ClientId { get; set; }
         public Client Client { get; set; }
         public ICollection<Notification> Notifications { get; set; }
     }

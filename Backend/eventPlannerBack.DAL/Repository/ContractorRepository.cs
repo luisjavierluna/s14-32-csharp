@@ -6,7 +6,7 @@ namespace eventPlannerBack.DAL.Repository
 {
     public class ContractorRepository : IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>
     {
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -16,7 +16,7 @@ namespace eventPlannerBack.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Task<ContractorDTO> GetByID(int id)
+        public Task<ContractorDTO> GetByID(string id)
         {
             throw new NotImplementedException();
         }
@@ -26,7 +26,7 @@ namespace eventPlannerBack.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Task<ContractorDTO> Update(int id, ContractorCreationDTO model)
+        public Task<ContractorDTO> Update(string id, ContractorCreationDTO model)
         {
             throw new NotImplementedException();
         }

@@ -32,7 +32,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetById")]
-        public async Task<ActionResult<ClientDTO>> GetById(int id) 
+        public async Task<ActionResult<ClientDTO>> GetById(string id) 
         {
             try
             {
@@ -88,7 +88,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("UpdateClient")]
-        public async Task<ActionResult<ClientDTO>>Update(int id, ClientCreationDTO model) 
+        public async Task<ActionResult<ClientDTO>>Update(string id, ClientCreationDTO model) 
         {   
             try 
             {
@@ -108,7 +108,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="admin")]
         [HttpDelete("DeleteClient")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
             try 
             { 
@@ -134,7 +134,7 @@ namespace eventPlannerBack.API.Controllers
         {
             var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
             var user = await _userManager.FindByIdAsync(claim.Value);                
-            var client = await _clientService.GetById((int)user.ClientId);
+            var client = await _clientService.GetById(user.ClientId);
 
             return Ok(client);
         }

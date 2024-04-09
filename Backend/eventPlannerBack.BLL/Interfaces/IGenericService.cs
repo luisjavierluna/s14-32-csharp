@@ -12,11 +12,11 @@ namespace eventPlannerBack.BLL.Interfaces
     {
         Task<DTO> SignIn(CreationDTO model);
 
-        Task<DTO> Update(int id, CreationDTO model);
+        Task<DTO> Update(string id, CreationDTO model);
 
-        Task<bool> Delete(int id);
+        Task<bool> Delete(string id);
 
-        Task<DTO> GetById(int id);
+        Task<DTO> GetById(string id);
 
         Task<IEnumerable<DTO>> GetAll();
     }

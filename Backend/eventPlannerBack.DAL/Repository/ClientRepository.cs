@@ -19,7 +19,7 @@ namespace eventPlannerBack.DAL.Repository
             this.mapper = mapper;
         }
 
-        public async Task<ClientDTO> Update(int id, ClientCreationDTO model)
+        public async Task<ClientDTO> Update(string id, ClientCreationDTO model)
         {
             try 
             { 
@@ -41,7 +41,7 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(string id)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace eventPlannerBack.DAL.Repository
             
         }
 
-        public async Task<ClientDTO> GetByID(int id)
+        public async Task<ClientDTO> GetByID(string id)
         {
             var client = await _dbcontext.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
 

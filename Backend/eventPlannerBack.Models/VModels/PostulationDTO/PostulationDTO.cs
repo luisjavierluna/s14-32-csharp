@@ -10,12 +10,12 @@ namespace eventPlannerBack.Models.VModels.PostulationDTO
 {
     public class PostulationDTO
     {
-        public int Id { get; set; }
-        public int ContractorId { get; set; }
+        public string Id { get; set; }
+        public string ContractorId { get; set; }
         public Contractor Contractor { get; set; }
-        public int VocationId { get; set; }
-        public string Vocation { get; set; } // REVER:VOCATIONS
-        public int EventId { get; set; }
+        public string VocationId { get; set; }
+        public Vocation Vocation { get; set; } // REVER:VOCATIONS
+        public string EventId { get; set; }
         public Event Event { get; set; }
         public string Message { get; set; }
         public StatusPostulation StatusPostulation { get; set; }

@@ -43,7 +43,7 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-        public async Task<bool> UpdateByClientId(int dataId, string email)
+        public async Task<bool> UpdateByClientId(string dataId, string email)
         {
             try
             {

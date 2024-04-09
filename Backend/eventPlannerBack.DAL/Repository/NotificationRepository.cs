@@ -6,7 +6,7 @@ namespace eventPlannerBack.DAL.Repository
 {
     public class NotificationRepository : IGenericRepository<NotificationCreationDTO, NotificationDTO, Notification>
     {
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -16,7 +16,7 @@ namespace eventPlannerBack.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Task<NotificationDTO> GetByID(int id)
+        public Task<NotificationDTO> GetByID(string id)
         {
             throw new NotImplementedException();
         }
@@ -26,7 +26,7 @@ namespace eventPlannerBack.DAL.Repository
             throw new NotImplementedException();
         }
 
-        public Task<NotificationDTO> Update(int id, NotificationCreationDTO model)
+        public Task<NotificationDTO> Update(string id, NotificationCreationDTO model)
         {
             throw new NotImplementedException();
         }
