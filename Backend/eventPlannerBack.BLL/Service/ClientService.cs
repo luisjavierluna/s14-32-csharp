@@ -30,17 +30,17 @@ namespace eventPlannerBack.BLL.Service
             return await _clientRepository.Insert(model);
         }
 
-        public async Task<ClientDTO> Update(int id, ClientCreationDTO model)
+        public async Task<ClientDTO> Update(string id, ClientCreationDTO model)
         {
             return await _clientRepository.Update(id, model);
         }
 
-        public async Task<bool> Delete(int id)
+        public async Task<bool> Delete(string id)
         {
             return await _clientRepository.Delete(id);
         }
 
-        public Task<ClientDTO> GetById(int id)
+        public Task<ClientDTO> GetById(string id)
         {
             return _clientRepository.GetByID(id);
         }

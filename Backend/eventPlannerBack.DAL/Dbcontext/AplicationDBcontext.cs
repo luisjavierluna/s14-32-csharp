@@ -19,7 +19,19 @@ namespace eventPlannerBack.DAL.Dbcontext
 
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+
         public DbSet<Client> Clients { get; set; }
+        public DbSet<Contractor> Contractors { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<Province> Provinces { get; set; }
+        public DbSet<Vocation> Vocations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Postulation> Postulations { get; set; }
 
     }
 }

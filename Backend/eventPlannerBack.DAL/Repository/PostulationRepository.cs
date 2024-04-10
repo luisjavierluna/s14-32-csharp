@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Repository
 {
-    internal class PostulationRepository : IPostulationRepository
+    public class PostulationRepository : IPostulationRepository
     {
         public Task<PostulationDTO> Create(PostulationCreationDTO model)
         {

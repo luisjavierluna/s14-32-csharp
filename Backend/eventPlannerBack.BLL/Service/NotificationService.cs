@@ -5,7 +5,7 @@ namespace eventPlannerBack.BLL.Service
 {
     public class NotificationService : IGenericService<NotificationCreationDTO, NotificationDTO>, INotificationService
     {
-        public Task<bool> Delete(int id)
+        public Task<bool> Delete(string id)
         {
             throw new NotImplementedException();
         }
@@ -15,7 +15,7 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public Task<NotificationDTO> GetById(int id)
+        public Task<NotificationDTO> GetById(string id)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +25,7 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public Task<NotificationDTO> Update(int id, NotificationCreationDTO model)
+        public Task<NotificationDTO> Update(string id, NotificationCreationDTO model)
         {
             throw new NotImplementedException();
         }

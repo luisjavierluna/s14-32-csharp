@@ -6,7 +6,7 @@ namespace eventPlannerBack.DAL.Interfaces
     {
         Task<bool> SignIn(User modelo, string password);
 
-        Task<bool> UpdateByClientId(int clientId, string email);
+        Task<bool> UpdateByClientId(string clientId, string email);
 
         Task<User> GetByEmailAsync(string email);
 

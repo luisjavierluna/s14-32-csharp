@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.Models.Enums;
+﻿using eventPlannerBack.Models.Entidades.Common;
+using eventPlannerBack.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace eventPlannerBack.Models.Entidades
 {
-    public class Postulation
+    public class Postulation : BaseEntity
     {
-        public int ContractorId { get; set; }
+        public string ContractorId { get; set; }
         public Contractor Contractor { get; set; }
-        public int VocationId { get; set; }
-        public string Vocation { get; set; } // REVER:VOCATIONS
-        public int EventId { get; set; }
+        public string VocationId { get; set; }
+        public Vocation Vocation { get; set; } // REVER:VOCATIONS
+        public string EventId { get; set; }
         public Event Event { get; set; }
         public string Message { get;set; }
         public StatusPostulation StatusPostulation { get; set; }
