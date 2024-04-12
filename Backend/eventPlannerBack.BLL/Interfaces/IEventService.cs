@@ -9,7 +9,7 @@ namespace eventPlannerBack.BLL.Interfaces
 {
     public interface IEventService
     {
-        Task<EventDTO> Create(EventCreationDTO model);
+        Task<EventDTO> Create(EventCreationDTO model, string clientId);
 
         Task<EventDTO> Update(string id, EventCreationDTO model);
 
@@ -17,7 +17,7 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<EventDTO> GetById(string id);
 
-        Task<IEnumerable<EventDTO>> GetAll();
+        Task<IEnumerable<EventDTO>> GetMyEvents(string id);
         Task<IEnumerable<EventDTO>> GetByVocation(string vocationId);
     }
 }

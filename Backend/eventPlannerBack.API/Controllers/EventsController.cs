@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,7 @@ namespace eventPlannerBack.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EventDTO>> GetEvent(string id) 
+        public async Task<ActionResult<EventDTO>> GetEvent(string id)
         {
             return Ok(new EventDTO());
         }
@@ -26,7 +27,19 @@ namespace eventPlannerBack.API.Controllers
         [HttpGet("myEvents")]
         public async Task<ActionResult<List<EventDTO>>> GetMyEvents()
         {
-            return Ok(new List<EventDTO>());
+            try
+            {
+                //var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
+                //var id = claim.Value;
+                var id = "7f24ea09-4593-4800-931a-d946c54b3dff";
+                var myEvents = await _eventService.GetMyEvents(id);
+                return Ok(myEvents);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
 
         [Authorize]
@@ -40,7 +53,18 @@ namespace eventPlannerBack.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
         {
-            return Created();
+            try
+            {
+                //var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
+                //var id = claim.Value;
+                var id = "7f24ea09-4593-4800-931a-d946c54b3dff";
+                await _eventService.Create(eventCreation, id);
+                return Created();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
 
         [Authorize]
@@ -52,7 +76,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize]
         [HttpPut("status/{id}")]
-        public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name ="status")] int status)
+        public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name = "status")] int status)
         {
             return Ok();
         }

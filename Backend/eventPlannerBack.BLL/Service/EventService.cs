@@ -1,6 +1,10 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using AutoMapper;
+using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,39 +16,75 @@ namespace eventPlannerBack.BLL.Service
     public class EventService : IEventService
     {
         private readonly IEventRepository _eventRepository;
-        public EventService(IEventRepository eventRepository)
+        private readonly IMapper _mapper;
+        public EventService(IEventRepository eventRepository, IMapper mapper)
         {
             _eventRepository = eventRepository;
+            _mapper = mapper;
         }
 
-        public Task<EventDTO> Create(EventCreationDTO model)
+        public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
         {
-            throw new NotImplementedException();
+            return await _eventRepository.Create(model, clientId);
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            return await _eventRepository.Delete(id);
         }
 
-        public Task<IEnumerable<EventDTO>> GetAll()
+        public async Task<IEnumerable<EventDTO>> GetMyEvents(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = await _eventRepository.GetAll();
+                var listEvents = await query
+                    .Where(e => !e.IsDeleted)
+                    .Where(e => e.ClientId == id)
+                    .Include(e => e.City)
+                        .ThenInclude(c => c.Province)
+                    .Include(e => e.vocations)
+                    .Include(e => e.postulations)
+                    //.Include(e => e.ImageEvents)
+                    .ToListAsync();
+                return _mapper.Map<List<EventDTO>>(listEvents);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<EventDTO> GetById(string id)
+        public async Task<EventDTO> GetById(string id)
         {
-            throw new NotImplementedException();
+            return await _eventRepository.GetByID(id);
         }
 
-        public Task<IEnumerable<EventDTO>> GetByVocation(string vocationId)
+        public async Task<IEnumerable<EventDTO>> GetByVocation(string vocationId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = await _eventRepository.GetAll();
+                var listEvents = query
+                    .Where(e => !e.IsDeleted)
+                    .Where(e => e.vocations.Where(v => v.Id == vocationId).Any())
+                    .Include(e => e.City)
+                        .ThenInclude(c => c.Province)
+                    .Include(e => e.vocations)
+                    .Include(e => e.postulations)
+                    .Include(e => e.ImageEvents)
+                    .ToListAsync();
+                return _mapper.Map<List<EventDTO>>(listEvents);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<EventDTO> Update(string id, EventCreationDTO model)
+        public async Task<EventDTO> Update(string id, EventCreationDTO model)
         {
-            throw new NotImplementedException();
+            return await _eventRepository.Update(id, model);
         }
     }
 }
