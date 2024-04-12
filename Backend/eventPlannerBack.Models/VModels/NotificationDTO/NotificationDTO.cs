@@ -2,5 +2,7 @@
 {
     public class NotificationDTO
     {
+        public string Title { get; set; }
+        public string RedirectionLink { get; set; }
     }
 }
