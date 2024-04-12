@@ -1,9 +1,8 @@
-import { IconButton, Container, Card, CardHeader, CardBody, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, HStack, Center, Flex} from '@chakra-ui/react'
+import { Container, Card, CardHeader, CardBody, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, HStack, Center } from '@chakra-ui/react'
 import LoginButton  from '../components/Login/LoginButton'
 import LoginInput from '../components/Login/LoginInput'
 import * as Yup from 'yup'
 import { useState } from 'react'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export default function Login () { 
   const [values, setValues] = useState({ email: '', password: '' })
@@ -62,11 +61,8 @@ export default function Login () {
           <form onSubmit={handleSubmit}>
             <HStack spacing='10' flexDirection='column' width=''>
               <LoginInput id='email' name='Correo electrónico' type='text' placeholder='Ingrese su correo electrónico' onChange={handleChange} errors={errors}/>
-              <Box width='100%'>
-                <Flex alignItems='end' justifyContent='center'>
-                  <LoginInput id='password' name='Contraseña' type={showPassword ? 'text' : 'password'} placeholder='Ingrese su contraseña' onChange={handleChange} errors={errors}/>
-                  <IconButton onClick={togglePasswordVisibility} mx='1' bg='white'>{showPassword ? <FaEye /> : <FaEyeSlash />}</IconButton>
-                </Flex>
+              <Box width='100%'>                
+                <LoginInput id='password' name='Contraseña' type={showPassword ? 'text' : 'password'} placeholder='Ingrese su contraseña' onChange={handleChange} errors={errors} togglePasswordVisibility={togglePasswordVisibility} showPassword={showPassword} />
                 <Text fontSize='xs' padding='2'>            
                     ¿Olvidaste tu contraseña? {' '}
                     <Link fontSize='xs' fontWeight='700' color='#263049' href='#'>Click aquí para recuperarla.</Link>         

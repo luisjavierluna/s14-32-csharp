@@ -1,11 +1,10 @@
-import { IconButton, Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid } from '@chakra-ui/react'
+import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid } from '@chakra-ui/react'
 import LoginButton  from '../components/Login/LoginButton'
 import LoginInput from '../components/Login/LoginInput'
 import { IoCheckmarkCircleOutline } from "react-icons/io5"
 import CancelAlert from '../components/Login/CancelAlert'
 import { useState } from 'react'
 import * as Yup from 'yup'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 export default function Register () {  
   const [values, setValues] = useState({ email: '', password: '', password2: '', firstname: '', lastname: '', areacode: 0, phone: 0 })
@@ -92,14 +91,8 @@ export default function Register () {
             <form onSubmit={handleSubmit}>
               <Box display='flex' flexDirection='column' gap='4'>         
                   <LoginInput id='email' name='Correo electrónico' type='text' placeholder='juanrodriguez@gmail.com' onChange={handleChange} errors={errors}/>
-                  <Box display='flex' alignItems='end' justifyContent='center'>              
-                    <LoginInput id='password' name='Contraseña' type={showPassword ? 'text' : 'password'} placeholder='Ingrese su contraseña' onChange={handleChange} errors={errors}/> 
-                    <IconButton onClick={togglePasswordVisibility} mx='1' bg='white'>{showPassword ? <FaEye /> : <FaEyeSlash />}</IconButton>
-                  </Box>
-                  <Box display='flex' alignItems='end' justifyContent='center'>
-                    <LoginInput id='password2' name='Confirmar contraseña' type={showPassword2 ? 'text' : 'password'} placeholder='Vuelva a ingresar su contraseña' onChange={handleChange} errors={errors} />
-                    <IconButton onClick={togglePasswordVisibility2} mx='1' bg='white'>{showPassword2 ? <FaEye /> : <FaEyeSlash />}</IconButton>
-                  </Box>
+                  <LoginInput id='password' name='Contraseña' type={showPassword ? 'text' : 'password'} placeholder='Ingrese su contraseña' onChange={handleChange} errors={errors} togglePasswordVisibility={togglePasswordVisibility} showPassword={showPassword}/>
+                  <LoginInput id='password2' name='Confirmar contraseña' type={showPassword2 ? 'text' : 'password'} placeholder='Vuelva a ingresar su contraseña' onChange={handleChange} errors={errors} togglePasswordVisibility={togglePasswordVisibility2} showPassword={showPassword2}/>                  
                   <Grid 
                   templateRows={{base:'repeat(1, 1fr)', lg:'repeat(2, 1fr)'}}
                   templateColumns={{base:'repeat(1, 1fr)', lg:'repeat(2, 1fr)'}}
