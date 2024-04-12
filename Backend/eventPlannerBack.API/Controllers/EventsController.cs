@@ -1,8 +1,8 @@
 ﻿using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
@@ -23,15 +23,14 @@ namespace eventPlannerBack.API.Controllers
             return Ok(new EventDTO());
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("myEvents")]
         public async Task<ActionResult<List<EventDTO>>> GetMyEvents()
         {
             try
             {
-                //var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
-                //var id = claim.Value;
-                var id = "7f24ea09-4593-4800-931a-d946c54b3dff";
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var id = claim.Value;
                 var myEvents = await _eventService.GetMyEvents(id);
                 return Ok(myEvents);
             }
@@ -42,22 +41,21 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("events")]
         public async Task<ActionResult<List<EventDTO>>> GetPostulable()
         {
             return Ok(new List<EventDTO>());
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
         {
             try
             {
-                //var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
-                //var id = claim.Value;
-                var id = "7f24ea09-4593-4800-931a-d946c54b3dff";
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var id = claim.Value;
                 await _eventService.Create(eventCreation, id);
                 return Created();
             }
@@ -67,21 +65,21 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("postulation/{id}")]
         public async Task<ActionResult> PostulateEvent(string id)
         {
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("status/{id}")]
         public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name = "status")] int status)
         {
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEvent([FromBody] EventCreationDTO eventCreation, string id)
         {

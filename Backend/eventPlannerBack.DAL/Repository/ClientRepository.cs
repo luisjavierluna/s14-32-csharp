@@ -27,7 +27,7 @@ namespace eventPlannerBack.DAL.Repository
 
                 if(client == null) throw new NotFoundException();
 
-                client.TaxCode = model.TaxCode;
+                client.DNI = model.TaxCode;
 
                 _dbcontext.Update(client);
 

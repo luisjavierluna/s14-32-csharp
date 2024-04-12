@@ -9,37 +9,37 @@ namespace eventPlannerBack.DAL.Repository
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<User> _userManager;
         private readonly AplicationDBcontext _dbcontext;
         public UserRepository(UserManager<User> userManager, AplicationDBcontext dbcontext)
         {
-            this.userManager = userManager;
+            this._userManager = userManager;
 
             this._dbcontext = dbcontext;
         }
 
-        public async Task<bool> SignIn(User model, string password)
+        public async Task<IdentityResult> SignIn(User model, string password)
         {
             var trasaction = await _dbcontext.Database.BeginTransactionAsync();
             try
             {
-                var result = await userManager.CreateAsync(model, password);
-                if (!result.Succeeded) return false;
-                var rolResult =   await userManager.AddToRoleAsync(model, "user");
+                var result = await _userManager.CreateAsync(model, password);
+                if (!result.Succeeded) return result;
+
+                var rolResult = await _userManager.AddToRoleAsync(model, "user");
                 if (!rolResult.Succeeded) 
                 { 
-                    
-                await trasaction.RollbackAsync();
-                 return false;
+                    await trasaction.RollbackAsync();
+                    return result;
                 }
                 await trasaction.CommitAsync();
                 
-                return true;
+                return result;
             }
             catch (Exception ex)
             {
                 await trasaction.RollbackAsync();
-                return false;
+                throw ex;
             }
         }
 
@@ -47,7 +47,7 @@ namespace eventPlannerBack.DAL.Repository
         {
             try
             {
-                var user = await userManager.FindByEmailAsync(email);
+                var user = await _userManager.FindByEmailAsync(email);
 
                 if (user == null) throw new NotFoundException();
 
@@ -80,12 +80,5 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-
-
     }
-
-     
-
-        
-    
 }

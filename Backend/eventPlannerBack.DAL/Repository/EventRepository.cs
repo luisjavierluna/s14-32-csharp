@@ -32,7 +32,6 @@ namespace eventPlannerBack.DAL.Repository
             {
                 var eventAdd = _mapper.Map<Event>(model);
                 eventAdd.ClientId = clientId;
-                eventAdd.Id = Guid.NewGuid().ToString();
                 eventAdd.CreatedAt = DateTime.Now;
                 eventAdd.IsDeleted = false;
                 eventAdd.ImageEvents = new List<ImageEvent>();

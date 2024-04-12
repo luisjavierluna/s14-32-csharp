@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace eventPlannerBack.Models.VModels.CitiesDTO
+namespace eventPlannerBack.Models.VModels.CityDTO
 {
     public class CityDTO
     {

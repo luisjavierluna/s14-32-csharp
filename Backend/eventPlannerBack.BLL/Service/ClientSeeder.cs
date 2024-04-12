@@ -9,15 +9,12 @@ namespace eventPlannerBack.BLL.Service
     {
         private readonly UserManager<User> userManager;
         private readonly RoleManager<IdentityRole> roleManager;
-        
 
         public ClientSeeder(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.userManager = userManager;
             this.roleManager = roleManager;            
         }
-
-        
 
         public async Task CreateRoles()
         {
@@ -60,8 +57,8 @@ namespace eventPlannerBack.BLL.Service
                     ProfileImage = "Example",
                     CreatedAt = DateTime.Today,
                     IsActive = true,
-                    Client = new Client() { TaxCode = "0000000000000", CreatedAt = DateTime.Today, IsDeleted = false },
-                    Contractor = new Contractor() { CUIT = "00000000", CreatedAt = DateTime.Today, IsDeleted = false }
+                    Client = new Client() { CreatedAt = DateTime.Today, IsDeleted = false },
+                    Contractor = new Contractor() { CreatedAt = DateTime.Today, IsDeleted = false }
                 };
 
                 var response = await userManager.CreateAsync(newAdmin, "Admin123!");

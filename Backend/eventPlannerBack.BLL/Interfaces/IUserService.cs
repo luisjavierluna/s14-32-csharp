@@ -1,12 +1,13 @@
 ﻿using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
+using Microsoft.AspNetCore.Identity;
 
 namespace eventPlannerBack.BLL.Interfaces
 {
     public interface IUserService
     {
-        Task<bool> SignIn(UserCreationDTO model);
+        Task<IdentityResult> SignIn(UserCreationDTO model);
 
         Task<bool> Update(User model);
 
