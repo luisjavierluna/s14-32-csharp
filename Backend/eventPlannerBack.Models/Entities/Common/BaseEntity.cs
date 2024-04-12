@@ -8,7 +8,7 @@ namespace eventPlannerBack.Models.Entidades.Common
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string Id { get; set; }
-        public DateTime? CreatedAt { get; set; }
-        public bool IsDeleted { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Today;
+        public bool IsDeleted { get; set; } = false;
     }
 }

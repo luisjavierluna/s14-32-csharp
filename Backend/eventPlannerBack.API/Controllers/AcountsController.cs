@@ -36,35 +36,21 @@ namespace eventPlannerBack.API.Controllers
         {
             try
             {
-                bool Result = await _userService.SignIn(model);
-                if (!Result) 
+                var Result = await _userService.SignIn(model);
+
+                if (!Result.Succeeded) 
                 { 
-                    return BadRequest("No se pudo agregar su User");
+                    return BadRequest(Result.Errors);
                 }
-           
-                ClientCreationDTO data = new ClientCreationDTO()
-                {
-                    TaxCode = "000000000000"
-                };
-
-                var registeredData = await _clientService.SignIn(data);
-
-                //model.DataId = registeredData.Id;
-                var result = await _userService.UpdateClientId(registeredData.Id, model.Email);
 
                 var token = _tokenService.GenerateToken(model.Email, 1);
 
-                AuthDTO authResponse = new() { 
-                           
-                Token = token.Result
-                };
+                AuthDTO authResponse = new() { Token = token.Result };
 
                 return Ok(authResponse);
-
             }
             catch (Exception e)
             {
-
                 return StatusCode(500, e.Message);
             }
         }

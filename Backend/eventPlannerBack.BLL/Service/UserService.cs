@@ -5,6 +5,7 @@ using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
+using Microsoft.AspNetCore.Identity;
 
 namespace eventPlannerBack.BLL.Service
 {
@@ -43,7 +44,7 @@ namespace eventPlannerBack.BLL.Service
             throw new NotImplementedException();
         }
 
-        public async Task<bool> SignIn(UserCreationDTO model)
+        public async Task<IdentityResult> SignIn(UserCreationDTO model)
         {
             await _validationBehavior.ValidateFields(model);
 
@@ -52,14 +53,15 @@ namespace eventPlannerBack.BLL.Service
                 UserName = model.Email,
                 Email = model.Email,
                 CreatedAt = DateTime.Now,
-
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 ProfileImage = model.ProfileImage,
                 IsActive = true,
-                Client = new Client() { TaxCode = "0000000000000", CreatedAt = DateTime.Today, IsDeleted = false },
-                Contractor = new Contractor() { CUIT = "00000000", CreatedAt = DateTime.Today, IsDeleted = false }
+                Client = new Client() { DNI = model.DNI, CreatedAt = DateTime.Today, IsDeleted = false },
+                // Contractor = new Contractor() { CUIT = model.DNI, CreatedAt = DateTime.Today, IsDeleted = false }
+                Contractor = new Contractor() { CreatedAt = DateTime.Today, IsDeleted = false }
             };
+
             return await _userRepository.SignIn(User, model.Password);
         }
 
@@ -79,10 +81,8 @@ namespace eventPlannerBack.BLL.Service
 
                 return new AuthDTO() { 
                            
-                    Token = token.Result};
-
-
-
+                    Token = token.Result
+                };
             }
             catch (Exception)
             {
