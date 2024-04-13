@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.Models.Entidades;
+﻿using eventPlannerBack.DAL.SeedData;
+using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace eventPlannerBack.DAL.Dbcontext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            SeedCity.Seed(modelBuilder);
         }
 
         public DbSet<Client> Clients { get; set; }

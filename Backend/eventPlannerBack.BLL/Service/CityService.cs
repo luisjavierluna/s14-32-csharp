@@ -1,7 +1,10 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using AutoMapper;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
-using eventPlannerBack.Models.VModels.CitiesDTO;
+using eventPlannerBack.DAL.Repository;
 using eventPlannerBack.Models.VModels.CityDTO;
+using eventPlannerBack.Models.VModels.EventsDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,24 +16,44 @@ namespace eventPlannerBack.BLL.Service
     public class CityService : ICityService
     {
         private readonly ICityRepository _cityRepository;
-        public CityService( ICityRepository cityRepository)
+        private readonly IMapper _mapper;
+        public CityService( ICityRepository cityRepository, IMapper mapper)
         {
             _cityRepository = cityRepository;
+            _mapper = mapper;
         }
 
-        public Task<IEnumerable<CityDTO>> GetAllCities(string? filter)
+        public async Task<IEnumerable<ProvinceDTO>> GetAllProvincies(string? filter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var query = await _cityRepository.GetProvincies();
+                if (filter != null) query = query.Where(p => p.Name.Contains(filter));
+                var listProvinces = await query.ToListAsync();
+                return _mapper.Map<List<ProvinceDTO>>(listProvinces);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public Task<IEnumerable<ProvinceDTO>> GetAllProvincies(string? filter)
+        public async Task<IEnumerable<CityDTO>> GetCities(int? provinceId, string? filter)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<CityDTO>> GetByProvince(int provinceId, string? filter)
-        {
-            throw new NotImplementedException();
+            try
+            {
+                var query = await _cityRepository.GetCities();
+                if (provinceId != null) query = query.Where(c => c.ProvinceId == provinceId);
+                if (filter != null) query = query.Where(c => c.Name.Contains(filter));
+                var listCities = await query
+                    .Take(20)
+                    .ToListAsync();
+                return _mapper.Map<List<CityDTO>>(listCities);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

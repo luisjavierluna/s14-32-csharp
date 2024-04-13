@@ -1,4 +1,5 @@
 ﻿using eventPlannerBack.Models.Entidades.Common;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,9 @@ namespace eventPlannerBack.Models.Entidades
         public Client Client { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public DateTime CreatedAt { get; set; }
         public DateTime FinishDate { get; set; }
         public StatusEvent Status { get; set; }
-        // public List<string> Images { get; set; } = new List<string>();
+        public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();
         public string PhoneNumber { get; set; } = string.Empty;
         public List<Postulation> postulations { get; set; } = new List<Postulation>();
         public List<Vocation> vocations { get; set; } = new List<Vocation>();

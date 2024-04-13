@@ -1,7 +1,8 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
@@ -17,47 +18,68 @@ namespace eventPlannerBack.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<EventDTO>> GetEvent(string id) 
+        public async Task<ActionResult<EventDTO>> GetEvent(string id)
         {
             return Ok(new EventDTO());
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("myEvents")]
         public async Task<ActionResult<List<EventDTO>>> GetMyEvents()
         {
-            return Ok(new List<EventDTO>());
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var id = claim.Value;
+                var myEvents = await _eventService.GetMyEvents(id);
+                return Ok(myEvents);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("events")]
         public async Task<ActionResult<List<EventDTO>>> GetPostulable()
         {
             return Ok(new List<EventDTO>());
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
         {
-            return Created();
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var id = claim.Value;
+                await _eventService.Create(eventCreation, id);
+                return Created();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("postulation/{id}")]
         public async Task<ActionResult> PostulateEvent(string id)
         {
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("status/{id}")]
-        public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name ="status")] int status)
+        public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name = "status")] int status)
         {
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEvent([FromBody] EventCreationDTO eventCreation, string id)
         {

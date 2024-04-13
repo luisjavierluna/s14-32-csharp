@@ -1,5 +1,7 @@
-﻿using eventPlannerBack.DAL.Interfaces;
+﻿using eventPlannerBack.DAL.Dbcontext;
+using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,14 +12,35 @@ namespace eventPlannerBack.DAL.Repository
 {
     public class CityRepository : ICityRepository
     {
-        public Task<IQueryable<City>> GetCities()
+        private readonly AplicationDBcontext _dbcontext;
+        public CityRepository(AplicationDBcontext dbcontext)
         {
-            throw new NotImplementedException();
+            _dbcontext = dbcontext;
+        }
+        public async Task<IQueryable<City>> GetCities()
+        {
+            try
+            {
+                IQueryable<City> queryCity = _dbcontext.Cities;
+                return queryCity;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<IQueryable<Province>> GetProvincies()
+        public async Task<IQueryable<Province>> GetProvincies()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IQueryable<Province> queryProvince = _dbcontext.Provinces;
+                return queryProvince;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
