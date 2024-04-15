@@ -58,7 +58,6 @@ namespace eventPlannerBack.BLL.Service
                 ProfileImage = model.ProfileImage,
                 IsActive = true,
                 Client = new Client() { DNI = model.DNI, CreatedAt = DateTime.Today, IsDeleted = false },
-                // Contractor = new Contractor() { CUIT = model.DNI, CreatedAt = DateTime.Today, IsDeleted = false }
                 Contractor = new Contractor() { CreatedAt = DateTime.Today, IsDeleted = false }
             };
 

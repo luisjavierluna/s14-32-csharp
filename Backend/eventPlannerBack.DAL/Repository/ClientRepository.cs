@@ -10,12 +10,12 @@ namespace eventPlannerBack.DAL.Repository
 {
     public class ClientRepository:IGenericRepository<ClientCreationDTO, ClientDTO, Client>
     {
-        private readonly AplicationDBcontext _dbcontext;
+        private readonly AplicationDBcontext _context;
         private readonly IMapper mapper;
 
         public ClientRepository(AplicationDBcontext dbcontext, IMapper mapper)
         {
-            _dbcontext = dbcontext;
+            _context = dbcontext;
             this.mapper = mapper;
         }
 
@@ -23,15 +23,15 @@ namespace eventPlannerBack.DAL.Repository
         {
             try 
             { 
-                var client = await _dbcontext.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
+                var client = await _context.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
 
                 if(client == null) throw new NotFoundException();
 
-                client.DNI = model.TaxCode;
+                client.DNI = model.DNI;
 
-                _dbcontext.Update(client);
+                _context.Update(client);
 
-                await _dbcontext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 return mapper.Map<ClientDTO>(client);
 
@@ -45,13 +45,13 @@ namespace eventPlannerBack.DAL.Repository
         {
             try
             {
-                var datos = await _dbcontext.Clients.Where(c => c.Id == id).FirstOrDefaultAsync();
+                var client = await _context.Clients.Where(c => c.Id == id).FirstOrDefaultAsync();
 
-                if (datos == null) throw new NotFoundException();
+                if (client == null) throw new NotFoundException();
 
-                _dbcontext.Remove(datos);
+                _context.Remove(client);
 
-                await _dbcontext.SaveChangesAsync();
+                await _context.SaveChangesAsync();
 
                 return true;
 
@@ -67,8 +67,8 @@ namespace eventPlannerBack.DAL.Repository
             try 
             {
                 var client = mapper.Map<Client>(model);
-                _dbcontext.Add(client);
-                await _dbcontext.SaveChangesAsync();
+                _context.Add(client);
+                await _context.SaveChangesAsync();
 
                 return mapper.Map<ClientDTO>(client);
             
@@ -82,7 +82,7 @@ namespace eventPlannerBack.DAL.Repository
 
         public async Task<ClientDTO> GetByID(string id)
         {
-            var client = await _dbcontext.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
+            var client = await _context.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
 
             if (client == null)throw new NotFoundException();
             
@@ -94,7 +94,7 @@ namespace eventPlannerBack.DAL.Repository
         {
             try
             {
-                IQueryable<Client> queryClient = _dbcontext.Clients;
+                IQueryable<Client> queryClient = _context.Clients;
                 return queryClient;
             }
             catch (Exception)

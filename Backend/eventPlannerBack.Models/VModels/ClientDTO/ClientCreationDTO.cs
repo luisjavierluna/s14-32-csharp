@@ -4,6 +4,6 @@ namespace eventPlannerBack.Models.VModels.ClientDTO
 {
     public class ClientCreationDTO
     {
-        public string TaxCode { get; set; }
+        public string DNI { get; set; }
     }
 }

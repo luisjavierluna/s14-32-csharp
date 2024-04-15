@@ -10,8 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
 {
-    [EnableCors("ReglasCors")]
-    [Authorize]
+    // [EnableCors("ReglasCors")]
+    // [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
@@ -21,7 +21,7 @@ namespace eventPlannerBack.API.Controllers
         private readonly UserManager<User> _userManager;
 
         public ClientsController(
-            IGenericService<ClientCreationDTO, ClientDTO> clientService, 
+            IGenericService<ClientCreationDTO, ClientDTO> clientService,
             IClientService clientService1,
             UserManager<User> userManager)
         {
@@ -30,9 +30,9 @@ namespace eventPlannerBack.API.Controllers
             _userManager = userManager;
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetById")]
-        public async Task<ActionResult<ClientDTO>> GetById(string id) 
+        public async Task<ActionResult<ClientDTO>> GetById(string id)
         {
             try
             {
@@ -47,29 +47,29 @@ namespace eventPlannerBack.API.Controllers
             catch (Exception)
             {
 
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, "Internal Server Error");
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<ClientDTO>>> GetAll()
         {
-            try 
-            { 
-                var client = await  _clientService.GetAll();
+            try
+            {
+                var client = await _clientService.GetAll();
                 return Ok(client);
             }
             catch (Exception)
             {
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, "Internal Server Error");
             }
         }
-     
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        [HttpPost("CreateClient")]
-        public async Task<ActionResult<ClientDTO>>SingIn(ClientCreationDTO model) 
+
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpPost("Create")]
+        public async Task<ActionResult<ClientDTO>> SingIn(ClientCreationDTO model)
         {
             try
             {
@@ -80,17 +80,16 @@ namespace eventPlannerBack.API.Controllers
             }
             catch (Exception e)
             {
-
                 return StatusCode(500, e.Message);
             }
         }
 
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut("UpdateClient")]
-        public async Task<ActionResult<ClientDTO>>Update(string id, ClientCreationDTO model) 
-        {   
-            try 
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPut("Update")]
+        public async Task<ActionResult<ClientDTO>> Update(string id, ClientCreationDTO model)
+        {
+            try
             {
                 var client = await _clientService.Update(id, model);
 
@@ -102,17 +101,17 @@ namespace eventPlannerBack.API.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, "Internal Server Error");
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles ="admin")]
-        [HttpDelete("DeleteClient")]
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(string id)
         {
-            try 
-            { 
-               var resultado = await _clientService.Delete(id);
+            try
+            {
+                var resultado = await _clientService.Delete(id);
 
                 return NoContent();
             }
@@ -122,32 +121,10 @@ namespace eventPlannerBack.API.Controllers
             }
             catch (Exception)
             {
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, "Internal Server Error");
             }
         }
-
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [HttpGet("MyClient")]
-    public async Task<ActionResult<ClientDTO>> GetById()
-    {
-        try
-        {
-            var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
-            var user = await _userManager.FindByIdAsync(claim.Value);                
-            var client = await _clientService.GetById(user.ClientId);
-
-            return Ok(client);
-        }
-        catch (NotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
-        catch (Exception)
-        {
-
-            return StatusCode(500, "Error interno del servidor");
-        }
-    }
+               
     }
 
 }
