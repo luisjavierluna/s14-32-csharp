@@ -50,7 +50,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
+        public async Task<ActionResult> CreateEvent([FromForm] EventCreationDTO eventCreation)
         {
             try
             {

@@ -146,9 +146,16 @@ builder.Services.AddScoped<IClientSeeder, ClientSeeder>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 
+//ImageEvent
+builder.Services.AddScoped<IImageEventRepository, ImageEventRepository>();
+
 //City-Province
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
+
+// Cloudinary
+builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<CloudinaryService>();
 
 var app = builder.Build();
 

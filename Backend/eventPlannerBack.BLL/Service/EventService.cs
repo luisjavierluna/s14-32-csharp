@@ -3,6 +3,8 @@ using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
+using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,17 +15,37 @@ namespace eventPlannerBack.BLL.Service
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
         private readonly ValidationBehavior<EventCreationDTO> _validationBehavior;
-        public EventService(IEventRepository eventRepository, IMapper mapper, ValidationBehavior<EventCreationDTO> validationBehavior)
+        private readonly CloudinaryService _imageService;
+        private readonly IImageEventRepository _imageEventRepository;
+        public EventService(IEventRepository eventRepository, IMapper mapper, ValidationBehavior<EventCreationDTO> validationBehavior, CloudinaryService imageService, IImageEventRepository imageEventRepository)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
             _validationBehavior = validationBehavior;
+            _imageService = imageService;
+            _imageEventRepository = imageEventRepository;
         }
 
         public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
         {
             await _validationBehavior.ValidateFields(model);
-            return await _eventRepository.Create(model, clientId);
+            var eventAdd = _mapper.Map<Event>(model);
+            eventAdd.ClientId = clientId;
+            eventAdd.CreatedAt = DateTime.Now;
+            eventAdd.IsDeleted = false;
+            eventAdd.ImageEvents = new List<ImageEvent>();
+
+            var responseEvent = await _eventRepository.Create(eventAdd, clientId);
+            foreach (var image in model.Images)
+            {
+                var url = await _imageService.UploadImage(image);
+                await _imageEventRepository.Create(new ImageEvent()
+                {
+                    Url = url,
+                    EventId = responseEvent.Id.ToString()
+                });
+            }
+            return responseEvent;
         }
 
         public async Task<bool> Delete(string id)
@@ -43,7 +65,7 @@ namespace eventPlannerBack.BLL.Service
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
                     .Include(e => e.postulations)
-                    //.Include(e => e.ImageEvents)
+                    .Include(e => e.ImageEvents)
                     .ToListAsync();
                 return _mapper.Map<List<EventDTO>>(listEvents);
             }
