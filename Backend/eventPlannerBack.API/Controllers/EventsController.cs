@@ -50,7 +50,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
+        public async Task<ActionResult> CreateEvent([FromForm] EventCreationDTO eventCreation)
         {
             try
             {
@@ -59,9 +59,9 @@ namespace eventPlannerBack.API.Controllers
                 await _eventService.Create(eventCreation, id);
                 return Created();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, e.Message);
             }
         }
 
@@ -83,7 +83,15 @@ namespace eventPlannerBack.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateEvent([FromBody] EventCreationDTO eventCreation, string id)
         {
-            return Ok();
+            try
+            {
+                await _eventService.Update(id, eventCreation);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

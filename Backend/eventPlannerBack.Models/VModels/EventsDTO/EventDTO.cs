@@ -1,6 +1,7 @@
 ﻿using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.Enums;
+using eventPlannerBack.Models.VModels.ImagesDTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,8 +17,9 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public StatusEvent Status { get; set; }
+        public DateTime InitDate { get; set; }
         public DateTime FinishDate { get; set; }
-        public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();
+        public List<ImageEventDTO> ImageEvents { get; set; } = new List<ImageEventDTO>();
         public string PhoneNumber { get; set; } = string.Empty;
         public List<Postulation> postulations { get; set; } = new List<Postulation>();
         public List<Vocation> vocations { get; set; } = new List<Vocation>();

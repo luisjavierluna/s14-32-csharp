@@ -11,6 +11,7 @@ using eventPlannerBack.Models.Utilities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.ClientDTO;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.EventsDTO;
 using eventPlannerBack.Models.VModels.NotificationDTO;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -108,6 +109,7 @@ builder.Services.AddTransient<IValidator<UserCreationDTO>, UserCreationDTOValida
 builder.Services.AddTransient<IValidator<ClientCreationDTO>, ClientCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<ContractorCreationDTO>, ContractorCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<NotificationCreationDTO>, NotificationCreationDTOValidator>();
+builder.Services.AddTransient<IValidator<EventCreationDTO>, EventCreationDTOValidator>();
 #endregion
 
 //Inyeccion de Dependencia
@@ -145,9 +147,16 @@ builder.Services.AddScoped<IClientSeeder, ClientSeeder>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 
+//ImageEvent
+builder.Services.AddScoped<IImageEventRepository, ImageEventRepository>();
+
 //City-Province
 builder.Services.AddScoped<ICityRepository, CityRepository>();
 builder.Services.AddScoped<ICityService, CityService>();
+
+// Cloudinary
+builder.Services.Configure<CloudinarySetting>(builder.Configuration.GetSection("CloudinarySettings"));
+builder.Services.AddScoped<CloudinaryService>();
 
 var app = builder.Build();
 

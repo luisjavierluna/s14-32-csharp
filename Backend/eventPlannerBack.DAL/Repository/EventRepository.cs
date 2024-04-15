@@ -26,15 +26,10 @@ namespace eventPlannerBack.DAL.Repository
             _mapper = mapper;
 
         }
-        public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
+        public async Task<EventDTO> Create(Event eventAdd, string clientId)
         {
             try
-            {
-                var eventAdd = _mapper.Map<Event>(model);
-                eventAdd.ClientId = clientId;
-                eventAdd.CreatedAt = DateTime.Now;
-                eventAdd.IsDeleted = false;
-                eventAdd.ImageEvents = new List<ImageEvent>();
+            {                
                 _dbcontext.Add(eventAdd);
                 await _dbcontext.SaveChangesAsync();
                 return _mapper.Map<EventDTO>(eventAdd);
@@ -107,6 +102,7 @@ namespace eventPlannerBack.DAL.Repository
                 if ( response == null ) throw new NotFoundException();
                 response.Name = model.Name ?? response.Name;
                 response.Description = model.Description ?? response.Description;
+                response.InitDate = model.InitDate ?? response.InitDate;
                 response.FinishDate = model.FinishDate ?? response.FinishDate;
                 response.PhoneNumber = model.PhoneNumber ?? response.PhoneNumber;
                 response.CityId = model.CityId ?? response.CityId;
