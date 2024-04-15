@@ -1,14 +1,13 @@
-﻿using eventPlannerBack.Models.VModels.ClientDTO;
+﻿using eventPlannerBack.Models.VModels.ContractorDTO;
 using FluentValidation;
 
 namespace eventPlannerBack.BLL.Validators
 {
-    public class ClientCreationDTOValidator : AbstractValidator<ClientCreationDTO>
+    public class ContractorCreationDTOValidator : AbstractValidator<ContractorCreationDTO>
     {
-        public ClientCreationDTOValidator()
+        public ContractorCreationDTOValidator()
         {
-
-            RuleFor(x => x.DNI)
+            RuleFor(x => x.CUIT)
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
                 .MaximumLength(20).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
         }

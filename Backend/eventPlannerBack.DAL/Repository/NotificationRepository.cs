@@ -1,35 +1,37 @@
 ﻿using AutoMapper;
+using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.VModels.NotificationDTO;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace eventPlannerBack.DAL.Repository
 {
     public class NotificationRepository : IGenericRepository<NotificationCreationDTO, NotificationDTO, Notification>
     {
-        private readonly AplicationDBcontext _dBcontext;
+        private readonly AplicationDBcontext _context;
         private readonly IMapper _mapper;
 
         public NotificationRepository(AplicationDBcontext dBcontext, IMapper mapper)
         {
-            this._dBcontext = dBcontext;
+            this._context = dBcontext;
             this._mapper = mapper;
         }
 
-        public Task<bool> Delete(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<IQueryable<Notification>> GetAll()
+        public async Task<bool> Delete(string id)
         {
             try
             {
-                IQueryable<Notification> queryData = _dBcontext.Notifications;
-                return queryData;
+                var notification = await _context.Notifications.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (notification == null) throw new NotFoundException();
+
+                _context.Remove(notification);
+                await _context.SaveChangesAsync();
+
+                return true;
+
             }
             catch (Exception)
             {
@@ -37,9 +39,26 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-        public Task<NotificationDTO> GetByID(string id)
+        public async Task<IQueryable<Notification>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IQueryable<Notification> queryNotifications = _context.Notifications;
+                return queryNotifications;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<NotificationDTO> GetByID(string id)
+        {
+            var notification = await _context.Notifications.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+            if (notification == null) throw new NotFoundException();
+
+            return _mapper.Map<NotificationDTO>(notification);
         }
 
         public async Task<NotificationDTO> Insert(NotificationCreationDTO model)
@@ -47,8 +66,8 @@ namespace eventPlannerBack.DAL.Repository
             try
             {
                 var notification = _mapper.Map<Notification>(model);
-                _dBcontext.Add(notification);
-                await _dBcontext.SaveChangesAsync();
+                _context.Add(notification);
+                await _context.SaveChangesAsync();
 
                 return _mapper.Map<NotificationDTO>(notification);
 
@@ -59,9 +78,28 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
-        public Task<NotificationDTO> Update(string id, NotificationCreationDTO model)
+        public async Task<NotificationDTO> Update(string id, NotificationCreationDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var notification = await _context.Notifications.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (notification == null) throw new NotFoundException();
+
+                notification.Title = model.Title;
+                notification.RedirectionLink = model.RedirectionLink;
+                notification.UserId = model.UserId;
+
+                _context.Update(notification);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<NotificationDTO>(notification);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
