@@ -11,6 +11,7 @@ using eventPlannerBack.Models.Utilities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.ClientDTO;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.EventsDTO;
 using eventPlannerBack.Models.VModels.NotificationDTO;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -107,6 +108,7 @@ builder.Services.AddTransient(typeof(ValidationBehavior<>));
 builder.Services.AddTransient<IValidator<UserCreationDTO>, UserCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<ClientCreationDTO>, ClientCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<NotificationCreationDTO>, NotificationCreationDTOValidator>();
+builder.Services.AddTransient<IValidator<EventCreationDTO>, EventCreationDTOValidator>();
 #endregion
 
 //Inyeccion de Dependencia

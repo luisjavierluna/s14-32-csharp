@@ -13,6 +13,7 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public DateTime? InitDate { get; set; }
         public DateTime? FinishDate { get; set; }
         public string PhoneNumber { get; set; } = string.Empty;
         public int? CityId { get; set; }

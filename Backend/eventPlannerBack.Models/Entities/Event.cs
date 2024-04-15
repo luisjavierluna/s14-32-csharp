@@ -15,6 +15,7 @@ namespace eventPlannerBack.Models.Entidades
         public Client Client { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
+        public DateTime InitDate { get; set; }
         public DateTime FinishDate { get; set; }
         public StatusEvent Status { get; set; }
         public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();

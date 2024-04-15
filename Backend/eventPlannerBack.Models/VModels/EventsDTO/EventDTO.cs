@@ -16,6 +16,7 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public StatusEvent Status { get; set; }
+        public DateTime InitDate { get; set; }
         public DateTime FinishDate { get; set; }
         public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();
         public string PhoneNumber { get; set; } = string.Empty;

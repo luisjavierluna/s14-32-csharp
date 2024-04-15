@@ -1,15 +1,10 @@
 ﻿using AutoMapper;
 using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Service
 {
@@ -17,14 +12,17 @@ namespace eventPlannerBack.BLL.Service
     {
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
-        public EventService(IEventRepository eventRepository, IMapper mapper)
+        private readonly ValidationBehavior<EventCreationDTO> _validationBehavior;
+        public EventService(IEventRepository eventRepository, IMapper mapper, ValidationBehavior<EventCreationDTO> validationBehavior)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
+            _validationBehavior = validationBehavior;
         }
 
         public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
         {
+            await _validationBehavior.ValidateFields(model);
             return await _eventRepository.Create(model, clientId);
         }
 

@@ -107,6 +107,7 @@ namespace eventPlannerBack.DAL.Repository
                 if ( response == null ) throw new NotFoundException();
                 response.Name = model.Name ?? response.Name;
                 response.Description = model.Description ?? response.Description;
+                response.InitDate = model.InitDate ?? response.InitDate;
                 response.FinishDate = model.FinishDate ?? response.FinishDate;
                 response.PhoneNumber = model.PhoneNumber ?? response.PhoneNumber;
                 response.CityId = model.CityId ?? response.CityId;
