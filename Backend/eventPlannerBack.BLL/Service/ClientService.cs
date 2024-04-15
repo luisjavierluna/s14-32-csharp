@@ -47,8 +47,8 @@ namespace eventPlannerBack.BLL.Service
 
         public async Task<IEnumerable<ClientDTO>> GetAll()
         {
-          var query = await _clientRepository.GetAll();                    
-          var list = await query.ToListAsync();
+            var query = await _clientRepository.GetAll();
+            var list = await query.ToListAsync();
             return _mapper.Map<IEnumerable<ClientDTO>>(list);
         }
        

@@ -1,34 +1,104 @@
-﻿using eventPlannerBack.DAL.Interfaces;
+﻿using AutoMapper;
+using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.DAL.Dbcontext;
+using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using Microsoft.EntityFrameworkCore;
 
 namespace eventPlannerBack.DAL.Repository
 {
     public class ContractorRepository : IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>
     {
-        public Task<bool> Delete(string id)
+        private readonly AplicationDBcontext _context;
+        private readonly IMapper _mapper;
+
+        public ContractorRepository(AplicationDBcontext dbcontext, IMapper mapper)
         {
-            throw new NotImplementedException();
+            _context = dbcontext;
+            _mapper = mapper;
         }
 
-        public Task<IQueryable<Contractor>> GetAll()
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var contractor = await _context.Contractors.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (contractor == null) throw new NotFoundException();
+
+                _context.Remove(contractor);
+                await _context.SaveChangesAsync();
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<ContractorDTO> GetByID(string id)
+        public async Task<IQueryable<Contractor>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IQueryable<Contractor> queryContractor = _context.Contractors;
+                return queryContractor;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<ContractorDTO> Insert(ContractorCreationDTO model)
+        public async Task<ContractorDTO> GetByID(string id)
         {
-            throw new NotImplementedException();
+            var contractor = await _context.Contractors.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+            if (contractor == null) throw new NotFoundException();
+
+            return _mapper.Map<ContractorDTO>(contractor);
         }
 
-        public Task<ContractorDTO> Update(string id, ContractorCreationDTO model)
+        public async Task<ContractorDTO> Insert(ContractorCreationDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var contractor = _mapper.Map<Contractor>(model);
+                _context.Add(contractor);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<ContractorDTO>(contractor);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ContractorDTO> Update(string id, ContractorCreationDTO model)
+        {
+            try
+            {
+                var contractor = await _context.Contractors.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (contractor == null) throw new NotFoundException();
+
+                contractor.CUIT = model.CUIT;
+
+                _context.Update(contractor);
+
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<ContractorDTO>(contractor);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

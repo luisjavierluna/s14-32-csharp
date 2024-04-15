@@ -26,7 +26,7 @@ namespace eventPlannerBack.DAL.Repository
                 var result = await _userManager.CreateAsync(model, password);
                 if (!result.Succeeded) return result;
 
-                var rolResult = await _userManager.AddToRoleAsync(model, "user");
+                var rolResult = await _userManager.AddToRoleAsync(model, "client");
                 if (!rolResult.Succeeded) 
                 { 
                     await trasaction.RollbackAsync();

@@ -18,7 +18,7 @@ namespace eventPlannerBack.BLL.Service
 
         public async Task CreateRoles()
         {
-            string[] roles = { "admin", "user" };
+            string[] roles = { "admin", "client", "contractor" };
 
             foreach (string role in roles)
             {
@@ -27,15 +27,12 @@ namespace eventPlannerBack.BLL.Service
                     var roleExist = await roleManager.RoleExistsAsync(roleName: role);
 
                     if (!roleExist) await roleManager.CreateAsync(new IdentityRole(roleName: role));
-
                 }
                 catch (Exception)
                 {
-
                     throw;
                 }
             }
-
         }
 
         public async Task CreateUserAdmin()
@@ -63,7 +60,7 @@ namespace eventPlannerBack.BLL.Service
 
                 var response = await userManager.CreateAsync(newAdmin, "Admin123!");
 
-                if (!response.Succeeded) throw new Exception("No se pudo crear el usuario administrador");
+                if (!response.Succeeded) throw new Exception("Failed to create administrator user");
 
                 var roleResponse = await userManager.AddToRoleAsync(newAdmin, "admin");
 

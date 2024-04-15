@@ -4,6 +4,7 @@ using eventPlannerBack.Models.VModels.CityDTO;
 using eventPlannerBack.Models.VModels.ClientDTO;
 using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.EventsDTO;
+using eventPlannerBack.Models.VModels.ContractorDTO;
 
 
 namespace eventPlannerBack.Models.Utilities
@@ -15,6 +16,9 @@ namespace eventPlannerBack.Models.Utilities
 
             CreateMap<ClientDTO, Client>().ReverseMap();
             CreateMap<ClientCreationDTO, Client>().ReverseMap();
+
+            CreateMap<ContractorDTO, Contractor>().ReverseMap();
+            CreateMap<ContractorCreationDTO, Contractor>().ReverseMap();
 
             CreateMap<EventCreationDTO, Event>().ReverseMap();
             CreateMap<EventDTO, Event>().ReverseMap();
