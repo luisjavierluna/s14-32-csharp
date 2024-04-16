@@ -1,6 +1,11 @@
-﻿using eventPlannerBack.DAL.Interfaces;
+﻿using AutoMapper;
+using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.DAL.Dbcontext;
+using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,31 +14,97 @@ using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Repository
 {
-    public class PostulationRepository : IPostulationRepository
+    public class PostulationRepository : IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation>
     {
-        public Task<PostulationDTO> Create(PostulationCreationDTO model)
+        private readonly AplicationDBcontext _context;
+        private readonly IMapper _mapper;
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var postulation = await _context.Postulations.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (postulation == null) throw new NotFoundException();
+
+                _context.Remove(postulation);
+                await _context.SaveChangesAsync();
+
+                return true;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<IQueryable<Postulation>> GetAll()
         {
-            throw new NotImplementedException();
+            try
+            {
+                IQueryable<Postulation> queryPostulation = _context.Postulations;
+                return queryPostulation;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<IQueryable<Postulation>> GetAll()
+        public async Task<PostulationDTO> GetByID(string id)
         {
-            throw new NotImplementedException();
+            var postulation = await _context.Postulations.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+            if (postulation == null) throw new NotFoundException();
+
+            return _mapper.Map<PostulationDTO>(postulation);
         }
 
-        public Task<PostulationDTO> GetByID(string id)
+        public async Task<PostulationDTO> Insert(PostulationCreationDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var postulation = _mapper.Map<Postulation>(model);
+                _context.Add(postulation);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<PostulationDTO>(postulation);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public Task<PostulationDTO> Update(string id, PostulationCreationDTO model)
+        public async Task<PostulationDTO> Update(string id, PostulationCreationDTO model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var postulation = await _context.Postulations.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+                if (postulation == null) throw new NotFoundException();
+
+                //REVER
+                postulation.StatusPostulation = model.StatusPostulation;
+                postulation.Message = model.Message;
+                postulation.Event = model.Event;
+                postulation.EventId = model.EventId;
+                postulation.Vocation = model.Vocation;
+                postulation.VocationId = model.VocationId;
+                postulation.Contractor = model.Contractor;
+                postulation.ContractorId = model.ContractorId;/
+
+                _context.Update(postulation);
+                await _context.SaveChangesAsync();
+
+                return _mapper.Map<PostulationDTO>(postulation);
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }
