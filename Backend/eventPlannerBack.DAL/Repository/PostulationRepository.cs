@@ -93,7 +93,7 @@ namespace eventPlannerBack.DAL.Repository
                 postulation.Vocation = model.Vocation;
                 postulation.VocationId = model.VocationId;
                 postulation.Contractor = model.Contractor;
-                postulation.ContractorId = model.ContractorId;/
+                postulation.ContractorId = model.ContractorId;
 
                 _context.Update(postulation);
                 await _context.SaveChangesAsync();
