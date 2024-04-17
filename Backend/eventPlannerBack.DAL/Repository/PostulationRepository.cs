@@ -18,6 +18,13 @@ namespace eventPlannerBack.DAL.Repository
     {
         private readonly AplicationDBcontext _context;
         private readonly IMapper _mapper;
+
+        public PostulationRepository(AplicationDBcontext context, IMapper mapper)
+        {
+            this._context = context;
+            this._mapper = mapper;
+        }
+
         public async Task<bool> Delete(string id)
         {
             try
@@ -87,9 +94,9 @@ namespace eventPlannerBack.DAL.Repository
 
                 
                 postulation.StatusPostulation = model.StatusPostulation;
-                postulation.Message = model.Message;               
-                postulation.EventId = model.EventId;              
-                postulation.VocationId = model.VocationId;               
+                postulation.Message = model.Message;
+                postulation.EventId = model.EventId; // TEMPORAL
+                postulation.VocationId = model.VocationId; // TEMPORAL
                 postulation.ContractorId = model.ContractorId;
                 //REVER
                 //postulation.Contractor = model.Contractor;

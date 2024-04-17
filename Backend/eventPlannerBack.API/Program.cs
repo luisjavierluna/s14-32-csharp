@@ -111,6 +111,8 @@ builder.Services.AddTransient<IValidator<ClientCreationDTO>, ClientCreationDTOVa
 builder.Services.AddTransient<IValidator<ContractorCreationDTO>, ContractorCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<NotificationCreationDTO>, NotificationCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<EventCreationDTO>, EventCreationDTOValidator>();
+builder.Services.AddTransient<IValidator<PostulationCreationDTO>, PostulationCreationDTOValidator>();
+
 #endregion
 
 //Inyeccion de Dependencia
