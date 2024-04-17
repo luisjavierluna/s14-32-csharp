@@ -85,16 +85,16 @@ namespace eventPlannerBack.DAL.Repository
 
                 if (postulation == null) throw new NotFoundException();
 
-                //REVER
+                
                 postulation.StatusPostulation = model.StatusPostulation;
-                postulation.Message = model.Message;
-                postulation.Event = model.Event;
-                postulation.EventId = model.EventId;
-                postulation.Vocation = model.Vocation;
-                postulation.VocationId = model.VocationId;
-                postulation.Contractor = model.Contractor;
+                postulation.Message = model.Message;               
+                postulation.EventId = model.EventId;              
+                postulation.VocationId = model.VocationId;               
                 postulation.ContractorId = model.ContractorId;
-
+                //REVER
+                //postulation.Contractor = model.Contractor;
+                //postulation.Event = model.Event;
+                //postulation.Vocation = model.Vocation;
                 _context.Update(postulation);
                 await _context.SaveChangesAsync();
 

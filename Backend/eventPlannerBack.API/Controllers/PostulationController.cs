@@ -9,14 +9,14 @@ namespace eventPlannerBack.API.Controllers
     public class PostulationController: ControllerBase
     {
         private readonly IGenericService<PostulationCreationDTO, PostulationDTO> _genericService;
-        private readonly INotificationService _notificationService;
+        private readonly IPostulationService _PostulationService;
 
         public PostulationController(
             IGenericService<PostulationCreationDTO, PostulationDTO> genericService,
-            INotificationService notificationService)
+            IPostulationService notificationService)
         {
             _genericService = genericService;
-            _notificationService = notificationService;
+            _PostulationService = notificationService;
         }
         [HttpGet("GetById")]
         public async Task<ActionResult<PostulationDTO>> GetById(string id)

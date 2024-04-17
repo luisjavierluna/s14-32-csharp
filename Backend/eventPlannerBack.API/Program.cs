@@ -13,6 +13,7 @@ using eventPlannerBack.Models.VModels.ClientDTO;
 using eventPlannerBack.Models.VModels.ContractorDTO;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using eventPlannerBack.Models.VModels.NotificationDTO;
+using eventPlannerBack.Models.VModels.PostulationDTO;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -133,6 +134,10 @@ builder.Services.AddScoped<IGenericRepository<ContractorCreationDTO, ContractorD
 builder.Services.AddScoped<IGenericService<ContractorCreationDTO, ContractorDTO>, ContractorService>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
 
+// Postulation
+builder.Services.AddScoped<IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation>, PostulationRepository>();
+builder.Services.AddScoped<IGenericService<PostulationCreationDTO, PostulationDTO>, PostulationService>();
+builder.Services.AddScoped<IPostulationService, PostulationService>();
 
 
 
