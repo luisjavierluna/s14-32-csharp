@@ -19,7 +19,8 @@ namespace eventPlannerBack.Models.Utilities
             CreateMap<ClientCreationDTO, Client>().ReverseMap();
 
             CreateMap<EventCreationDTO, Event>().ReverseMap().IncludeAllDerived();
-            CreateMap<EventDTO, Event>().ReverseMap().IncludeAllDerived();
+            CreateMap<Event, EventDTO>()
+                .ForMember(e=>e.ClientName, dto=>dto.MapFrom(e=> e.Client.User.FirstName));
 
             CreateMap<ContractorDTO, Contractor>().ReverseMap();
             CreateMap<ContractorCreationDTO, Contractor>().ReverseMap();
