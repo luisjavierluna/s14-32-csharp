@@ -7,6 +7,7 @@ using eventPlannerBack.Models.VModels.EventsDTO;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ImagesDTO;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.VocationDTO;
 
 namespace eventPlannerBack.Models.Utilities
 {
@@ -31,6 +32,9 @@ namespace eventPlannerBack.Models.Utilities
             CreateMap<NotificationCreationDTO, Notification>().ReverseMap();
 
             CreateMap<ImageEvent, ImageEventDTO>().ReverseMap();
+
+            CreateMap<VocationDTO, Vocation>().ReverseMap();
+            CreateMap<VocationCreationDTO, Vocation>().ReverseMap();
         }
     }
 }
