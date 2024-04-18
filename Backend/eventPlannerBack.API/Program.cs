@@ -150,6 +150,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Data Seeder
 builder.Services.AddScoped<IClientSeeder, ClientSeeder>();
+builder.Services.AddScoped<IVocationSeeder, VocationSeeder>();
 
 //Event
 builder.Services.AddScoped<IEventRepository, EventRepository>();
@@ -179,9 +180,15 @@ using (var scope = app.Services.CreateScope())
 
     try
     {
-        var dataSeeder = services.GetRequiredService<IClientSeeder>();
+        //Clients
+        var dataSeeder = services.GetRequiredService<IClientSeeder>();      
         await dataSeeder.CreateRoles();
-        await dataSeeder.CreateUserAdmin();        
+        await dataSeeder.CreateUserAdmin();
+
+
+        //Vocations
+        var dataSeeder1 = services.GetRequiredService<IVocationSeeder>();   
+        await dataSeeder1.CreateVocations();
     }
     catch (Exception)
     {
