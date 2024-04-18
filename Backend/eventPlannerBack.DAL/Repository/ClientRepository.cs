@@ -21,13 +21,13 @@ namespace eventPlannerBack.DAL.Repository
 
         public async Task<ClientDTO> Update(string id, ClientCreationDTO model)
         {
+            // No se actualiza nada, ya que client no tiene propiedades individuales
+
             try 
             { 
                 var client = await _context.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
 
                 if(client == null) throw new NotFoundException();
-
-                client.DNI = model.DNI;
 
                 _context.Update(client);
 

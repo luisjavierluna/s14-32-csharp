@@ -4,13 +4,15 @@ namespace eventPlannerBack.Models.VModels
 {
     public class UserDTO
     {
+        public string Id { get; set; }
+        public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
         public string ProfileImage { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool IsActive { get; set; }
-        public Contractor Contractor { get; set; }
-        public Client Client { get; set; }
-        public ICollection<Notification> Notifications { get; set; }
+        public string Role { get; set; }
+        public string CUIT { get; set; }
+        public string ContractorId { get; set; }
+        public string ClientId { get; set; }
     }
 }

@@ -33,9 +33,9 @@ namespace eventPlannerBack.BLL.Validators
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
                 .MaximumLength(100).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
 
-            RuleFor(x => x.DNI)
+            RuleFor(x => x.PhoneNumber)
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
-                .MaximumLength(20).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
+                .MaximumLength(10).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
 
         }
     }

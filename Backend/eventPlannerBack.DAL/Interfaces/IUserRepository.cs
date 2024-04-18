@@ -10,7 +10,6 @@ namespace eventPlannerBack.DAL.Interfaces
         Task<bool> UpdateByClientId(string clientId, string email);
 
         Task<User> GetByEmailAsync(string email);
-
-
+        Task<string> GetUserRole(User user);
     }
 }
