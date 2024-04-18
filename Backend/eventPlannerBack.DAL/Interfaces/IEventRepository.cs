@@ -19,5 +19,7 @@ namespace eventPlannerBack.DAL.Interfaces
         Task<EventDTO> GetByID(string id);
 
         Task<IQueryable<Event>> GetAll();
+
+        Task ActiveInactive(string id);
     }
 }

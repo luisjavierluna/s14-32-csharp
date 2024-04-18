@@ -141,8 +141,9 @@ builder.Services.AddScoped<IGenericRepository<PostulationCreationDTO, Postulatio
 builder.Services.AddScoped<IGenericService<PostulationCreationDTO, PostulationDTO>, PostulationService>();
 builder.Services.AddScoped<IPostulationService, PostulationService>();
 
-
-
+// Vocation
+builder.Services.AddScoped<IVocationRepository, VocationRepository>();
+builder.Services.AddScoped<IVocationService, VocationService>();
 
 //Email
 builder.Services.AddScoped<IEmailService, EmailService>();

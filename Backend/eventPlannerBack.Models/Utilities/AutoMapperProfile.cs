@@ -8,6 +8,7 @@ using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ImagesDTO;
 using eventPlannerBack.Models.VModels.ContractorDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
+using eventPlannerBack.Models.VModels.VocationDTO;
 
 namespace eventPlannerBack.Models.Utilities
 {
@@ -20,7 +21,8 @@ namespace eventPlannerBack.Models.Utilities
             CreateMap<ClientCreationDTO, Client>().ReverseMap();
 
             CreateMap<EventCreationDTO, Event>().ReverseMap().IncludeAllDerived();
-            CreateMap<EventDTO, Event>().ReverseMap().IncludeAllDerived();
+            CreateMap<Event, EventDTO>()
+                .ForMember(e=>e.ClientName, dto=>dto.MapFrom(e=> e.Client.User.FirstName));
 
             CreateMap<ContractorDTO, Contractor>().ReverseMap();
             CreateMap<ContractorCreationDTO, Contractor>().ReverseMap();
@@ -35,6 +37,9 @@ namespace eventPlannerBack.Models.Utilities
 
             CreateMap<PostulationDTO, Postulation>().ReverseMap();
             CreateMap<PostulationCreationDTO, Postulation>().ReverseMap();
+
+            CreateMap<VocationDTO, Vocation>().ReverseMap();
+            CreateMap<VocationCreationDTO, Vocation>().ReverseMap();
         }
     }
 }

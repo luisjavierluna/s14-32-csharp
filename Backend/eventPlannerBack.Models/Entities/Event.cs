@@ -16,10 +16,13 @@ namespace eventPlannerBack.Models.Entidades
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime InitDate { get; set; }
-        public DateTime FinishDate { get; set; }
-        public StatusEvent Status { get; set; }
-        public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();
-        public string PhoneNumber { get; set; } = string.Empty;
+        // public DateTime FinishDate { get; set; }
+        // public StatusEvent Status { get; set; }
+        // public List<ImageEvent> ImageEvents { get; set; } = new List<ImageEvent>();
+        // public string PhoneNumber { get; set; } = string.Empty;
+        public int Duration { get; set; }
+        public bool IsActive { get; set; }
+        public int Guests { get; set; }
         public List<Postulation> postulations { get; set; } = new List<Postulation>();
         public List<Vocation> vocations { get; set; } = new List<Vocation>();
         public int CityId { get; set; }

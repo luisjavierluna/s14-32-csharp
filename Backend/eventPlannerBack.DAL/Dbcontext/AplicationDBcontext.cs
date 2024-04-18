@@ -30,7 +30,7 @@ namespace eventPlannerBack.DAL.Dbcontext
         public DbSet<Contractor> Contractors { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Event> Events { get; set; }
-        public DbSet<ImageEvent> ImageEvents { get; set; }
+        // public DbSet<ImageEvent> ImageEvents { get; set; }
         public DbSet<Province> Provinces { get; set; }
         public DbSet<Vocation> Vocations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
