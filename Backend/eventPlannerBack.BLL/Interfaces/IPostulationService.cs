@@ -22,5 +22,7 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<IEnumerable<PostulationCreationDTO>> GetAll();
         */
+        Task Refuse(string id, string clientId);
+        Task Accept(string id, string clientId);
     }
 }

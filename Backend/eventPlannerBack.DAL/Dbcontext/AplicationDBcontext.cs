@@ -24,6 +24,7 @@ namespace eventPlannerBack.DAL.Dbcontext
         {
             base.OnModelCreating(modelBuilder);
             SeedCity.Seed(modelBuilder);
+            SeedVocation.Seed(modelBuilder);
         }
 
         public DbSet<Client> Clients { get; set; }

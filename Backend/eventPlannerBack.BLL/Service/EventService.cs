@@ -5,6 +5,7 @@ using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
+using eventPlannerBack.Models.Enums;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,24 +30,7 @@ namespace eventPlannerBack.BLL.Service
         public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
         {
             await _validationBehavior.ValidateFields(model);
-            var eventAdd = _mapper.Map<Event>(model);
-            eventAdd.ClientId = clientId;
-            eventAdd.CreatedAt = DateTime.Now;
-            eventAdd.IsDeleted = false;
-            eventAdd.IsActive = true;
-            // eventAdd.ImageEvents = new List<ImageEvent>();
-
-            var responseEvent = await _eventRepository.Create(eventAdd, clientId);
-            /*foreach (var image in model.Images)
-            {
-                var url = await _imageService.UploadImage(image);
-                await _imageEventRepository.Create(new ImageEvent()
-                {
-                    Url = url,
-                    EventId = responseEvent.Id.ToString()
-                });
-            }*/
-            return responseEvent;
+            return await _eventRepository.Create(model, clientId);
         }
 
         public async Task<bool> Delete(string id)
@@ -66,7 +50,8 @@ namespace eventPlannerBack.BLL.Service
                     .Include(e => e.City)
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
-                    .Include(e => e.postulations)
+                    .Include(e => e.postulations.Where(p=>p.StatusPostulation!=StatusPostulation.REFUSED))
+                        .ThenInclude(p=>p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c=>c.User)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
@@ -90,7 +75,8 @@ namespace eventPlannerBack.BLL.Service
                     .Include(e => e.City)
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
-                    .Include(e => e.postulations)
+                    .Include(e => e.postulations.Where(p => p.StatusPostulation != StatusPostulation.REFUSED))
+                        .ThenInclude(p => p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c => c.User)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
@@ -119,7 +105,8 @@ namespace eventPlannerBack.BLL.Service
                     .Include(e => e.City)
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
-                    .Include(e => e.postulations)
+                    .Include(e => e.postulations.Where(p => p.StatusPostulation != StatusPostulation.REFUSED))
+                        .ThenInclude(p => p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c => c.User)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();

@@ -8,9 +8,9 @@ namespace eventPlannerBack.Models.Enums
 {
     public enum StatusPostulation
     {
-        PENDIENTE,
-        ACEPTADA,
-        RECHAZADA
+        PENDING,
+        ACCEPTED,
+        REFUSED
             // ver contactado que no tiene especificado que es en el diagrama
     }
 }

@@ -17,16 +17,19 @@ namespace eventPlannerBack.BLL.Service
     public class PostulationService : IGenericService<PostulationCreationDTO, PostulationDTO>, IPostulationService
     {
         private readonly IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation> _repository;
+        private readonly IPostulationRepository _postulationRepository;
         private readonly IMapper _mapper;
         private readonly ValidationBehavior<PostulationCreationDTO> _validationBehavior;
         public PostulationService(
             IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation> repository,
             IMapper mapper,
-            ValidationBehavior<PostulationCreationDTO> validationBehavior)
+            ValidationBehavior<PostulationCreationDTO> validationBehavior,
+            IPostulationRepository postulationRepository)
         {
             _repository = repository;
             _mapper = mapper;
             _validationBehavior = validationBehavior;
+            _postulationRepository = postulationRepository;
         }
 
         public async Task<bool> Delete(string id)
@@ -56,6 +59,16 @@ namespace eventPlannerBack.BLL.Service
         public async Task<PostulationDTO> Update(string id, PostulationCreationDTO model)
         {
             return await _repository.Update(id, model);
+        }
+
+        public async Task Refuse(string id, string clientId)
+        {
+            await _postulationRepository.Refuse(id, clientId);
+        }
+
+        public async Task Accept(string id, string clientId)
+        {
+            await _postulationRepository.Accept(id, clientId);
         }
     }
 }

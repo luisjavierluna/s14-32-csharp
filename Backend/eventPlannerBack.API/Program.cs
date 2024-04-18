@@ -138,6 +138,7 @@ builder.Services.AddScoped<IContractorService, ContractorService>();
 
 // Postulation
 builder.Services.AddScoped<IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation>, PostulationRepository>();
+builder.Services.AddScoped<IPostulationRepository, PostulationRepository>();
 builder.Services.AddScoped<IGenericService<PostulationCreationDTO, PostulationDTO>, PostulationService>();
 builder.Services.AddScoped<IPostulationService, PostulationService>();
 
