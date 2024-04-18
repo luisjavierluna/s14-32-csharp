@@ -9,6 +9,6 @@
         public string Password { get; set; }
         public string ConfirmPassword { get; set; }
         public string ProfileImage { get; set; }
-        public string DNI { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

@@ -27,13 +27,13 @@ namespace eventPlannerBack.DAL.Repository
                 if (!result.Succeeded) return result;
 
                 var rolResult = await _userManager.AddToRoleAsync(model, "client");
-                if (!rolResult.Succeeded) 
-                { 
+                if (!rolResult.Succeeded)
+                {
                     await trasaction.RollbackAsync();
                     return result;
                 }
                 await trasaction.CommitAsync();
-                
+
                 return result;
             }
             catch (Exception ex)
@@ -51,7 +51,7 @@ namespace eventPlannerBack.DAL.Repository
 
                 if (user == null) throw new NotFoundException();
 
-                user.ClientId= dataId;
+                user.ClientId = dataId;
 
                 _dbcontext.Update(user);
                 await _dbcontext.SaveChangesAsync();
@@ -67,10 +67,11 @@ namespace eventPlannerBack.DAL.Repository
         {
             try
             {
-                var user = await _dbcontext.Users.Where(user => user.Email == email).Include(user => user.Client).FirstOrDefaultAsync();
+                var user = await _dbcontext.Users
+                    .Where(user => user.Email == email)
+                    .Include(user => user.Client).FirstOrDefaultAsync();
 
-                if(user == null) throw new NotFoundException();
-
+                if (user == null) throw new NotFoundException();
 
                 return user;
             }
@@ -80,5 +81,20 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
+        public async Task<string> GetUserRole(User user)
+        {
+            try
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+
+                string userRole = roles.FirstOrDefault() ?? "noRole";
+
+                return userRole;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

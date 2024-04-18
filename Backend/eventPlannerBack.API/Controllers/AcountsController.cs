@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using eventPlannerBack.BLL.Behaviors;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
@@ -18,17 +19,20 @@ namespace eventPlannerBack.API.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IGenericService<ClientCreationDTO, ClientDTO> _clientService;
+        private readonly ValidationBehavior<UserCredentialsDTO> _validationBehavior;
 
         public AcountsController(
             IUserService userService,
             SignInManager<User> signInManager, 
             ITokenService tokenService, 
-            IGenericService<ClientCreationDTO, ClientDTO> clientService)
+            IGenericService<ClientCreationDTO, ClientDTO> clientService,
+            ValidationBehavior<UserCredentialsDTO> validationBehavior)
         {
-            this._userService = userService;
-            this._signInManager = signInManager;
-            this._tokenService = tokenService;
-            this._clientService = clientService;
+            _userService = userService;
+            _signInManager = signInManager;
+            _tokenService = tokenService;
+            _clientService = clientService;
+            _validationBehavior = validationBehavior;
         }
 
         [HttpPost("SignIn")]
@@ -43,9 +47,7 @@ namespace eventPlannerBack.API.Controllers
                     return BadRequest(Result.Errors);
                 }
 
-                var token = _tokenService.GenerateToken(model.Email, 1);
-
-                AuthDTO authResponse = new() { Token = token.Result };
+                AuthDTO authResponse = await _userService.GetCredentialsAsync(model.Email);
 
                 return Ok(authResponse);
             }
@@ -55,28 +57,33 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-
         [HttpPost("Login")]
         public async Task<ActionResult<AuthDTO>> Login([FromBody] UserCredentialsDTO userCredentials)
         {
             try
             {
-                var result = await _signInManager.PasswordSignInAsync(userCredentials.Email, userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
+                await _validationBehavior.ValidateFields(userCredentials);
 
-                if (!result.Succeeded) return BadRequest("Credenciales incorrectas");
-            
+                var result = await _signInManager.PasswordSignInAsync
+                    (
+                    userCredentials.Email, 
+                    userCredentials.Password, 
+                    isPersistent: false, 
+                    lockoutOnFailure: false
+                    );
 
-                return Ok(await _userService.GetCredentialsAsync(userCredentials.Email));
+                if (!result.Succeeded) return BadRequest("Wrong Credentials");
+
+                AuthDTO authResponse = await _userService.GetCredentialsAsync(userCredentials.Email);
+
+                return Ok(authResponse);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, ex.Message);
             }
-
-
         }
-
 
     }
 }

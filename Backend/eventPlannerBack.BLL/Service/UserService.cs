@@ -1,4 +1,5 @@
-﻿using eventPlannerBack.BLL.Behaviors;
+﻿using AutoMapper;
+using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
@@ -14,14 +15,17 @@ namespace eventPlannerBack.BLL.Service
         private readonly IUserRepository _userRepository;
         private readonly ITokenService _tokenService;
         private readonly ValidationBehavior<UserCreationDTO> _validationBehavior;
+        private readonly IMapper _mapper;
 
         public UserService(IUserRepository userRepository, 
             ITokenService tokenService,
-            ValidationBehavior<UserCreationDTO> validationBehavior)
+            ValidationBehavior<UserCreationDTO> validationBehavior,
+            IMapper mapper)
         {
             _userRepository = userRepository;
-            this._tokenService = tokenService;
-            this._validationBehavior = validationBehavior;
+            _tokenService = tokenService;
+            _validationBehavior = validationBehavior;
+            _mapper = mapper;
         }
 
         public Task<bool> Update(User model)
@@ -46,22 +50,31 @@ namespace eventPlannerBack.BLL.Service
 
         public async Task<IdentityResult> SignIn(UserCreationDTO model)
         {
-            await _validationBehavior.ValidateFields(model);
-
-            User User = new User()
+            try
             {
-                UserName = model.Email,
-                Email = model.Email,
-                CreatedAt = DateTime.Now,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                ProfileImage = model.ProfileImage,
-                IsActive = true,
-                Client = new Client() { DNI = model.DNI, CreatedAt = DateTime.Today, IsDeleted = false },
-                Contractor = new Contractor() { CreatedAt = DateTime.Today, IsDeleted = false }
-            };
+                await _validationBehavior.ValidateFields(model);
 
-            return await _userRepository.SignIn(User, model.Password);
+                User User = new User()
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    CreatedAt = DateTime.Now,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    ProfileImage = model.ProfileImage,
+                    PhoneNumber = model.PhoneNumber,
+                    IsActive = true,
+                    Client = new Client() { CreatedAt = DateTime.Today, IsDeleted = false },
+                    Contractor = new Contractor() { CreatedAt = DateTime.Today, IsDeleted = false }
+                };
+
+                return await _userRepository.SignIn(User, model.Password);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<bool> UpdateClientId(string dataId, string email)
@@ -74,18 +87,34 @@ namespace eventPlannerBack.BLL.Service
         {
             try
             {
-                var usuario = await _userRepository.GetByEmailAsync(email);
+                User user = await _userRepository.GetByEmailAsync(email);
+                string role = await GetUserRole(user);
+
+                UserDTO dto = _mapper.Map<UserDTO>(user);
+                dto.Role = role;
 
                 var token = _tokenService.GenerateToken(email, 1);
 
                 return new AuthDTO() { 
                            
-                    Token = token.Result
+                    Token = token.Result,
+                    User = dto
                 };
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
 
+        public async Task<string> GetUserRole(User user)
+        {
+            try
+            {
+                return await _userRepository.GetUserRole(user);
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

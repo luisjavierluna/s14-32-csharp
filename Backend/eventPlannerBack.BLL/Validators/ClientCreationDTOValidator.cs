@@ -7,10 +7,7 @@ namespace eventPlannerBack.BLL.Validators
     {
         public ClientCreationDTOValidator()
         {
-
-            RuleFor(x => x.DNI)
-                .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
-                .MaximumLength(20).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
+            
         }
     }
 }

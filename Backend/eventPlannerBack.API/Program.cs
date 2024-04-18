@@ -106,6 +106,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 #region FluentValidation
 builder.Services.AddTransient(typeof(ValidationBehavior<>));
 builder.Services.AddTransient<IValidator<UserCreationDTO>, UserCreationDTOValidator>();
+builder.Services.AddTransient<IValidator<UserCredentialsDTO>, UserCredentialsDTOValidator>();
 builder.Services.AddTransient<IValidator<ClientCreationDTO>, ClientCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<ContractorCreationDTO>, ContractorCreationDTOValidator>();
 builder.Services.AddTransient<IValidator<NotificationCreationDTO>, NotificationCreationDTOValidator>();

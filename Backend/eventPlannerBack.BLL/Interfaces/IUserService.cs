@@ -20,6 +20,6 @@ namespace eventPlannerBack.BLL.Interfaces
         Task<bool> UpdateClientId(string clientId, string email);
 
         Task<AuthDTO> GetCredentialsAsync(string email);
-
+        Task<string> GetUserRole(User user);
     }
 }
