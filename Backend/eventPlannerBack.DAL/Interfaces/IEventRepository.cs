@@ -10,7 +10,7 @@ namespace eventPlannerBack.DAL.Interfaces
 {
     public interface IEventRepository
     {
-        Task<EventDTO> Create(Event eventAdd, string clientId);
+        Task<EventDTO> Create(EventCreationDTO model, string clientId);
 
         Task<EventDTO> Update(string id, EventCreationDTO model);
 

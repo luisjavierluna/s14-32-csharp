@@ -18,6 +18,7 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         // public DateTime? FinishDate { get; set; }
         // public List<IFormFile>? Images { get; set; } = new List<IFormFile>();
         // public string PhoneNumber { get; set; } = string.Empty;
+        public List<string> VocationsId { get; set; } = new List<string>();
         public int? Duration { get; set; }
         public int? Guests { get; set; }
         public int? CityId { get; set; }

@@ -26,10 +26,24 @@ namespace eventPlannerBack.DAL.Repository
             _mapper = mapper;
 
         }
-        public async Task<EventDTO> Create(Event eventAdd, string clientId)
+        public async Task<EventDTO> Create(EventCreationDTO model, string clientId)
         {
             try
-            {                
+            {
+                var eventAdd = _mapper.Map<Event>(model);
+                eventAdd.ClientId = clientId;
+                eventAdd.CreatedAt = DateTime.Now;
+                eventAdd.IsDeleted = false;
+                eventAdd.IsActive = true;
+                // eventAdd.ImageEvents = new List<ImageEvent>();
+
+                if (model.VocationsId != null)
+                {
+                    foreach (var vocation in eventAdd.vocations)
+                    {
+                        _dbcontext.Entry(vocation).State = EntityState.Unchanged;
+                    }
+                }
                 _dbcontext.Add(eventAdd);
                 await _dbcontext.SaveChangesAsync();
                 return _mapper.Map<EventDTO>(eventAdd);
@@ -78,9 +92,11 @@ namespace eventPlannerBack.DAL.Repository
                 var response = await _dbcontext.Events
                     .Where(e => !e.IsDeleted)
                     .Include(e => e.City)
-                        .ThenInclude(c=>c.Province)
+                        .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
-                    .Include(e => e.postulations)
+                    .Include(e => e.postulations.Where(p => p.StatusPostulation != StatusPostulation.REFUSED))
+                        .ThenInclude(p => p.Contractor).ThenInclude(c => c.User)
+                    .Include(e => e.Client).ThenInclude(c => c.User)
                     //.Include(e=>e.ImageEvents)
                     .FirstOrDefaultAsync(e => e.Id == id);
                 if (response == null) throw new NotFoundException();

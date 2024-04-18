@@ -16,7 +16,7 @@ namespace eventPlannerBack.Models.Entidades
         public Vocation Vocation { get; set; } // REVER:VOCATIONS
         public string? EventId { get; set; } // TEMPORALMENTE PUEDEN SER NULOS
         public Event Event { get; set; }
-        public string Message { get;set; }
+        public string? Message { get;set; }
         public StatusPostulation StatusPostulation { get; set; }
 
     }

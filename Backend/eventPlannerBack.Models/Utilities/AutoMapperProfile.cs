@@ -10,6 +10,7 @@ using eventPlannerBack.Models.VModels.ContractorDTO;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.PostulationDTO;
 using eventPlannerBack.Models.VModels.VocationDTO;
+using eventPlannerBack.Models.Enums;
 
 namespace eventPlannerBack.Models.Utilities
 {
@@ -23,9 +24,16 @@ namespace eventPlannerBack.Models.Utilities
             CreateMap<ClientDTO, Client>().ReverseMap();
             CreateMap<ClientCreationDTO, Client>().ReverseMap();
 
-            CreateMap<EventCreationDTO, Event>().ReverseMap().IncludeAllDerived();
+            CreateMap<EventCreationDTO, Event>()
+                .ForMember(e => e.vocations, dto =>
+                dto.MapFrom(v => v.VocationsId.Select(id => new Vocation { Id = id })))
+                .IncludeAllDerived();
             CreateMap<Event, EventDTO>()
-                .ForMember(e=>e.ClientName, dto=>dto.MapFrom(e=> e.Client.User.FirstName));
+                .ForMember(e => e.ClientName, dto => dto.MapFrom(e => e.Client.User.FirstName))
+                .ForMember(e => e.vocations, dto => dto.MapFrom(e => e.vocations))
+                .ForMember(e => e.City, dto => dto.MapFrom(e => e.City.Name))
+                .ForMember(e => e.Province, dto => dto.MapFrom(e => e.City.Province.Name))
+                .ForMember(e => e.postulations, dto => dto.MapFrom(e => e.postulations));
 
             CreateMap<ContractorDTO, Contractor>().ReverseMap();
             CreateMap<ContractorCreationDTO, Contractor>().ReverseMap();
@@ -40,6 +48,10 @@ namespace eventPlannerBack.Models.Utilities
 
             CreateMap<PostulationDTO, Postulation>().ReverseMap();
             CreateMap<PostulationCreationDTO, Postulation>().ReverseMap();
+            CreateMap<Postulation, PostulationEventDTO>()
+                .ForMember(p => p.ContractorName, dto => dto.MapFrom(p => p.Contractor.User.FirstName))
+                .ForMember(p => p.StatusPostulation, dto => dto.MapFrom(p => p.StatusPostulation.ToString()))
+                .ReverseMap();
 
             CreateMap<VocationDTO, Vocation>().ReverseMap();
             CreateMap<VocationCreationDTO, Vocation>().ReverseMap();

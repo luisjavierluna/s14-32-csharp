@@ -1,12 +1,6 @@
 ﻿using eventPlannerBack.Models.Entidades;
-using eventPlannerBack.Models.Entities;
-using eventPlannerBack.Models.Enums;
-using eventPlannerBack.Models.VModels.ImagesDTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using eventPlannerBack.Models.VModels.PostulationDTO;
+using eventPlannerBack.Models.VModels.VocationDTO;
 
 namespace eventPlannerBack.Models.VModels.EventsDTO
 {
@@ -24,9 +18,10 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         public int Duration { get; set; }
         public bool IsActive { get; set; }
         public int Guests { get; set; }
-        public List<Postulation> postulations { get; set; } = new List<Postulation>();
-        public List<Vocation> vocations { get; set; } = new List<Vocation>();
-        public City City { get; set; }
+        public List<PostulationEventDTO> postulations { get; set; } = new List<PostulationEventDTO>();
+        public List<VocationDTO.VocationDTO> vocations { get; set; } = new List<VocationDTO.VocationDTO>();
+        public string City { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;        
         public string Address { get; set; } = string.Empty;
     }
 }

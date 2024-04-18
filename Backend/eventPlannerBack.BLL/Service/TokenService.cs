@@ -31,7 +31,8 @@ namespace eventPlannerBack.BLL.Service
                 { 
                     new Claim("mail", email), 
                     new Claim("id", user.Id), 
-                    new Claim("clientid", user.ClientId)
+                    new Claim("clientid", user.ClientId),
+                    new Claim("contractorid", user.ContractorId)
                 };
 
                 foreach (var role in roles)
