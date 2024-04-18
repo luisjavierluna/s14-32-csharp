@@ -1,5 +1,11 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using AutoMapper;
+using eventPlannerBack.BLL.Behaviors;
+using eventPlannerBack.BLL.Interfaces;
+using eventPlannerBack.DAL.Interfaces;
+using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,31 +14,48 @@ using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Service
 {
-    public class PostulationService : IPostulationService
+    public class PostulationService : IGenericService<PostulationCreationDTO, PostulationDTO>, IPostulationService
     {
-        public Task<PostulationCreationDTO> Create(PostulationCreationDTO model)
+        private readonly IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation> _repository;
+        private readonly IMapper _mapper;
+        private readonly ValidationBehavior<PostulationCreationDTO> _validationBehavior;
+        public PostulationService(
+            IGenericRepository<PostulationCreationDTO, PostulationDTO, Postulation> repository,
+            IMapper mapper,
+            ValidationBehavior<PostulationCreationDTO> validationBehavior)
         {
-            throw new NotImplementedException();
+            _repository = repository;
+            _mapper = mapper;
+            _validationBehavior = validationBehavior;
         }
 
-        public Task<bool> Delete(string id)
+        public async Task<bool> Delete(string id)
         {
-            throw new NotImplementedException();
+            return await _repository.Delete(id);
         }
 
-        public Task<IEnumerable<PostulationCreationDTO>> GetAll()
+        public async Task<IEnumerable<PostulationDTO>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = await _repository.GetAll();
+            var list = await query.ToListAsync();
+            return _mapper.Map<IEnumerable<PostulationDTO>>(list);
         }
 
-        public Task<PostulationCreationDTO> GetById(string id)
+        public async Task<PostulationDTO> GetById(string id)
         {
-            throw new NotImplementedException();
+            return await _repository.GetByID(id);
         }
 
-        public Task<PostulationCreationDTO> Update(string id, PostulationCreationDTO model)
+        public async Task<PostulationDTO> SignIn(PostulationCreationDTO model)
         {
-            throw new NotImplementedException();
+            await _validationBehavior.ValidateFields(model);
+
+            return await _repository.Insert(model);
+        }
+
+        public async Task<PostulationDTO> Update(string id, PostulationCreationDTO model)
+        {
+            return await _repository.Update(id, model);
         }
     }
 }

@@ -3,10 +3,12 @@ using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.VModels.EventsDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
 {
+    [EnableCors("CorsRules")]
     [Route("api/[controller]")]
     [ApiController]
     public class EventsController : ControllerBase
@@ -42,6 +44,24 @@ namespace eventPlannerBack.API.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("myEvents/inactive")]
+        public async Task<ActionResult<List<EventDTO>>> GetMyInactiveEvents()
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var id = claim.Value;
+                var myEvents = await _eventService.GetMyInactiveEvents(id);
+                return Ok(myEvents);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Error interno del servidor");
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("events")]
         public async Task<ActionResult<List<EventDTO>>> GetPostulable()
         {
@@ -50,7 +70,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
-        public async Task<ActionResult> CreateEvent([FromForm] EventCreationDTO eventCreation)
+        public async Task<ActionResult> CreateEvent([FromBody] EventCreationDTO eventCreation)
         {
             try
             {
@@ -89,6 +109,21 @@ namespace eventPlannerBack.API.Controllers
                 return NoContent();
             }
             catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPut("activeInactive/{id}")]
+        public async Task<ActionResult> ActiveInactive(string id)
+        {
+            try
+            {
+                await _eventService.ActiveInactive(id);
+                return Ok();
+            }
+            catch(Exception e)
             {
                 return StatusCode(500, e.Message);
             }

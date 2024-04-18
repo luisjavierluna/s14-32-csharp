@@ -7,7 +7,7 @@ namespace eventPlannerBack.Models.Entidades
     {
         public User User { get; set; }
         public string? CUIT { get; set; }
-        public ICollection<Vocation> Vocations { get; set; }
+        public List<Vocation> ListContractorVocations { get; } = new List<Vocation>();
         public ICollection<Postulation> Postulations { get; set; }
     }
 }

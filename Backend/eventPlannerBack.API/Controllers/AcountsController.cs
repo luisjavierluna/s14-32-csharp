@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
 {
-    [EnableCors("ReglasCors")]
+    [EnableCors("CorsRules")]
     [Route("api/[controller]")]
     [ApiController]
     public class AcountsController : ControllerBase

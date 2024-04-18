@@ -19,5 +19,7 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<IEnumerable<EventDTO>> GetMyEvents(string id);
         Task<IEnumerable<EventDTO>> GetByVocation(string vocationId);
+        Task ActiveInactive(string id);
+        Task<IEnumerable<EventDTO>> GetMyInactiveEvents(string id);
     }
 }

@@ -24,6 +24,14 @@ namespace eventPlannerBack.BLL.Validators
             RuleFor(x => x.Address)
                 .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
                 .MaximumLength(250).WithMessage("The '{PropertyName}' field must not exceed {MaxLength} characters");
+
+            RuleFor(x => x.Guests)
+                .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
+                .GreaterThan(0).WithMessage("The '{PropertyName}' must be positive.");
+
+            RuleFor(x => x.Duration)
+                .NotEmpty().WithMessage("The '{PropertyName}' field cannot be empty.")
+                .GreaterThan(0).WithMessage("The '{PropertyName}' must be positive.");
         }
     }
 }

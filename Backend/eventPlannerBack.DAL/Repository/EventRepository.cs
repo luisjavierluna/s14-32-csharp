@@ -47,7 +47,7 @@ namespace eventPlannerBack.DAL.Repository
                 var FindEvent = await _dbcontext.Events.Where(e => e.Id == id).FirstOrDefaultAsync();
                 if (FindEvent == null) throw new NotFoundException();
                 FindEvent.IsDeleted = true;
-                FindEvent.Status = StatusEvent.CLOSE;
+                FindEvent.IsActive = false;
                 _dbcontext.Update(FindEvent);
                 await _dbcontext.SaveChangesAsync();
                 return true;
@@ -81,7 +81,7 @@ namespace eventPlannerBack.DAL.Repository
                         .ThenInclude(c=>c.Province)
                     .Include(e => e.vocations)
                     .Include(e => e.postulations)
-                    .Include(e=>e.ImageEvents)
+                    //.Include(e=>e.ImageEvents)
                     .FirstOrDefaultAsync(e => e.Id == id);
                 if (response == null) throw new NotFoundException();
                 return _mapper.Map<EventDTO>(response);
@@ -103,8 +103,10 @@ namespace eventPlannerBack.DAL.Repository
                 response.Name = model.Name ?? response.Name;
                 response.Description = model.Description ?? response.Description;
                 response.InitDate = model.InitDate ?? response.InitDate;
-                response.FinishDate = model.FinishDate ?? response.FinishDate;
-                response.PhoneNumber = model.PhoneNumber ?? response.PhoneNumber;
+                //response.FinishDate = model.FinishDate ?? response.FinishDate;
+                //response.PhoneNumber = model.PhoneNumber ?? response.PhoneNumber;
+                response.Duration = model.Duration ?? response.Duration;
+                response.Guests = model.Guests ?? response.Guests;
                 response.CityId = model.CityId ?? response.CityId;
                 response.Address = model.Address ?? response.Address;
 
@@ -112,6 +114,24 @@ namespace eventPlannerBack.DAL.Repository
                 await _dbcontext.SaveChangesAsync();
 
                 return _mapper.Map<EventDTO>(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task ActiveInactive(string id)
+        {
+            try
+            {
+                var response = await _dbcontext.Events
+                    .FirstOrDefaultAsync(e => e.Id == id);
+                if (response == null) throw new NotFoundException();
+                response.IsActive = !response.IsActive;
+
+                _dbcontext.Update(response);
+                await _dbcontext.SaveChangesAsync();
             }
             catch (Exception)
             {
