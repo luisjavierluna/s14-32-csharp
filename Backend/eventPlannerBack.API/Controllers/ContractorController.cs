@@ -74,12 +74,15 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("AssignVocation")]
         public async Task<ActionResult<ContractorsVocations>> AssignVocation(AssignVocationDTO model)
         {
             try
             {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var contractorId = claim.Value;
+                model.ContractorId = contractorId;
                 var contractorVocation = await _contractorService.AssignVocation(model);
 
                 return contractorVocation;

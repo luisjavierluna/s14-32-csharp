@@ -101,14 +101,14 @@ namespace eventPlannerBack.BLL.Service
             try
             {
                 var contractor = await _dbcontext.Contractors.Where(c => c.Id == contractorId)
-                    .Include(c=>c.ListContractorVocations)
+                    .Include(c=>c.ContractorsVocations).ThenInclude(c=>c.Vocation)
                     .FirstOrDefaultAsync();
                 List<string> vocationsId = new List<string>();
                 if (contractor != null) 
                 { 
-                    foreach (var con in contractor.ListContractorVocations)
+                    foreach (var con in contractor.ContractorsVocations)
                     {
-                        vocationsId.Add(con.Id);
+                        vocationsId.Add(con.Vocation.Id);
                     }
                 }
 
