@@ -1,9 +1,5 @@
 ﻿using eventPlannerBack.Models.Entidades.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using eventPlannerBack.Models.Entities;
 
 namespace eventPlannerBack.Models.Entidades
 {
@@ -12,7 +8,7 @@ namespace eventPlannerBack.Models.Entidades
         public string Name { get; set; }
         public string Description { get; set; }
         public List<Event> Events { get; set; } = new List<Event>();
-        public List<Contractor> Contractors { get; set; } = new List<Contractor>();
+        public ICollection<ContractorsVocations> ContractorsVocations { get; set; } = new List<ContractorsVocations>();
 
     }
 }

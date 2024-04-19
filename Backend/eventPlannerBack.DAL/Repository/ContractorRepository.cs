@@ -3,12 +3,14 @@ using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.VocationDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace eventPlannerBack.DAL.Repository
 {
-    public class ContractorRepository : IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>
+    public class ContractorRepository : IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>, IContractorRepository
     {
         private readonly AplicationDBcontext _context;
         private readonly IMapper _mapper;
@@ -54,11 +56,22 @@ namespace eventPlannerBack.DAL.Repository
 
         public async Task<ContractorDTO> GetByID(string id)
         {
-            var contractor = await _context.Contractors.Where(c => c.Id == id).FirstOrDefaultAsync();
+            var contractor = await _context.Contractors
+                .Where(c => c.Id == id)
+                .Include(x => x.ContractorsVocations)
+                    .ThenInclude(x => x.Vocation)
+                .FirstOrDefaultAsync();
 
             if (contractor == null) throw new NotFoundException();
 
-            return _mapper.Map<ContractorDTO>(contractor);
+            ContractorDTO dto = _mapper.Map<ContractorDTO>(contractor);
+
+            dto.Vocations = 
+                _mapper.Map<List<VocationDTO>>(contractor
+                .ContractorsVocations
+                .Select(x => x.Vocation).ToList());
+
+            return dto;
         }
 
         public async Task<ContractorDTO> Insert(ContractorCreationDTO model)
@@ -71,6 +84,21 @@ namespace eventPlannerBack.DAL.Repository
 
                 return _mapper.Map<ContractorDTO>(contractor);
 
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<ContractorsVocations> AssignVocation(ContractorsVocations model)
+        {
+            try
+            {
+                _context.ContractorsVocations.Add(model);
+                await _context.SaveChangesAsync();
+
+                return model;
             }
             catch (Exception)
             {

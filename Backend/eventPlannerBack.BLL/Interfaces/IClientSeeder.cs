@@ -5,5 +5,7 @@
         public Task CreateUserAdmin();
 
         public Task CreateRoles();
+        Task CreateClientUsers();
+        Task CreateContractorUsers();
     }
 }

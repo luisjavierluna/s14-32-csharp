@@ -3,12 +3,13 @@ using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ClientDTO;
 using Microsoft.EntityFrameworkCore;
 
 namespace eventPlannerBack.DAL.Repository
 {
-    public class ClientRepository:IGenericRepository<ClientCreationDTO, ClientDTO, Client>
+    public class ClientRepository : IGenericRepository<ClientCreationDTO, ClientDTO, Client>
     {
         private readonly AplicationDBcontext _context;
         private readonly IMapper mapper;
@@ -101,6 +102,11 @@ namespace eventPlannerBack.DAL.Repository
             {
                 throw;
             }
+        }
+
+        public Task<ContractorsVocations> AssignVocation(ContractorsVocations model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -134,6 +134,7 @@ builder.Services.AddScoped<IClientService, ClientService>();
 
 // Contractor
 builder.Services.AddScoped<IGenericRepository<ContractorCreationDTO, ContractorDTO, Contractor>, ContractorRepository>();
+builder.Services.AddScoped<IContractorRepository, ContractorRepository>();
 builder.Services.AddScoped<IGenericService<ContractorCreationDTO, ContractorDTO>, ContractorService>();
 builder.Services.AddScoped<IContractorService, ContractorService>();
 
@@ -183,7 +184,9 @@ using (var scope = app.Services.CreateScope())
     {
         var dataSeeder = services.GetRequiredService<IClientSeeder>();
         await dataSeeder.CreateRoles();
-        await dataSeeder.CreateUserAdmin();        
+        await dataSeeder.CreateUserAdmin();
+        await dataSeeder.CreateClientUsers();
+        await dataSeeder.CreateContractorUsers();
     }
     catch (Exception)
     {

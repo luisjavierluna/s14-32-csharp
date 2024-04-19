@@ -23,6 +23,10 @@ namespace eventPlannerBack.DAL.Dbcontext
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<ContractorsVocations>()
+                .HasKey(x => new { x.ContractorId, x.VocationId });
+
             SeedCity.Seed(modelBuilder);
             SeedVocation.Seed(modelBuilder);
         }
@@ -36,6 +40,7 @@ namespace eventPlannerBack.DAL.Dbcontext
         public DbSet<Vocation> Vocations { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Postulation> Postulations { get; set; }
+        public DbSet<ContractorsVocations> ContractorsVocations { get; set; }
 
     }
 }

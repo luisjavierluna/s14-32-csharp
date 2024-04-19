@@ -55,6 +55,11 @@ namespace eventPlannerBack.Models.Utilities
 
             CreateMap<VocationDTO, Vocation>().ReverseMap();
             CreateMap<VocationCreationDTO, Vocation>().ReverseMap();
+
+            CreateMap<ContractorsVocations, ContractorDTO>()
+                .ForMember(dest => dest.Vocations, opt => opt.MapFrom(src => src.Vocation));
+
+            CreateMap<ContractorsVocations, AssignVocationDTO>().ReverseMap();
         }
     }
 }

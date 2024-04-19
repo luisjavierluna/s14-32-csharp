@@ -4,14 +4,8 @@ using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Enums;
-using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Repository
 {
