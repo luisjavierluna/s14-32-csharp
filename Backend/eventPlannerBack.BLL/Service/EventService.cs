@@ -2,6 +2,7 @@
 using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
+using eventPlannerBack.DAL.Dbcontext;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
@@ -16,13 +17,15 @@ namespace eventPlannerBack.BLL.Service
         private readonly IEventRepository _eventRepository;
         private readonly IMapper _mapper;
         private readonly ValidationBehavior<EventCreationDTO> _validationBehavior;
+        private readonly AplicationDBcontext _dbcontext;
         // private readonly CloudinaryService _imageService;
         // private readonly IImageEventRepository _imageEventRepository;
-        public EventService(IEventRepository eventRepository, IMapper mapper, ValidationBehavior<EventCreationDTO> validationBehavior/*, CloudinaryService imageService, IImageEventRepository imageEventRepository*/)
+        public EventService(IEventRepository eventRepository, IMapper mapper, ValidationBehavior<EventCreationDTO> validationBehavior, AplicationDBcontext dbcontext/*, CloudinaryService imageService, IImageEventRepository imageEventRepository*/)
         {
             _eventRepository = eventRepository;
             _mapper = mapper;
             _validationBehavior = validationBehavior;
+            _dbcontext = dbcontext;
             // _imageService = imageService;
             // _imageEventRepository = imageEventRepository;
         }
@@ -93,20 +96,31 @@ namespace eventPlannerBack.BLL.Service
             return await _eventRepository.GetByID(id);
         }
 
-        public async Task<IEnumerable<EventDTO>> GetByVocation(string vocationId)
+        public async Task<IEnumerable<EventDTO>> GetByVocation(string contractorId, string clientId)
         {
             try
             {
+                var contractor = await _dbcontext.Contractors.Where(c => c.Id == contractorId)
+                    .Include(c=>c.ListContractorVocations)
+                    .FirstOrDefaultAsync();
+                List<string> vocationsId = new List<string>();
+                if (contractor != null) 
+                { 
+                    foreach (var con in contractor.ListContractorVocations)
+                    {
+                        vocationsId.Add(con.Id);
+                    }
+                }
+
                 var query = await _eventRepository.GetAll();
-                var listEvents = query
+                var listEvents = await query
                     .Where(e => !e.IsDeleted)
                     .Where(e => e.IsActive)
-                    .Where(e => e.vocations.Where(v => v.Id == vocationId).Any())
+                    .Where(e => e.vocations.Where(v =>vocationsId.Contains(v.Id)).Any())
+                    .Where(e=>e.Client.Id != clientId)
                     .Include(e => e.City)
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
-                    .Include(e => e.postulations.Where(p => p.StatusPostulation != StatusPostulation.REFUSED))
-                        .ThenInclude(p => p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c => c.User)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
