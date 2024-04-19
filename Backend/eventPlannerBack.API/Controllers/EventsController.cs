@@ -62,10 +62,23 @@ namespace eventPlannerBack.API.Controllers
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet("events")]
+        [HttpGet("postulable")]
         public async Task<ActionResult<List<EventDTO>>> GetPostulable()
         {
-            return Ok(new List<EventDTO>());
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var contractorId = claim.Value;
+                var claim2 = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
+                var clientId = claim2.Value;
+                var posEvents = await _eventService.GetByVocation(contractorId, clientId);
+                return Ok(posEvents);
+            }
+            catch (Exception)
+            {
+
+                return StatusCode(500, "Error interno del servidor");
+            }
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
