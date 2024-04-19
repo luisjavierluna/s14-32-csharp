@@ -1,6 +1,10 @@
 ﻿using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Interfaces;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ContractorDTO;
+using eventPlannerBack.Models.VModels.VocationDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
@@ -20,7 +24,6 @@ namespace eventPlannerBack.API.Controllers
             _contractorService = contractorService;
         }
 
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetById")]
         public async Task<ActionResult<ContractorDTO>> GetById(string id)
         {
@@ -41,7 +44,6 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<ContractorDTO>>> GetAll()
         {
@@ -55,9 +57,7 @@ namespace eventPlannerBack.API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
-
-
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        
         [HttpPost("Create")]
         public async Task<ActionResult<ContractorDTO>> SingIn(ContractorCreationDTO model)
         {
@@ -74,8 +74,23 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
+        [HttpPost("AssignVocation")]
+        public async Task<ActionResult<ContractorsVocations>> AssignVocation(AssignVocationDTO model)
+        {
+            try
+            {
+                var contractorVocation = await _contractorService.AssignVocation(model);
 
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+                return contractorVocation;
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
         [HttpPut("Update")]
         public async Task<ActionResult<ContractorDTO>> Update(string id, ContractorCreationDTO model)
         {
@@ -95,7 +110,7 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete(string id)
         {

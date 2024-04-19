@@ -5,11 +5,6 @@ using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.VModels.VocationDTO;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.DAL.Repository
 {
@@ -24,6 +19,7 @@ namespace eventPlannerBack.DAL.Repository
             _mapper = mapper;
 
         }
+
         public async Task<bool> Delete(string id)
         {
             try

@@ -4,5 +4,6 @@
     {
         public string Id { get; set; }
         public string CUIT { get; set; }
+        public ICollection<VocationDTO.VocationDTO> Vocations { get; set; }
     }
 }
