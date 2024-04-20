@@ -6,6 +6,6 @@ namespace eventPlannerBack.BLL.Interfaces
 {
     public interface IContractorService : IGenericService<ContractorCreationDTO, ContractorDTO>
     {
-        Task<ContractorsVocations> AssignVocation(AssignVocationDTO model);
+        Task<ContractorsVocations> AssignVocation(AssignVocationDTO model, string contractorId);
     }
 }

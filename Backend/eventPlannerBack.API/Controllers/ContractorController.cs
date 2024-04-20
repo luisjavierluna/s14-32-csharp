@@ -82,8 +82,8 @@ namespace eventPlannerBack.API.Controllers
             {
                 var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
                 var contractorId = claim.Value;
-                model.ContractorId = contractorId;
-                var contractorVocation = await _contractorService.AssignVocation(model);
+
+                var contractorVocation = await _contractorService.AssignVocation(model, contractorId);
 
                 return contractorVocation;
             }

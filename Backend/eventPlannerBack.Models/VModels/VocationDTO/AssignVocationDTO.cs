@@ -1,8 +1,9 @@
-﻿namespace eventPlannerBack.Models.VModels.VocationDTO
+﻿using System.Text.Json.Serialization;
+
+namespace eventPlannerBack.Models.VModels.VocationDTO
 {
     public class AssignVocationDTO
     {
-        public string ContractorId { get; set; }
         public string VocationId { get; set; }
     }
 }
