@@ -96,5 +96,29 @@ namespace eventPlannerBack.DAL.Repository
                 throw;
             }
         }
+
+        public async Task<string> ChangeRole(string userId)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null) throw new NotFoundException();
+
+                string roleName = (await _userManager.GetRolesAsync(user)).FirstOrDefault() ?? "noRole";
+
+                var result = await _userManager.RemoveFromRoleAsync(user, roleName);
+                if (!result.Succeeded) throw new Exception("Failed to change role");
+
+                roleName = roleName == "client" ? "contractor" : "client";
+                result = await _userManager.AddToRoleAsync(user, roleName);
+                if (!result.Succeeded) throw new Exception("Failed to change role");
+
+                return roleName;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

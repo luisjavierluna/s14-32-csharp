@@ -24,6 +24,7 @@ namespace eventPlannerBack.API.Controllers
             _contractorService = contractorService;
         }
 
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("GetById")]
         public async Task<ActionResult<ContractorDTO>> GetById(string id)
         {
@@ -44,6 +45,7 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
+        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<ContractorDTO>>> GetAll()
         {
@@ -93,7 +95,7 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("Update")]
         public async Task<ActionResult<ContractorDTO>> Update(string id, ContractorCreationDTO model)
         {
