@@ -7,6 +7,7 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
     public class EventDTO
     {
         public Guid Id { get; set; }
+        public string ClientId { get; set; } = string.Empty;
         public string ClientName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

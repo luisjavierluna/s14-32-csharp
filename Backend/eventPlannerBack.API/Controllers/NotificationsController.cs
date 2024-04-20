@@ -1,6 +1,8 @@
 ﻿using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.VModels.NotificationDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eventPlannerBack.API.Controllers
@@ -46,6 +48,27 @@ namespace eventPlannerBack.API.Controllers
             try
             {
                 var notifications = await _genericService.GetAll();
+                return Ok(notifications);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpGet("GetMyNotifications")]
+        public async Task<ActionResult<IEnumerable<NotificationDTO>>> GetMyNotifications()
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
+                var userId = claim.Value;
+
+                if (userId == null)
+                    return BadRequest("Id was not provided");
+
+                var notifications = await _notificationService.GetMyNotifications(userId);
                 return Ok(notifications);
             }
             catch (Exception)

@@ -71,7 +71,6 @@ namespace eventPlannerBack.API.Controllers
 
                 var postulations = await _postulationService.GetMyPostulations(contractorId);
                 return Ok(postulations);
-
             }
             catch (Exception)
             {
@@ -137,6 +136,10 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
+
+        // CUANDO UN CLIENT ACEPTE A UN CONTRACTOR DE AQUÍ SE DEBE ENVIAR LA NOTIFICACIÓN
+            // EN AMBOS CASOS TAL VEZ SE PUEDAN HACER LOS MÉTODO DESDE EL POSTULATION CONTROLLER
+            // ADEMÁS EL POSTULATIONS CONTROLLER DEBE LLAMAR MÉTODO DEL NOTIFICATIONS SERVICE QUE ES EL DE CREATE
         [HttpPut("accept/{id}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Accept(string id)

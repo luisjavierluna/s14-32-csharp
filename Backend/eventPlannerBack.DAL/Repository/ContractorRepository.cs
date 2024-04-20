@@ -60,6 +60,7 @@ namespace eventPlannerBack.DAL.Repository
                 .Where(c => c.Id == id)
                 .Include(x => x.ContractorsVocations)
                     .ThenInclude(x => x.Vocation)
+                .Include(x => x.User)
                 .FirstOrDefaultAsync();
 
             if (contractor == null) throw new NotFoundException();
