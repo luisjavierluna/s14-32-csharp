@@ -3,14 +3,8 @@ using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
 using eventPlannerBack.Models.Entidades;
-using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace eventPlannerBack.BLL.Service
 {
@@ -40,6 +34,13 @@ namespace eventPlannerBack.BLL.Service
         public async Task<IEnumerable<PostulationDTO>> GetAll()
         {
             var query = await _repository.GetAll();
+            var list = await query.ToListAsync();
+            return _mapper.Map<IEnumerable<PostulationDTO>>(list);
+        }
+
+        public async Task<IEnumerable<PostulationDTO>> GetMyPostulations(string contractorId)
+        {
+            var query = await _postulationRepository.GetMyPostulations(contractorId);
             var list = await query.ToListAsync();
             return _mapper.Map<IEnumerable<PostulationDTO>>(list);
         }

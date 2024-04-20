@@ -1,6 +1,5 @@
 ﻿using eventPlannerBack.API.Exceptions;
 using eventPlannerBack.BLL.Interfaces;
-using eventPlannerBack.Models.VModels.NotificationDTO;
 using eventPlannerBack.Models.VModels.PostulationDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,23 +14,23 @@ namespace eventPlannerBack.API.Controllers
     public class PostulationController: ControllerBase
     {
         private readonly IGenericService<PostulationCreationDTO, PostulationDTO> _genericService;
-        private readonly IPostulationService _PostulationService;
+        private readonly IPostulationService _postulationService;
 
         public PostulationController(
             IGenericService<PostulationCreationDTO, PostulationDTO> genericService,
-            IPostulationService notificationService)
+            IPostulationService postulationService)
         {
             _genericService = genericService;
-            _PostulationService = notificationService;
+            _postulationService = postulationService;
         }
         [HttpGet("GetById")]
         public async Task<ActionResult<PostulationDTO>> GetById(string id)
         {
             try
             {
-                var notification = await _genericService.GetById(id);
+                var postulation = await _genericService.GetById(id);
 
-                return Ok(notification);
+                return Ok(postulation);
             }
             catch (NotFoundException ex)
             {
@@ -43,13 +42,14 @@ namespace eventPlannerBack.API.Controllers
                 return StatusCode(500, "Internal Server Error");
             }
         }
+
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<PostulationDTO>>> GetAll()
         {
             try
             {
-                var notifications = await _genericService.GetAll();
-                return Ok(notifications);
+                var postulations = await _genericService.GetAll();
+                return Ok(postulations);
             }
             catch (Exception)
             {
@@ -57,7 +57,29 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
+        [HttpGet("GetMyPostulations")]
+        public async Task<ActionResult<IEnumerable<PostulationDTO>>> GetMyPostulations()
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var contractorId = claim.Value;
+
+                if (contractorId == null)
+                    return BadRequest("Id was not provided");
+
+                var postulations = await _postulationService.GetMyPostulations(contractorId);
+                return Ok(postulations);
+
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
         [HttpPost("Insert")]
         public async Task<ActionResult<PostulationDTO>> Insert(PostulationCreationDTO model)
         {
@@ -66,9 +88,9 @@ namespace eventPlannerBack.API.Controllers
                 var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
                 var id = claim.Value;
                 model.ContractorId = id;
-                var notification = await _genericService.SignIn(model);
+                var postulation = await _genericService.SignIn(model);
 
-                return Ok(notification);
+                return Ok(postulation);
             }
             catch (Exception e)
             {
@@ -82,9 +104,9 @@ namespace eventPlannerBack.API.Controllers
         {
             try
             {
-                var notification = await _genericService.Update(id, model);
+                var postulation = await _genericService.Update(id, model);
 
-                return Ok(notification);
+                return Ok(postulation);
             }
             catch (NotFoundException ex)
             {
@@ -123,7 +145,7 @@ namespace eventPlannerBack.API.Controllers
             {
                 var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
                 var clientid = claim.Value;
-                await _PostulationService.Accept(id, clientid);
+                await _postulationService.Accept(id, clientid);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -144,7 +166,7 @@ namespace eventPlannerBack.API.Controllers
             {
                 var claim = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
                 var clientid = claim.Value;
-                await _PostulationService.Refuse(id,clientid);
+                await _postulationService.Refuse(id,clientid);
                 return Ok();
             }
             catch (NotFoundException ex)

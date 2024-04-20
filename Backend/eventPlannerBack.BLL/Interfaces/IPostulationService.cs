@@ -24,5 +24,6 @@ namespace eventPlannerBack.BLL.Interfaces
         */
         Task Refuse(string id, string clientId);
         Task Accept(string id, string clientId);
+        Task<IEnumerable<PostulationDTO>> GetMyPostulations(string contractorId);
     }
 }
