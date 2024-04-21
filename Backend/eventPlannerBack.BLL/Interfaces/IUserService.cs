@@ -21,5 +21,6 @@ namespace eventPlannerBack.BLL.Interfaces
 
         Task<AuthDTO> GetCredentialsAsync(string email);
         Task<string> GetUserRole(User user);
+        Task<string> ChangeRole(string userId);
     }
 }

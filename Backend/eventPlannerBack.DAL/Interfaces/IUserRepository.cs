@@ -11,5 +11,6 @@ namespace eventPlannerBack.DAL.Interfaces
 
         Task<User> GetByEmailAsync(string email);
         Task<string> GetUserRole(User user);
+        Task<string> ChangeRole(string userId);
     }
 }

@@ -119,5 +119,17 @@ namespace eventPlannerBack.BLL.Service
             }
         }
 
+        public async Task<string> ChangeRole(string userId)
+        {
+            try
+            {
+                return await _userRepository.ChangeRole(userId);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
     }
 }

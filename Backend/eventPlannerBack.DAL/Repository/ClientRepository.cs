@@ -83,7 +83,10 @@ namespace eventPlannerBack.DAL.Repository
 
         public async Task<ClientDTO> GetByID(string id)
         {
-            var client = await _context.Clients.Where(c=> c.Id == id).FirstOrDefaultAsync();
+            var client = await _context.Clients
+                .Include(x => x.User)
+                .Where(c=> c.Id == id)
+                .FirstOrDefaultAsync();
 
             if (client == null)throw new NotFoundException();
             

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eventPlannerBack.DAL.Repository
 {
-    public class NotificationRepository : IGenericRepository<NotificationCreationDTO, NotificationDTO, Notification>
+    public class NotificationRepository : IGenericRepository<NotificationCreationDTO, NotificationDTO, Notification>, INotificationRepository
     {
         private readonly AplicationDBcontext _context;
         private readonly IMapper _mapper;
@@ -45,6 +45,21 @@ namespace eventPlannerBack.DAL.Repository
             {
                 IQueryable<Notification> queryNotifications = _context.Notifications;
                 return queryNotifications;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IQueryable<Notification>> GetMyNotifications(string userId)
+        {
+            try
+            {
+                IQueryable<Notification> queryPostulation = _context.Notifications
+                    .Where(x => x.UserId == userId);
+
+                return queryPostulation;
             }
             catch (Exception)
             {

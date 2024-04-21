@@ -23,5 +23,6 @@ namespace eventPlannerBack.DAL.Interfaces
 
         Task Refuse(string id, string clientId);
         Task Accept(string id, string clientId);
+        Task<IQueryable<Postulation>> GetMyPostulations(string contractorId);
     }
 }

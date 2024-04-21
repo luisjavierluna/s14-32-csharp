@@ -53,6 +53,21 @@ namespace eventPlannerBack.DAL.Repository
             }
         }
 
+        public async Task<IQueryable<Postulation>> GetMyPostulations(string contractorId)
+        {
+            try
+            {
+                IQueryable<Postulation> queryPostulation = _context.Postulations
+                    .Where(x => x.ContractorId == contractorId);
+
+                return queryPostulation;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<PostulationDTO> GetByID(string id)
         {
             var postulation = await _context.Postulations.Where(c => c.Id == id).FirstOrDefaultAsync();

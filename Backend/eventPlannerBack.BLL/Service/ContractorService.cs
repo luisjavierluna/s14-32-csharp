@@ -2,7 +2,6 @@
 using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
-using eventPlannerBack.DAL.Repository;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ContractorDTO;
@@ -53,11 +52,12 @@ namespace eventPlannerBack.BLL.Service
             return await _genericRepository.Insert(model);
         }
 
-        public async Task<ContractorsVocations> AssignVocation(AssignVocationDTO model)
+        public async Task<ContractorsVocations> AssignVocation(AssignVocationDTO model, string contractorId)
         {
             try
             {
                 ContractorsVocations contractorVocation = _mapper.Map<ContractorsVocations>(model);
+                contractorVocation.ContractorId = contractorId;
 
                 await _contractorRepository.AssignVocation(contractorVocation);
                 return contractorVocation;

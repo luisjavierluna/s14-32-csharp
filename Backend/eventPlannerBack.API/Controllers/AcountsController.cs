@@ -1,9 +1,12 @@
-﻿using eventPlannerBack.BLL.Behaviors;
+﻿using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
-using eventPlannerBack.Models.VModels.ClientDTO;
+using eventPlannerBack.Models.VModels.ContractorDTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,21 +20,18 @@ namespace eventPlannerBack.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
-        private readonly ITokenService _tokenService;
-        private readonly IGenericService<ClientCreationDTO, ClientDTO> _clientService;
+        private readonly IGenericService<ContractorCreationDTO, ContractorDTO> _contractorService;
         private readonly ValidationBehavior<UserCredentialsDTO> _validationBehavior;
 
         public AcountsController(
             IUserService userService,
             SignInManager<User> signInManager, 
-            ITokenService tokenService, 
-            IGenericService<ClientCreationDTO, ClientDTO> clientService,
+            IGenericService<ContractorCreationDTO, ContractorDTO> contractorService,
             ValidationBehavior<UserCredentialsDTO> validationBehavior)
         {
             _userService = userService;
             _signInManager = signInManager;
-            _tokenService = tokenService;
-            _clientService = clientService;
+            _contractorService = contractorService;
             _validationBehavior = validationBehavior;
         }
 
@@ -85,5 +85,44 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("ChangeRole")]
+        public async Task<ActionResult> ChangeRole()
+        {
+            bool CUITConfirmed = await IsContractorCUITConfirmed();
+            if (!CUITConfirmed) return BadRequest("CUIT needs to be added to enable role change");
+
+            var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
+            var userId = claim.Value;
+
+            if (userId == null)
+                return BadRequest("Id was not provided");
+
+            var newRole = await _userService.ChangeRole(userId);
+
+            return Ok(newRole);
+        }
+
+        private async Task<bool> IsContractorCUITConfirmed()
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var contractorId = claim.Value;
+
+                if (contractorId == null) throw new NotFoundException("Id was not provided");
+
+                var contractor = await _contractorService.GetById(contractorId);
+
+                bool isConfirmed = contractor.CUIT != null ? true : false;
+
+                return isConfirmed;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }
