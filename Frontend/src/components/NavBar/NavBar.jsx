@@ -1,15 +1,17 @@
-import { Link, Box, Flex, Text, Button, Stack } from '@chakra-ui/react';
-import { useState } from 'react';
-import Logo from '../../assets/Logo.png';
+import { Box, Flex, Text, Button, Stack, Image } from '@chakra-ui/react'
+import { useState } from 'react'
+import Logo from '../../assets/Logo.png'
+import { useUserAuth } from '../../context/UserAuthContext'
+import { Link } from 'react-router-dom'
 
-const NavBar = (props) => {
-  const [isOpen, setIsOpen] = useState(false);
+const NavBar = (props) => {  
+  const [isOpen, setIsOpen] = useState(false)  
 
   const toggle = () => setIsOpen(!isOpen);
 
   return (
     <NavBarContainer {...props}>
-      <img src={Logo} alt="logo" width="200px" />
+      <Link to={'/'}><Image src={Logo} alt="logo" w='44' h='auto'/></Link>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
       <MenuLinks isOpen={isOpen} />
     </NavBarContainer>
@@ -48,7 +50,7 @@ const MenuToggle = ({ toggle, isOpen }) => {
 
 const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
   return (
-    <Link href={to}>
+    <Link to={to}>
       <Text display="block" {...rest}>
         {children}
       </Text>
@@ -57,51 +59,80 @@ const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
 };
 
 const MenuLinks = ({ isOpen }) => {
+  const { handleLogout } = useUserAuth()
+  const token = localStorage.getItem('token') ? localStorage.getItem('token') : '' 
   return (
     <Box
       display={{ base: isOpen ? 'block' : 'none', md: 'block' }}
       flexBasis={{ base: '100%', md: 'auto' }}
     >
-      <Stack
+      { token ?
+      (<Stack
+        spacing={1}
+        align="center"
+        justify={['center', 'space-between', 'flex-end', 'flex-end']}
+        direction={['column', 'column', 'row']}
+        pt={[4, 4, 0, 0]}>
+        <MenuItem to="/userdashboard" isLast>
+          <Button
+            size="sm"
+            rounded="50px"
+            w="119px"
+            h="25px"            
+            color={['#263049']}
+            variant='ghost'>
+            Mi Cuenta
+          </Button>
+        </MenuItem>
+        <MenuItem to="/" isLast>
+          <Button
+            size="sm"
+            rounded="50px"
+            w="119px"
+            h="25px"            
+            color={['#263049']}
+            fontWeight='300'
+            variant='ghost'
+            onClick={handleLogout}>
+            Cerrar Sesión
+          </Button>
+        </MenuItem>
+        </Stack>)
+        :
+        (<Stack
         spacing={8}
         align="center"
         justify={['center', 'space-between', 'flex-end', 'flex-end']}
         direction={['column', 'column', 'row']}
-        pt={[4, 4, 0, 0]}
-      >
-        <MenuItem to="/signup" isLast>
-          <Button
-            size="sm"
-            rounded="50px"
-            w="119px"
-            h="25px"
-            border="1px solid"
-            borderColor="#263049"
-            color={['#263049']}
-            bg={'#fff'}
-            // _hover={{
-            //   bg: ['black'],
-            // }}
-          >
-            Crear Cuenta
-          </Button>
-        </MenuItem>
-        <MenuItem to="/signup" isLast>
-          <Button
-            size="sm"
-            rounded="50px"
-            w="119px"
-            h="25px"
-            color="#fff"
-            bg={'#263049'}
-            // _hover={{
-            //   bg: ['black'],
-            // }}
-          >
-            Iniciar Sesión
-          </Button>
-        </MenuItem>
-      </Stack>
+        pt={[4, 4, 0, 0]}>
+          <MenuItem to="/register" isLast>
+            <Button
+              size="sm"
+              rounded="50px"
+              w="119px"
+              h="25px"
+              border="1px solid"
+              borderColor="#263049"
+              color={['#263049']}
+              bg={'#fff'}
+              boxShadow='xl'>
+              Crear Cuenta
+            </Button>
+          </MenuItem>
+          <MenuItem to="/login" isLast>
+            <Button
+              size="sm"
+              rounded="50px"
+              w="119px"
+              h="25px"
+              color="#fff"
+              bg={'#263049'}
+              boxShadow='xl'>
+              Iniciar Sesión
+            </Button>
+          </MenuItem>
+          </Stack>)
+        }
     </Box>
   );
 };
@@ -117,8 +148,7 @@ const NavBarContainer = ({ children, ...props }) => {
       h="96px"
       mb={0}
       px={3}
-      pr={9}
-      // bg={['rgba(2, 96, 190, 0.63)']}
+      pr={9}      
       color={['black']}
       {...props}
     >

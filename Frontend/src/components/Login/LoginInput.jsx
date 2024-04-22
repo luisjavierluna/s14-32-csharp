@@ -6,7 +6,7 @@ import {
     Box,
     IconButton  
 } from '@chakra-ui/react'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import { FaEye, FaEyeSlash } from '../../assets/icons'
 
 
 export default function LoginInput({ id, name, type, placeholder, value, errors, onChange, togglePasswordVisibility, showPassword }) {
