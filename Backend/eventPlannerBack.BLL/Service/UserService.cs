@@ -2,10 +2,12 @@
 using eventPlannerBack.BLL.Behaviors;
 using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.DAL.Interfaces;
+using eventPlannerBack.DAL.Migrations;
 using eventPlannerBack.Models.Entidades;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
+using eventPlannerBack.Models.VModels.VocationDTO;
 using Microsoft.AspNetCore.Identity;
 
 namespace eventPlannerBack.BLL.Service
@@ -92,6 +94,13 @@ namespace eventPlannerBack.BLL.Service
 
                 UserDTO dto = _mapper.Map<UserDTO>(user);
                 dto.Role = role;
+                if(user.Contractor.ContractorsVocations != null)
+                {
+                    dto.contractor.Vocations =
+                    _mapper.Map<List<VocationDTO>>(user.Contractor
+                    .ContractorsVocations
+                    .Select(x => x.Vocation).ToList());
+                }
 
                 var token = _tokenService.GenerateToken(email, 1);
 

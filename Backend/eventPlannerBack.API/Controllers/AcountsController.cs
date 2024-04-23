@@ -87,7 +87,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost("ChangeRole")]
-        public async Task<ActionResult> ChangeRole()
+        public async Task<ActionResult<AuthDTO>> ChangeRole()
         {
             bool CUITConfirmed = await IsContractorCUITConfirmed();
             if (!CUITConfirmed) return BadRequest("CUIT needs to be added to enable role change");
@@ -100,7 +100,12 @@ namespace eventPlannerBack.API.Controllers
 
             var newRole = await _userService.ChangeRole(userId);
 
-            return Ok(newRole);
+            var claim2 = HttpContext.User.Claims.Where(c => c.Type == "mail").FirstOrDefault();
+            var mail = claim2.Value;
+
+            AuthDTO authResponse = await _userService.GetCredentialsAsync(mail);
+
+            return Ok(authResponse);
         }
 
         private async Task<bool> IsContractorCUITConfirmed()

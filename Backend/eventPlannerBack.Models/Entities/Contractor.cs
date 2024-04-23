@@ -7,6 +7,9 @@ namespace eventPlannerBack.Models.Entidades
     {
         public User User { get; set; }
         public string? CUIT { get; set; }
+        public string? Link { get; set; }
+        public string? BusinessName { get; set; }
+        public string? ProfileImage { get; set; }
         public ICollection<ContractorsVocations> ContractorsVocations { get; } = new List<ContractorsVocations>();
         public ICollection<Postulation> Postulations { get; set; }
     }

@@ -11,8 +11,9 @@ namespace eventPlannerBack.Models.VModels
         public string PhoneNumber { get; set; }
         public string ProfileImage { get; set; }
         public string Role { get; set; }
-        public string CUIT { get; set; }
+        //public string CUIT { get; set; }
         public string ContractorId { get; set; }
         public string ClientId { get; set; }
+        public ContractorDTO.ContractorDTO? contractor { get; set; }
     }
 }

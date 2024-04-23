@@ -69,7 +69,11 @@ namespace eventPlannerBack.DAL.Repository
             {
                 var user = await _dbcontext.Users
                     .Where(user => user.Email == email)
-                    .Include(user => user.Client).FirstOrDefaultAsync();
+                    .Include(user => user.Client)
+                    .Include(user => user.Contractor)
+                        .ThenInclude(c=>c.ContractorsVocations)
+                            .ThenInclude(cv=>cv.Vocation)
+                    .FirstOrDefaultAsync();
 
                 if (user == null) throw new NotFoundException();
 
