@@ -1,5 +1,6 @@
 ﻿using eventPlannerBack.Models.Entidades.Common;
 using eventPlannerBack.Models.Enums;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,8 @@ namespace eventPlannerBack.Models.Entidades
         public Event Event { get; set; }
         public string? Message { get;set; }
         public StatusPostulation StatusPostulation { get; set; }
+        [Precision(18, 2)]
+        public decimal? Budget { get; set; }
 
     }
 }

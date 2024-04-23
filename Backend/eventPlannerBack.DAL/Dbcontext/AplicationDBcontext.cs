@@ -29,6 +29,7 @@ namespace eventPlannerBack.DAL.Dbcontext
 
             SeedCity.Seed(modelBuilder);
             SeedVocation.Seed(modelBuilder);
+            SeedEventType.Seed(modelBuilder);
         }
 
         public DbSet<Client> Clients { get; set; }
@@ -41,6 +42,6 @@ namespace eventPlannerBack.DAL.Dbcontext
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Postulation> Postulations { get; set; }
         public DbSet<ContractorsVocations> ContractorsVocations { get; set; }
-
+        public DbSet<EventType> EventTypes { get; set; }
     }
 }

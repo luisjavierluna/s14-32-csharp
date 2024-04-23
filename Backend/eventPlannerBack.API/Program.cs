@@ -27,8 +27,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options =>
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); 
+builder.Services.AddControllers();
+    //.AddJsonOptions(options =>
+    //options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve); 
 
 //builder.Services.AddControllers().AddJsonOptions(x =>
 //                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
@@ -165,6 +166,10 @@ builder.Services.AddScoped<IClientSeeder, ClientSeeder>();
 //Event
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
+
+//EventType
+builder.Services.AddScoped<IEventTypeRepository, EventTypeRepository>();
+builder.Services.AddScoped<IEventTypeService, EventTypeService>();
 
 //ImageEvent
 builder.Services.AddScoped<IImageEventRepository, ImageEventRepository>();

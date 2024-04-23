@@ -56,6 +56,7 @@ namespace eventPlannerBack.BLL.Service
                     .Include(e => e.postulations.Where(p=>p.StatusPostulation!=StatusPostulation.REFUSED))
                         .ThenInclude(p=>p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c=>c.User)
+                    .Include(e=>e.EventType)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
                 return _mapper.Map<List<EventDTO>>(listEvents);
@@ -81,6 +82,7 @@ namespace eventPlannerBack.BLL.Service
                     .Include(e => e.postulations.Where(p => p.StatusPostulation != StatusPostulation.REFUSED))
                         .ThenInclude(p => p.Contractor).ThenInclude(c => c.User)
                     .Include(e => e.Client).ThenInclude(c => c.User)
+                    .Include(e => e.EventType)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
                 return _mapper.Map<List<EventDTO>>(listEvents);
@@ -96,7 +98,7 @@ namespace eventPlannerBack.BLL.Service
             return await _eventRepository.GetByID(id);
         }
 
-        public async Task<IEnumerable<EventDTO>> GetByVocation(string contractorId, string clientId)
+        public async Task<IEnumerable<EventDTO>> GetByVocation(string contractorId, string clientId, int? eventTypeId)
         {
             try
             {
@@ -113,6 +115,7 @@ namespace eventPlannerBack.BLL.Service
                 }
 
                 var query = await _eventRepository.GetAll();
+                if (eventTypeId.HasValue) query = query.Where(e=>e.EventTypeId == eventTypeId);
                 var listEvents = await query
                     .Where(e => !e.IsDeleted)
                     .Where(e => e.IsActive)
@@ -122,6 +125,7 @@ namespace eventPlannerBack.BLL.Service
                         .ThenInclude(c => c.Province)
                     .Include(e => e.vocations)
                     .Include(e => e.Client).ThenInclude(c => c.User)
+                    .Include(e => e.EventType)
                     //.Include(e => e.ImageEvents)
                     .ToListAsync();
                 return _mapper.Map<List<EventDTO>>(listEvents);
