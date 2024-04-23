@@ -10,5 +10,6 @@
         public string EventId { get; set; } // TEMPORAL
         //public Event Event { get; set; }
         public string? Message { get; set; }
+        public double subprice { get; set; }
     }
 }

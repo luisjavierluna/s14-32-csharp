@@ -18,6 +18,7 @@ namespace eventPlannerBack.Models.VModels.PostulationDTO
         public string EventId { get; set; }
         public Event Event { get; set; }
         public string Message { get; set; }
+        public double subprice { get; set; }
         public StatusPostulation StatusPostulation { get; set; }
     }
 }

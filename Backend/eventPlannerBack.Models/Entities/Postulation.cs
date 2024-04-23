@@ -17,6 +17,7 @@ namespace eventPlannerBack.Models.Entidades
         public string? EventId { get; set; } // TEMPORALMENTE PUEDEN SER NULOS
         public Event Event { get; set; }
         public string? Message { get;set; }
+        public double subprice { get; set; }
         public StatusPostulation StatusPostulation { get; set; }
 
     }

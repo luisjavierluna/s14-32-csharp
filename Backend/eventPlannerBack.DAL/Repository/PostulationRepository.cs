@@ -109,6 +109,7 @@ namespace eventPlannerBack.DAL.Repository
                 postulation.EventId = model.EventId; // TEMPORAL
                 postulation.VocationId = model.VocationId; // TEMPORAL
                 postulation.ContractorId = model.ContractorId;
+                postulation.subprice = model.subprice;
                 //REVER
                 //postulation.Contractor = model.Contractor;
                 //postulation.Event = model.Event;

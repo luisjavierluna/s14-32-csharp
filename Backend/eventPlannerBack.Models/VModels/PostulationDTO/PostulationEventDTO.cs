@@ -16,5 +16,6 @@ namespace eventPlannerBack.Models.VModels.PostulationDTO
         public string VocationId { get; set; }
         public string VocationName { get; set; }
         public string StatusPostulation { get; set; }
+        public double subprice { get; set; }
     }
 }
