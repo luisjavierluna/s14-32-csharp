@@ -18,7 +18,9 @@ namespace eventPlannerBack.Models.Utilities
     {
         public AutoMapperProfile()
         {
-            CreateMap<UserDTO, User>().ReverseMap();
+            CreateMap<User, UserDTO>()
+                .ForMember(u => u.contractor, dto => dto.MapFrom(u => u.Contractor))
+                .IncludeAllDerived().ReverseMap();
             CreateMap<UserCreationDTO, User>().ReverseMap();
 
             CreateMap<ClientDTO, Client>().ReverseMap();
@@ -35,7 +37,9 @@ namespace eventPlannerBack.Models.Utilities
                 .ForMember(e => e.Province, dto => dto.MapFrom(e => e.City.Province.Name))
                 .ForMember(e => e.postulations, dto => dto.MapFrom(e => e.postulations));
 
-            CreateMap<ContractorDTO, Contractor>().ReverseMap();
+            CreateMap<Contractor, ContractorDTO>()
+                .IncludeAllDerived()
+                .ReverseMap();
             CreateMap<ContractorCreationDTO, Contractor>().ReverseMap();
 
             CreateMap<CityDTO, City>().ReverseMap();

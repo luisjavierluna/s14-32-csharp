@@ -7,6 +7,9 @@
         public string UserFirstName { get; set; }
         public string UserLastName { get; set; }
         public string CUIT { get; set; }
-        public ICollection<VocationDTO.VocationDTO> Vocations { get; set; }
+        public string? Link { get; set; }
+        public string? BusinessName { get; set; }
+        public string? ProfileImage { get; set; }
+        public ICollection<VocationDTO.VocationDTO> Vocations { get; set; } = new List<VocationDTO.VocationDTO>();
     }
 }

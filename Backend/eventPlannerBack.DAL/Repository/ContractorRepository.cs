@@ -7,6 +7,7 @@ using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.ContractorDTO;
 using eventPlannerBack.Models.VModels.VocationDTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace eventPlannerBack.DAL.Repository
 {
@@ -115,7 +116,21 @@ namespace eventPlannerBack.DAL.Repository
 
                 if (contractor == null) throw new NotFoundException();
 
-                contractor.CUIT = model.CUIT;
+                contractor.CUIT = model.CUIT ?? contractor.CUIT;
+                contractor.BusinessName = model.BusinessName ?? contractor.BusinessName;
+                contractor.Link = model.Link ?? contractor.Link;
+                contractor.ProfileImage = model.ProfileImage ?? contractor.ProfileImage;
+                if (!model.VocationsId.IsNullOrEmpty())
+                {
+                    foreach (var voc in model.VocationsId)
+                    {
+                        await AssignVocation(new ContractorsVocations()
+                        {
+                            ContractorId = id,
+                            VocationId = voc
+                        });
+                    }
+                }
 
                 _context.Update(contractor);
 
