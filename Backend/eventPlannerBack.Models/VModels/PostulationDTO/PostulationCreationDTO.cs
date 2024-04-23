@@ -1,4 +1,6 @@
-﻿namespace eventPlannerBack.Models.VModels.PostulationDTO
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace eventPlannerBack.Models.VModels.PostulationDTO
 {
     public class PostulationCreationDTO
     {
@@ -10,5 +12,7 @@
         public string EventId { get; set; } // TEMPORAL
         //public Event Event { get; set; }
         public string? Message { get; set; }
+        [Precision(18, 2)]
+        public decimal? Budget { get; set; }
     }
 }

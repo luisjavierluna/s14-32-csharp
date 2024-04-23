@@ -1,5 +1,6 @@
 ﻿using eventPlannerBack.Models.Enums;
 using eventPlannerBack.Models.VModels.EventsDTO;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,7 @@ namespace eventPlannerBack.Models.VModels.PostulationDTO
         public string VocationId { get; set; }
         public string VocationName { get; set; }
         public string StatusPostulation { get; set; }
+        [Precision(18, 2)]
+        public decimal? Budget { get; set; }
     }
 }

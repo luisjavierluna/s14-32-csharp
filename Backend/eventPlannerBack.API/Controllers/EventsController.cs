@@ -19,11 +19,11 @@ namespace eventPlannerBack.API.Controllers
             _eventService = eventService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<EventDTO>> GetEvent(string id)
-        {
-            return Ok(new EventDTO());
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<EventDTO>> GetEvent(string id)
+        //{
+        //    return Ok(new EventDTO());
+        //}
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("myEvents")]
@@ -63,7 +63,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("postulable")]
-        public async Task<ActionResult<List<EventDTO>>> GetPostulable()
+        public async Task<ActionResult<List<EventDTO>>> GetPostulable([FromQuery(Name = "type")] int? eventTypeId)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace eventPlannerBack.API.Controllers
                 var contractorId = claim.Value;
                 var claim2 = HttpContext.User.Claims.Where(c => c.Type == "clientid").FirstOrDefault();
                 var clientId = claim2.Value;
-                var posEvents = await _eventService.GetByVocation(contractorId, clientId);
+                var posEvents = await _eventService.GetByVocation(contractorId, clientId, eventTypeId);
                 return Ok(posEvents);
             }
             catch (Exception)
@@ -98,19 +98,19 @@ namespace eventPlannerBack.API.Controllers
             }
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut("postulation/{id}")]
-        public async Task<ActionResult> PostulateEvent(string id)
-        {
-            return Ok();
-        }
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[HttpPut("postulation/{id}")]
+        //public async Task<ActionResult> PostulateEvent(string id)
+        //{
+        //    return Ok();
+        //}
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPut("status/{id}")]
-        public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name = "status")] int status)
-        {
-            return Ok();
-        }
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[HttpPut("status/{id}")]
+        //public async Task<ActionResult> ChangeStatus(string id, [FromQuery(Name = "status")] int status)
+        //{
+        //    return Ok();
+        //}
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("{id}")]

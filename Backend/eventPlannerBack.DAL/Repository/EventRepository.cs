@@ -125,6 +125,7 @@ namespace eventPlannerBack.DAL.Repository
                 response.Guests = model.Guests ?? response.Guests;
                 response.CityId = model.CityId ?? response.CityId;
                 response.Address = model.Address ?? response.Address;
+                response.EventTypeId = model.EventTypeId ?? response.EventTypeId;
 
                 _dbcontext.Update(response);
                 await _dbcontext.SaveChangesAsync();

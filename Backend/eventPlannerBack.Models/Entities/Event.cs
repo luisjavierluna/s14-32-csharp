@@ -28,5 +28,7 @@ namespace eventPlannerBack.Models.Entidades
         public int CityId { get; set; }
         public City City { get; set; }
         public string Address { get; set; } = string.Empty;
+        public int? EventTypeId { get; set; }
+        public EventType? EventType { get; set; }
     }
 }

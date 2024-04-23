@@ -1,4 +1,5 @@
 ﻿using eventPlannerBack.Models.Entidades;
+using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels.PostulationDTO;
 using eventPlannerBack.Models.VModels.VocationDTO;
 
@@ -24,5 +25,6 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         public string City { get; set; } = string.Empty;
         public string Province { get; set; } = string.Empty;        
         public string Address { get; set; } = string.Empty;
+        public EventType? EventType { get; set; }
     }
 }

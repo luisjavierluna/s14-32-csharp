@@ -23,5 +23,6 @@ namespace eventPlannerBack.Models.VModels.EventsDTO
         public int? Guests { get; set; }
         public int? CityId { get; set; }
         public string Address { get; set; } = string.Empty;
+        public int? EventTypeId { get; set; }
     }
 }

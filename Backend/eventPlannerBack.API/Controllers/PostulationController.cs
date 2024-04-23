@@ -80,7 +80,7 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "contractor")]
         [HttpPost("Insert")]
-        public async Task<ActionResult<PostulationDTO>> Insert(PostulationCreationDTO model)
+        public async Task<ActionResult> Insert(PostulationCreationDTO model)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace eventPlannerBack.API.Controllers
                 model.ContractorId = id;
                 var postulation = await _genericService.SignIn(model);
 
-                return Ok(postulation);
+                return Ok();
             }
             catch (Exception e)
             {

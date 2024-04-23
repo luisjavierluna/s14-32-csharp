@@ -97,10 +97,12 @@ namespace eventPlannerBack.API.Controllers
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPut("Update")]
-        public async Task<ActionResult<ContractorDTO>> Update(string id, ContractorCreationDTO model)
+        public async Task<ActionResult<ContractorDTO>> Update(ContractorCreationDTO model)
         {
             try
             {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var id = claim.Value;
                 var contractor = await _genericService.Update(id, model);
 
                 return Ok(contractor);
