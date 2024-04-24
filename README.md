@@ -9,8 +9,8 @@ Reservá y preparate para celebrar. Unite a nuestra comunidad y convertí cada e
 | :---------------- | :-------------------------- | :-------------------------------------------------------------------------------------------------------------------------------- |      
 | `UX/UI Designer`  | Agustina Balcarcel          | [![GitHub]](https://github.com/agusbcl) [![linkedin]](https://www.linkedin.com/in/agustina-balcarcel/)                            |
 | `Front End`       | Leandro Rossi               | [![GitHub]](https://github.com/leandrofrossi) [![linkedin]](https://www.linkedin.com/in/rossileandro/)                            |
-| `Back End`        | Emanuel Capo                | [![GitHub]](https://github.com/Emanuel-Capo) [![linkedin]]([https://www.linkedin.com/in/emanuel-capo/])                           |                                                                                        
-| `Back End`        | Luis Javier Luna Arellano   | [![GitHub]]( https://www.linkedin.com/in/luis-javier-luna/) [![linkedin]](https://www.linkedin.com/in/luis-javier-luna/)        |
+| `Back End`        | Emanuel Capo                | [![GitHub]](https://github.com/Emanuel-Capo) [![linkedin]](https://www.linkedin.com/in/emanuel-capo/)                           |                                                                                        
+| `Back End`        | Luis Javier Luna Arellano   | [![GitHub]](https://github.com/luisjavierluna) [![linkedin]](https://www.linkedin.com/in/luis-javier-luna/)        |
 | `Back End`        | Adrián L.                   | [![GitHub]](https://github.com/rixda) [![linkedin]](https://www.linkedin.com/in/rixda/)                                           |              
 | `Back End`        | Rodrigo Kohnen              | [![GitHub]](https://github.com/rodrikohnen) [![linkedin]](https://www.linkedin.com/in/rodrigo-kohnen)                             |
 
