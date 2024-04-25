@@ -11,10 +11,10 @@ import {
     IconButton
 } from '@chakra-ui/react'
 import { useRef } from 'react'
-import { FiTrash2 } from "react-icons/fi"
+import { FiTrash2 } from "../../assets/icons"
 import { Link } from 'react-router-dom'
 
-  export default function CancelAlert() {
+  export default function CancelAlert({ navlink }) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const cancelRef = useRef()
   
@@ -37,7 +37,7 @@ import { Link } from 'react-router-dom'
             <AlertDialogBody>Se perderán todos los datos y deberá volver a cargarlos.</AlertDialogBody>
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose} w='12'>NO</Button>
-              <Link to='/'><Button colorScheme='red' ml={3} w='12'>SI</Button></Link>               
+              <Link to={navlink}><Button colorScheme='red' ml={3} w='12'>SI</Button></Link>               
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
