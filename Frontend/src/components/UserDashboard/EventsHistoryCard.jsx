@@ -18,7 +18,7 @@ const EventsHistoryCard = () => {
               Authorization: `Bearer ${token}`
           }
         })        
-        setEventsCreated(response.data)
+        setEventsCreated(response.data)        
       } catch (error) {
         console.error('Error al obtener historial de eventos:', error.message)
       }
@@ -26,9 +26,7 @@ const EventsHistoryCard = () => {
     fetchEventsCreated()
   }, []) 
    
-  const handleEventClick = () => {
-    console.log('Click')
-  }
+  
   return (
     <Card bg='rgba(180, 224, 223, .2)' color='#263049' flexDirection='column' borderRadius='20' alignItems='center' width='full' boxShadow='xl' minH='80%'>          
         <CardHeader >
@@ -48,10 +46,12 @@ const EventsHistoryCard = () => {
           p='3'
           justifyItems='center'>
           {eventsCreated.map(event => (
-            <Box key={event.id} onClick={() => handleEventClick(event)} flexDirection='column' w={{base:'50vw', md:'35vw', lg:'20vw'}} textAlign='center'>                          
-                <Heading py='2' size='sm'>{event.name}</Heading>
-                <Image src={EventForm} alt={event.name} borderRadius='md'/>              
-            </Box>
+            <Link key={event.id} to={{ pathname:`/eventinfocard/${event.id}`, state: { event } }} style={{ textDecoration: 'none' }}>
+              <Box flexDirection='column' w={{base:'50vw', md:'35vw', lg:'20vw'}} textAlign='center'>                          
+                  <Heading py='2' size='sm'>{event.name}</Heading>
+                  <Image src={EventForm} alt={event.name} borderRadius='md'/>              
+              </Box>
+            </Link>            
           ))}          
           <Center flexDirection='column' w='52' h='52' mt='-2'>
               <Button as={Link} to='/eventform' color='#263049' variant='ghost' py='2' borderRadius='md'>

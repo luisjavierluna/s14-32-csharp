@@ -145,7 +145,7 @@ const NavBarContainer = ({ children, ...props }) => {
       justify="space-between"
       wrap="wrap"
       w="100%"
-      h="96px"
+      h="10vh"
       mb={0}
       px={3}
       pr={9}      

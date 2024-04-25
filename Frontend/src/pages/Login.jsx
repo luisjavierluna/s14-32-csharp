@@ -38,15 +38,19 @@ export default function Login () {
       setIsSubmitting(true)      
       console.log(values)
       const response = await axios.post('https://www.eventplanner.somee.com/api/Acounts/Login', values)
-      handleLogin(response.data)      
-      navigate('/userdashboard')      
       console.log(response.data)
+      await handleLogin(response.data)      
+      navigate('/userdashboard')   
     } catch (error) {
       const formErrors = {}
+      if (error.inner) {
       error.inner.forEach(err => {
         formErrors[err.path] = err.message;
       })
       setErrors(formErrors)
+    } else {
+      console.error('Error desconocido:', error.message);
+    }
     }
     setIsSubmitting(false)
   } 

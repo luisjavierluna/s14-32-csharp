@@ -2,16 +2,21 @@ import { Box, Button, Grid, Heading, Image, Text } from "@chakra-ui/react"
 import Balloons from '../assets/ballons.jpeg'
 import BalloonsPink from '../assets/ballons-pink.jpeg'
 import EventForm from '../assets/eventform.png'
+import PostulableEvent from '../assets/postulable.png'
 import { LoginButton, ReviewCard, FAQCarousel } from "../components"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 
 export default function Landing () {
-    const [isClicked, setIsClicked] = useState(true);
+    const [isClicked, setIsClicked] = useState(true)    
 
-  const handleClick = () => {
-    setIsClicked(!isClicked);
-  };
+    const handleClick = () => {
+        setIsClicked(!isClicked);
+    }
+    
+    const token = localStorage.getItem('token') 
+
     return (
       <>
         <Box bgImage={Balloons} bgPosition='right' bgRepeat="no-repeat" bgSize='cover' minH='90vh' display='flex' alignItems='center'>
@@ -23,7 +28,7 @@ export default function Landing () {
                     Event Planner lo hace por vos!
                 </Heading>                 
                 <Box w='fit-content'>
-                    <LoginButton bgcolor='#263049' color='white' name='CREAR EVENTO'/>
+                    <Link to={token ? '/eventform' : '/register'}><LoginButton bgcolor='#263049' color='white' name='CREAR EVENTO'/></Link>
                 </Box>
             </Box>
         </Box>
@@ -106,7 +111,7 @@ export default function Landing () {
                             {!isClicked? <Text>Envia presupuestos</Text> : <Text>Contrata</Text>}
                         </Box>                        
                         <Box gridColumn="1/ span 2" gridRow="2" display="flex" alignItems="center" justifyContent="center">
-                            <Image src={EventForm} alt="ejemplo crear evento" />
+                            <Image src={!isClicked? PostulableEvent : EventForm } alt="ejemplo crear evento" />
                         </Box>
                         <Box display="flex" alignItems="center" justifyContent="center" gap='2'>
                             <Box
@@ -165,7 +170,7 @@ export default function Landing () {
                             {!isClicked? <Text>Envia presupuestos</Text> : <Text>Contrata</Text>}
                         </Box>
                         <Box gridColumn="2" gridRow="1 / span 2" display="flex" alignItems="center" justifyContent="center" p='4'>
-                            <Image src={EventForm} alt='ejemplo crear evento'/>
+                            <Image src={!isClicked? PostulableEvent : EventForm} alt='ejemplo crear evento'/>
                         </Box>
                         <Box gridColumn="3" gridRow="1" display='flex' gap='2' alignItems='center'>
                             <Box bg='#CFE4E4' borderRadius='full' w='12' h='12' py='1' px='4' fontSize='2xl' display='flex' alignItems='center' justifyContent='center'>2</Box>

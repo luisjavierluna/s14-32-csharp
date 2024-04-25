@@ -7,10 +7,12 @@ import { NavBar, Footer } from './components'
 import { useLocation } from 'react-router-dom'
 import UserDashboard from './pages/UserDashboard'
 import ContractorForm from './pages/ContractorForm'
+import EventInfoCard from './pages/EventInfoCard'
+import PostulableEvents from './pages/PostulableEvents'
 
 function App() {
   const location = useLocation();  
-  const hideNavBarRoutes = ['/login', '/register', '/eventform']
+  const hideNavBarRoutes = ['/login', '/register', '/eventform', '/eventinfocard']
   const isNavBarHidden = hideNavBarRoutes.includes(location.pathname)
 
   return (
@@ -20,9 +22,11 @@ function App() {
         <Route exact path='/login' element={<Login />}/>
         <Route exact path='/register' element={<Register />}/>
         <Route exact path='/eventform' element={<EventForm />}/> 
-        <Route exact path="/" element={<Landing />}/>
-        <Route exact path="/userdashboard" element={<UserDashboard />}/>
-        <Route exact path="/contractorform" element={<ContractorForm />}/>                 
+        <Route path='/' element={<Landing />}/>
+        <Route exact path='/userdashboard' element={<UserDashboard />}/>
+        <Route exact path='/contractorform' element={<ContractorForm />}/>
+        <Route path='/eventinfocard/:id' element={<EventInfoCard />}/>  
+        <Route exact path='/postulableevents' element={<PostulableEvents />}/>            
       </Routes>
       {!isNavBarHidden && <Footer/>}      
     </>

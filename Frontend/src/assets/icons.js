@@ -8,7 +8,7 @@ import { CheckIcon, QuestionOutlineIcon } from "@chakra-ui/icons"
 import { TbClockHour8, TbClockHour4 } from "react-icons/tb"
 import { FiTrash2 } from "react-icons/fi"
 import { FaLinkedin, FaInstagram, FaGithub, FaEye, FaEyeSlash, FaPencilAlt, FaMicrophone, FaBed, FaHandshake, FaUserEdit, FaRegSmile, FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import { HiOutlineBell, HiOutlineMenu, HiOutlineVideoCamera, HiOutlineClipboardList, HiStar } from "react-icons/hi"
+import { HiOutlinePhone, HiOutlineBell, HiOutlineMenu, HiOutlineVideoCamera, HiOutlineClipboardList, HiStar, HiOutlineFilter, HiOutlineCurrencyDollar  } from "react-icons/hi"
 import { MdEventNote, MdOutlineDirectionsBus, MdOutlineCleanHands, MdMailOutline } from 'react-icons/md'
 import { GrUserPolice } from "react-icons/gr"
 import { TfiMicrophoneAlt } from "react-icons/tfi"
@@ -55,5 +55,8 @@ export {
     FaLinkedin,
     FaInstagram,
     FaGithub,
-    MdMailOutline
+    MdMailOutline,
+    HiOutlineFilter,
+    HiOutlineCurrencyDollar,
+    HiOutlinePhone
   }

@@ -5,8 +5,8 @@ const EventModal = ({ isOpen, onClose, onSelect, title, children }) => {
 
   const handleInputChange = (event) => {
     const newValue = event.target.value;
-    onSelect(newValue); // Llama a la función onSelect con el nuevo valor seleccionado
-  };
+    onSelect(newValue)
+  }
   
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
@@ -19,7 +19,7 @@ const EventModal = ({ isOpen, onClose, onSelect, title, children }) => {
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
-};
+  )
+}
 
 export default EventModal

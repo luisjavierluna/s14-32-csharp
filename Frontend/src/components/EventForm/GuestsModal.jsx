@@ -19,7 +19,7 @@ export default function GuestsModal({guests, setGuests}) {
 
     return(
         <Box>        
-            <EventInfoModalBtn icon={<HiOutlineUserGroup size='30' />} onClick={handleGuestsModalOpen} text={breakpointValue === 'base' ?(eventGuests > 0 ? eventGuests :'Invitados') : (eventGuests > 0 ? eventGuests :'Cantidad de invitados')} />
+            <EventInfoModalBtn icon={<HiOutlineUserGroup size='30' />} onClick={handleGuestsModalOpen} text={breakpointValue === 'base' ?(eventGuests > 0 ? eventGuests : (guests ? guests : 'Invitados')) : (eventGuests > 0 ? eventGuests :(guests ? guests : 'Cantidad de invitados'))} />
             <EventModal isOpen={isGuestsModalOpen} onClose={handleGuestsModalClose} title="Seleccionar la cantidad de invitados" onSelect={handleEventGuests}>                          
                 <FormControl>
                     <FormLabel>Cantidad total de invitados</FormLabel>

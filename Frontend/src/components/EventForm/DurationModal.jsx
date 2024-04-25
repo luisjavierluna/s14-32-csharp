@@ -19,7 +19,7 @@ export default function DurationModal({duration, setDuration}) {
 
     return(
         <Box>        
-            <EventInfoModalBtn icon={<TbClockHour8 size='30' />} text={breakpointValue === 'base' ?(eventDuration > 0 ? eventDuration + 'hs':'Duración') : (eventDuration > 0 ? eventDuration + 'hs':'Duración del evento')} onClick={handleDurationModalOpen}/>
+            <EventInfoModalBtn icon={<TbClockHour8 size='30' />} text={breakpointValue === 'base' ?(eventDuration > 0 ? eventDuration + 'hs':(duration ? duration : 'Duración')) : (eventDuration > 0 ? eventDuration + 'hs':(duration ? duration : 'Duración del evento'))} onClick={handleDurationModalOpen}/>
             <EventModal isOpen={isDurationModalOpen} onClose={handleDurationModalClose} title="Seleccionar la duración del evento" onSelect={handleEventDuration}>                        
                 <FormControl>
                     <FormLabel>Cantidad de horas</FormLabel>

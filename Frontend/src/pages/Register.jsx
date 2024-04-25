@@ -1,4 +1,4 @@
-import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid } from '@chakra-ui/react'
+import { Container, Flex, Card, CardHeader, CardBody, CardFooter, Heading, Text, Image, AspectRatio, Link, CloseButton, Box, Center, Grid, Button, Input } from '@chakra-ui/react'
 import { LoginButton, LoginInput, CancelAlert }  from '../components'
 import { IoCheckmarkCircleOutline } from "../assets/icons"
 import { useState } from 'react'
@@ -12,6 +12,7 @@ export default function Register () {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showPassword2, setShowPassword2] = useState(false)
+  const [imageUrl, setImageUrl] = useState('image') 
   const navigate = useNavigate()
 
   const validationSchema = Yup.object().shape({
@@ -55,7 +56,28 @@ export default function Register () {
       [name]: value
     })
   }
-
+  const handleImgSubmit = async () => {
+    const imageInput = document.querySelector('input[type="file"]')
+    if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+        console.error('No se ha seleccionado ningún archivo')
+        console.log('No se ha seleccionado ningún archivo')
+        return
+    }  
+    const imageUpload = imageInput.files[0]    
+    try {          
+        const formData = new FormData()
+        formData.append('file', imageUpload)  
+        const response = await axios.post('https://www.eventplanner.somee.com/api/ProfileImage', formData, {
+            headers: {                
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+        console.log(response.data)
+        setImageUrl(response.data)
+    } catch (error) {
+        console.error('Error al subir imagen:', error.message)
+    }
+  }
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
@@ -72,7 +94,7 @@ export default function Register () {
         password: newValues.password,
         confirmPassword: newValues.password2, 
         phoneNumber: newValues.phone, 
-        profileImage: 'url_de_la_imagen',
+        profileImage: imageUrl,
       }
       await axios.post('https://www.eventplanner.somee.com/api/Acounts/SignIn', requestBody)   
       console.log(requestBody)
@@ -118,6 +140,10 @@ export default function Register () {
                       <LoginInput id='areacode' name='Código de area' type='number' placeholder='011' onChange={handleChange} errors={errors}/>
                       <LoginInput id='phone' name='Teléfono' type='number' placeholder='46239758' onChange={handleChange} errors={errors}/>
                   </Grid>
+                  <Box display='flex' flexDirection={{base:'column', lg:'row'}}  justifyContent='center' alignItems='center' gap='4'>
+                    <Button variant='outline' borderRadius='3xl' fontSize='xs' boxSize='fit-content' color='#CC949F' py='1' onClick={handleImgSubmit}>Cargar Foto</Button>
+                    <Input placeholder='Seleccionar Archivo' size='sm' w='80%' type='file' accept=".jpg, .jpeg, .png, .webp"  border='none'/>
+                  </Box>
               </Box>
               <Box textAlign='center' mt='4'>
                 <Flex alignItems='center' justifyContent='center'>

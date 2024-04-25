@@ -22,18 +22,21 @@ export default function EventForm () {
   const [eventDescription, setEventDescription] = useState('')
   const [expertOptions, setExpertOptions] = useState([])
   const [selectedExpertIds, setSelectedExpertIds] = useState([])
+  const [eventOptions, setEventOptions] = useState([])
   
   //EventsModal
-  const eventOptions = [
-    "-",
-    "Casamiento",
-    "Cumpleaños",
-    "Bautismo",
-    "Baby Shower",
-    "Empresarial",
-    "Fin de Año",
-    "Otro Evento"
-  ]
+  useEffect(() => {
+    const fetchEventsOptions = async () => {
+      try {        
+        const response = await axios.get('https://www.eventplanner.somee.com/api/EventType')
+        console.log(response.data)
+        setEventOptions(response.data)
+      } catch (error) {
+        console.error('Error al obtener tipos de eventos:', error.message)
+      }
+    }
+    fetchEventsOptions()
+  }, [])    
   const handleEventModalOpen = () => {setIsEventModalOpen(true)}  
   const handleEventModalClose = () => {setIsEventModalOpen(false)}
   const handleEventOptionClick = (eventOption) => {
@@ -101,6 +104,7 @@ export default function EventForm () {
       const eventData = {
         name: eventName,
         description: eventDescription,
+        eventTypeId: selectedEventOption.id,
         initDate: date,
         duration: duration,
         guests: guests,
@@ -160,7 +164,7 @@ return(
                     <HiOutlineTag size='30'/> 
                     <Box position="relative" zIndex="1" width='100%'>
                       <Input
-                        value={selectedEventOption === "-" ? "" : selectedEventOption || ""}
+                        value={selectedEventOption?.name || ""}
                         readOnly
                         onClick={handleEventModalOpen}
                         placeholder="Tipo de evento"
@@ -176,7 +180,7 @@ return(
                         <List cursor='pointer'>
                           {eventOptions.map((eventOption, index) => (
                             <ListItem key={index} onClick={() => handleEventOptionClick(eventOption)}>
-                              <Button variant='ghost' width='100%'>{eventOption}</Button>
+                              <Button variant='ghost' width='100%'>{eventOption.name}</Button>
                             </ListItem>
                           ))}
                         </List>

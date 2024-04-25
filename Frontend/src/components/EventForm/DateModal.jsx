@@ -11,13 +11,21 @@ export default function DateModal({date, setDate}) {
     const handleDateModalOpen = () => {setIsDateModalOpen(true)}
     const handleDateModalClose = () => {setIsDateModalOpen(false)}
 
+    const formatDate = (dateTime) => {
+        const [year, month, day] = dateTime.split('T')[0].split('-')
+        return `${day}-${month}-${year}`
+    }
+    const formattedTime = (timeString) => {        
+        const [hour, minute] = timeString.split('T')[1].split(':')
+        return `${hour}:${minute}hs`
+    }
+
     const handleDateTimeSelect = (dateTime) => {
-        console.log(dateTime)        
-        const [year, month, day] = dateTime.split('T')[0].split('-');
-        setSelectedDate(`${day}-${month}-${year}`) 
+        console.log(dateTime)
+        setSelectedDate(formatDate(dateTime)) 
         setSelectedTime(dateTime.split('T')[1])         
         setDate(dateTime + ':00.000Z')
-    }
+    }    
 
     const breakpointValue = useBreakpointValue({ base: 'base', md: 'md' })
 
@@ -25,7 +33,7 @@ export default function DateModal({date, setDate}) {
         <>
             <Box >        
                 <EventInfoModalBtn icon={<HiOutlineCalendar size='30' />} 
-                text={breakpointValue === 'base' ? (selectedDate ? `${selectedDate} ${selectedTime}hs` : 'Fecha') : (selectedDate ? selectedDate : 'Fecha del evento')}
+                text={breakpointValue === 'base' ? (selectedDate ? `${selectedDate} ${selectedTime}hs` : (date ? date : 'Fecha')) : (selectedDate ? selectedDate : (date ? formatDate(date) :'Fecha del evento'))}
                 onClick={handleDateModalOpen} />
                 <EventModal isOpen={isDateModalOpen} onClose={handleDateModalClose} title="Seleccionar la fecha y hora del evento" onSelect={handleDateTimeSelect}>
                     <Box display='flex' gap='2'>
@@ -35,7 +43,7 @@ export default function DateModal({date, setDate}) {
                 </EventModal> 
             </Box>
             <Box display={{ base: 'none', md: 'block' }}>
-                <EventInfoModalBtn icon={<TbClockHour4 size='30' />} text={selectedTime ? selectedTime + 'hs' : 'Hora de inicio'} onClick={handleDateModalOpen} />                      
+                <EventInfoModalBtn icon={<TbClockHour4 size='30' />} text={selectedTime ? selectedTime + 'hs' : (date? formattedTime(date) : 'Hora de inicio')} onClick={handleDateModalOpen} />                      
             </Box> 
         </>
     )

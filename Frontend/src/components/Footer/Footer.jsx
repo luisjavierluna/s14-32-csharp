@@ -4,7 +4,7 @@ import { FaLinkedin, FaInstagram, FaGithub, MdMailOutline } from '../../assets/i
 
 const Footer = () => {
   return (
-    <Box display='flex' justifyContent='space-between' alignItems='center' p='2'>
+    <Box display='flex' justifyContent='space-between' alignItems='center' p='2' h='10vh' w='100%'>
         <Link href='/'><Image src={FooterLogo} alt='Footer Logo' boxSize='14'></Image></Link>
         <Link href='https://www.gmail.com/' target='_blank' display={{base:'none', sm:'block'}}>consultas@eventplanner.com</Link>
         <Box display='flex' gap='2'>

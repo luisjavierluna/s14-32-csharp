@@ -22,10 +22,10 @@ export default function LocationModal({location, setLocation}) {
     }
 
     const handleProvinceChange = async (event) => { 
-        const selectedProvinceName = event.target.value   
+        const selectedProvinceName = event.target.value
         const selectedProvinceId = provinces.find(province => province.name === selectedProvinceName)
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token')
             const response = await axios.get(`https://www.eventplanner.somee.com/api/Cities?provinceId=${selectedProvinceId.id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -52,18 +52,17 @@ export default function LocationModal({location, setLocation}) {
                         Authorization: `Bearer ${token}`
                     }
                 });                
-                setProvinces(response.data)
-                console.log(provinces)
+                setProvinces(response.data)                              
             } catch (error) {
-                console.error('Error al solicitar las provincias:', error.message);
+                console.error('Error al solicitar las provincias:', error.message)
             }
         }
-        handleLocations();
+        handleLocations()
     }, [])
 
     return(
         <Box>        
-            <EventInfoModalBtn icon={<HiOutlineGlobe size='30' />} text={breakpointValue === 'base' ?(address ? address :'Ubicación') : (address ? address :'Ubicación del evento')} onClick={handleLocationModalOpen} />
+            <EventInfoModalBtn icon={<HiOutlineGlobe size='30' />} text={breakpointValue === 'base' ?(address ? address : (location.address ? location.address : 'Ubicación')) : (address ? address : (location.address ? location.address : 'Ubicación del evento'))} onClick={handleLocationModalOpen} />
             <EventModal isOpen={isLocationModalOpen} onClose={handleLocationModalClose} title="Seleccionar la ubicación del evento" onSelect={handleAddressChange}>
                 <FormControl display='flex' flexDirection='column' gap='6'>
                     <Box>
