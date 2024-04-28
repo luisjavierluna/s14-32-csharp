@@ -13,7 +13,7 @@ const NavBar = (props) => {
     <NavBarContainer {...props}>
       <Link to={'/'}><Image src={Logo} alt="logo" w='44' h='auto'/></Link>
       <MenuToggle toggle={toggle} isOpen={isOpen} />
-      <MenuLinks isOpen={isOpen} />
+      <MenuLinks isOpen={isOpen} toggle={toggle} />
     </NavBarContainer>
   );
 };
@@ -48,9 +48,9 @@ const MenuToggle = ({ toggle, isOpen }) => {
   );
 };
 
-const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
+const MenuItem = ({ children, isLast, to = '/', toggle, ...rest }) => {
   return (
-    <Link to={to}>
+    <Link to={to} onClick={toggle}>
       <Text display="block" {...rest}>
         {children}
       </Text>
@@ -58,13 +58,15 @@ const MenuItem = ({ children, isLast, to = '/', ...rest }) => {
   );
 };
 
-const MenuLinks = ({ isOpen }) => {
+const MenuLinks = ({ isOpen, toggle }) => {
   const { handleLogout } = useUserAuth()
   const token = localStorage.getItem('token') ? localStorage.getItem('token') : '' 
   return (
     <Box
       display={{ base: isOpen ? 'block' : 'none', md: 'block' }}
       flexBasis={{ base: '100%', md: 'auto' }}
+      bg='white'    
+      m='-3'      
     >
       { token ?
       (<Stack
@@ -72,19 +74,20 @@ const MenuLinks = ({ isOpen }) => {
         align="center"
         justify={['center', 'space-between', 'flex-end', 'flex-end']}
         direction={['column', 'column', 'row']}
-        pt={[4, 4, 0, 0]}>
-        <MenuItem to="/userdashboard" isLast>
+        py={{base:'4', md:'0'}}
+        minW={{base:'100vw', md:'50vh'}}>
+        <MenuItem to="/userdashboard" isLast toggle={toggle}>
           <Button
             size="sm"
             rounded="50px"
             w="119px"
             h="25px"            
             color={['#263049']}
-            variant='ghost'>
+            variant='ghost'            >
             Mi Cuenta
           </Button>
         </MenuItem>
-        <MenuItem to="/" isLast>
+        <MenuItem to="/" isLast toggle={toggle}>
           <Button
             size="sm"
             rounded="50px"
@@ -104,8 +107,9 @@ const MenuLinks = ({ isOpen }) => {
         align="center"
         justify={['center', 'space-between', 'flex-end', 'flex-end']}
         direction={['column', 'column', 'row']}
-        pt={[4, 4, 0, 0]}>
-          <MenuItem to="/register" isLast>
+        py={{base:'4', md:'0'}}
+        minW={{base:'100vw', md:'50vh'}}>
+          <MenuItem to="/register" isLast toggle={toggle}>
             <Button
               size="sm"
               rounded="50px"
@@ -119,7 +123,7 @@ const MenuLinks = ({ isOpen }) => {
               Crear Cuenta
             </Button>
           </MenuItem>
-          <MenuItem to="/login" isLast>
+          <MenuItem to="/login" isLast toggle={toggle}>
             <Button
               size="sm"
               rounded="50px"
@@ -145,8 +149,8 @@ const NavBarContainer = ({ children, ...props }) => {
       justify="space-between"
       wrap="wrap"
       w="100%"
-      h="10vh"
-      mb={0}
+      h={{md:"10vh"}}
+      mb={0}      
       px={3}
       pr={9}      
       color={['black']}

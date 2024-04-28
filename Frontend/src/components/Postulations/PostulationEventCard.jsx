@@ -1,4 +1,4 @@
-import { Box, Card,  Center, Heading,  CardBody, CardFooter, Text, CardHeader, Button } from '@chakra-ui/react'
+import { Box, Card,  Center, Heading,  CardBody, Text, CardHeader, Button, CloseButton } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import {  HiOutlineCamera, HiOutlineCake, GiMusicalNotes, PiMicrophoneStage, FaPeopleGroup,  HiOutlineTruck, MdEventNote, FaPencilAlt, GiFairyWand, FaMicrophone, GrUserPolice, MdOutlineDirectionsBus, FaBed, FaHandshake, FaUserEdit, FaRegSmile, MdOutlineCleanHands, HiOutlineVideoCamera, TfiMicrophoneAlt, HiOutlineClipboardList, HiOutlineGlobe, HiOutlineUserGroup, HiOutlineCalendar, TbClockHour8, QuestionOutlineIcon } from '../../assets/icons'
 
@@ -56,34 +56,35 @@ const PostulationEventCard = ({ postulation, events, eventId, isOpen, onClose })
         <Box display={isOpen ? 'block' : 'none'} position="fixed" zIndex="9999" top="0" bottom="0" left="0" right="0" bg="rgba(0, 0, 0, 0.5)" onClick={onClose}>
             <Box position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" width="90%" maxWidth="600px" bg="white" p='12' borderRadius="3xl" boxShadow="lg" onClick={(e) => e.stopPropagation()}>               
             <Card color='#263049' flexDirection='column' borderRadius='20' alignItems='center' boxShadow='xl' minH='50vh' bg='rgba(204, 148, 159, .2)'>
-                <CardHeader>
+                <CardHeader width='100%' display='flex' justifyContent='space-between' alignItems='center' position='relative'>
                     <Center width='100%'>
                         <Heading size='lg' fontFamily='heading'>{eventData?.name || 'Nombre del Evento'}</Heading>
                     </Center>
+                    <CloseButton position='absolute' right='1rem' top='50%' transform='translateY(-50%)' size='lg' onClick={onClose}/>                
                 </CardHeader>
                 <CardBody width='100%' mt='-4' fontFamily='body' px='6'>                
                         <Box display='flex' flexDirection='column'  alignItems='center' gap='2' w='full' >
-                            <Box display='flex' justify="space-between" w="100%" gap='8' overflowX='auto'>
-                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20'>
+                            <Box display='flex' justify="space-between" w="100%" gap='8' overflowX='scroll'>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2' ml={{base:'5', md:'1'}}>
                                     <HiOutlineCalendar size='30' />
                                     <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" 
                                     w={{base:'20', md:'22'}}>
                                         {formatDateTime(eventData?.initDate) || 'Fecha'}
                                     </Text>
                                 </Button>
-                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20'>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
                                     <TbClockHour8 size='30' />
                                     <Text bg='white' border="1px" borderRadius="md" fontSize="sm" color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
                                         {eventData?.duration || 'Duración'}
                                     </Text>
                                 </Button>
-                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20'>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
                                     <HiOutlineUserGroup size='30' />
                                     <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
                                         {eventData?.guests || 'Invitados'}
                                     </Text>
                                 </Button>
-                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20'>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
                                     <HiOutlineGlobe size='30' />
                                     <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
                                         {eventData?.city || 'Ciudad'}
@@ -102,7 +103,7 @@ const PostulationEventCard = ({ postulation, events, eventId, isOpen, onClose })
                                 <Text bg='white' borderRadius='lg' p='1' h='15vh' overflowY='auto'>{postulationData?.message}</Text>
                             </Box>                        
                         </Box>               
-                </CardBody>                
+                </CardBody>                               
             </Card> 
             </Box>            
         </Box>

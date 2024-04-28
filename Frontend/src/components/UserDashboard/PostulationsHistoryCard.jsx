@@ -1,7 +1,7 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Center, Flex, Heading, Image, useDisclosure } from "@chakra-ui/react"
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import EventForm from '../../assets/postulable.png'
 import { HiOutlinePlusCircle } from '../../assets/icons'
 import { PostulationEventCard } from '../index'
@@ -11,7 +11,8 @@ const PostulationsHistoryCard = () => {
     const [postulationsCreated, setPostulationsCreated] = useState([])    
     const [events, setEvents] = useState([])
     const [selectedEventId, setSelectedEventId] = useState(null) 
-    const { isOpen, onOpen, onClose } = useDisclosure()   
+    const { isOpen, onOpen, onClose } = useDisclosure() 
+    const navigate = useNavigate()  
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -41,6 +42,9 @@ const PostulationsHistoryCard = () => {
     const handleCloseModal = () => {
         setSelectedEventId(null)
         onClose()
+    }
+    const hableNewPostulationClick = () =>{
+      navigate('/postulableevents')
     }
 
   useEffect(() => {
@@ -79,7 +83,7 @@ const PostulationsHistoryCard = () => {
           gap='6'
           p='3'
           justifyItems='center'>
-          {postulationsCreated.map(event => { 
+          {postulationsCreated && events && postulationsCreated.map(event => { 
               const correspondingEvent = events.find(e => e.id === event.eventId);
 
               return (
@@ -92,7 +96,7 @@ const PostulationsHistoryCard = () => {
               );
           })}         
           <Center flexDirection='column' w='52' h='52' mt='-2'>
-              <Button as={Link} to='/postulableevents' color='#263049' variant='ghost' py='2' borderRadius='md'>
+              <Button onClick={hableNewPostulationClick} color='#263049' variant='ghost' py='2' borderRadius='md'>
                 <Flex align='center' flexDirection='column' gap='2'>
                   <Heading size='sm' ml='2'>Nueva Postulación</Heading>
                   <HiOutlinePlusCircle size={20} />                  

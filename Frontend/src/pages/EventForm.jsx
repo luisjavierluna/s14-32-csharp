@@ -243,17 +243,11 @@ return(
                     <Divider mt='2' borderColor='#CC949F'/>
                     <List mt='8' overflowY='scroll' h='70%'>
                       {selectedExperts.map((expert, index) => (
-                        <ListItem key={index} display='flex' gap='2' alignItems='center' justifyContent='center' pl={{md:'24'}} mt='2'>
+                        <ListItem key={index} display='flex' gap='2' alignItems='center' justifyContent='center' pr={{md:'16'}} pl={{md:'24'}} mt='2'>
                           {expertIcons[expert] ? React.createElement(expertIcons[expert], { size: 30 }) : <QuestionOutlineIcon/>}
                           <Text bg='white' borderRadius='md' py='1' px='2' w='100%' display='flex' justifyContent='space-between'>{expert} 
                             <CloseButton size='sm' onClick={() => handleRemoveExpertFromList(expert)}/>
-                          </Text>
-                          <Button bg='#CC949F' color='white' maxW='75px' fontSize={{base:'xs', md:'sm'}}>
-                            <Box display="flex" flexDirection="column">
-                              <Text>Ver</Text>
-                              <Text display={{ base: 'none', md: 'block' }}>Propuestas</Text>
-                            </Box>
-                          </Button>                          
+                          </Text>                                                   
                         </ListItem>
                       ))}
                     </List>

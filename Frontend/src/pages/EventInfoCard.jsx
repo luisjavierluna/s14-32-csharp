@@ -1,7 +1,7 @@
 import { Container, Box, Card, CardHeader, Center, Heading, CloseButton, CardBody, CardFooter, FormControl, FormLabel, Input, IconButton, List, ListItem, Button, Text, Divider, Link, useDisclosure } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
-import { LoginButton, EventModal, LocationModal, DateModal, GuestsModal, DurationModal, PostulationListModal } from '../components'
-import { HiOutlineTag, HiOutlineCamera, HiOutlinePlusCircle, HiOutlineCake, GiMusicalNotes, PiMicrophoneStage, FaPeopleGroup, QuestionOutlineIcon, HiOutlineTruck, MdEventNote, FaPencilAlt, GiFairyWand, FaMicrophone, GrUserPolice, MdOutlineDirectionsBus, FaBed, FaHandshake, FaUserEdit, FaRegSmile, MdOutlineCleanHands, HiOutlineVideoCamera, TfiMicrophoneAlt, HiOutlineClipboardList } from '../assets/icons'
+import { LoginButton, EventModal, PostulationListModal } from '../components'
+import { HiOutlineTag, HiOutlineCamera, HiOutlinePlusCircle, HiOutlineCake, GiMusicalNotes, PiMicrophoneStage, FaPeopleGroup, QuestionOutlineIcon, HiOutlineTruck, MdEventNote, FaPencilAlt, GiFairyWand, FaMicrophone, GrUserPolice, MdOutlineDirectionsBus, FaBed, FaHandshake, FaUserEdit, FaRegSmile, MdOutlineCleanHands, HiOutlineVideoCamera, TfiMicrophoneAlt, HiOutlineClipboardList, HiOutlineCalendar, TbClockHour8, HiOutlineUserGroup, HiOutlineGlobe } from '../assets/icons'
 import axios from 'axios'
 import { useNavigate, useParams } from 'react-router-dom'
 
@@ -16,7 +16,7 @@ const EventInfoCard = () => {
     const [error, setError] = useState(false)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const navigate = useNavigate()
-    const [location, setLocation] = useState({ cityId: '', address: '' })
+    const [location, setLocation] = useState({ cityId: '', address: '', city: ''})
     const [date, setDate] = useState('')
     const [duration, setDuration] = useState('')
     const [guests, setGuests] = useState('')
@@ -28,8 +28,6 @@ const EventInfoCard = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [selectedPostulations, setSelectedPostulations] = useState([])
     const [postulations, setPostulations] = useState(null)
-    
-    
      
     //EventsModal    
     const handleEventModalOpen = () => {setIsEventModalOpen(true)}  
@@ -38,7 +36,6 @@ const EventInfoCard = () => {
         setSelectedEventOption(eventOption)
         handleEventModalClose()
     }
-
     //ExpertsModal     
     const expertIcons = { 
         "Organizador de eventos": MdEventNote,
@@ -108,19 +105,7 @@ const EventInfoCard = () => {
         console.error('Error al enviar los cambios:', error.message)
         }
         setIsSubmitting(false)
-    } 
-    const handleLocationChange = (newLocation) => {
-        setLocation(newLocation)
-    }
-    const handleDateChange = (newDate) => {
-        setDate(newDate)
-    }
-    const handleDurationChange = (newDuration) => {
-        setDuration(newDuration)
-    }
-    const handleGuestsChange = (newGuests) => {
-        setGuests(newGuests)
-    }  
+    }      
 
     useEffect(() => {
         const fetchData = async () => {
@@ -134,7 +119,7 @@ const EventInfoCard = () => {
             const filteredEvent = responseEvents.data.find(item => item.id === id)
             console.log(filteredEvent)
             setEventData(filteredEvent)            
-            setLocation({ cityId: filteredEvent.cityId, address: filteredEvent.address })
+            setLocation({ cityId: filteredEvent.cityId, address: filteredEvent.address, city: filteredEvent.city })
             setDate(filteredEvent.initDate)
             setDuration(filteredEvent.duration)
             setGuests(filteredEvent.guests)
@@ -167,13 +152,22 @@ const EventInfoCard = () => {
     const handleCardClick = (vocationId) => {            
             const filteredPostulations = filterPostulationsByVocation(vocationId);
             console.log("Postulaciones para la especialidad con ID", vocationId, ":", filteredPostulations);
-            /* setSelectedPostulations(filteredPostulations) */
             setSelectedPostulations([...selectedPostulations, ...filteredPostulations, ...filteredPostulations])
             onOpen() 
     }    
 
     const handleCloseModal = () => {        
         onClose()
+    }
+
+    const formatDateTime = (dateTimeString) => {
+        if (!dateTimeString) return ''
+        const [datePart] = dateTimeString.split('T')        
+    
+        const [year, month, day] = datePart.split('-')
+        const formattedDate = `${day}-${month}-${year}` 
+    
+        return `${formattedDate}`
     }
 
     return (
@@ -229,11 +223,33 @@ const EventInfoCard = () => {
                             </FormControl>
                         </Box>
                         <Box width='100%' display='flex' flexDirection={{base:'column', md:'row'}} gap={{base:'4', md:'8'}}>                  
-                        <Box mt={{base:'3',md:'8'}} display='flex' flexDirection={{base:'row', md:'column'}} gap={{base:'0.5', sm:'2', md:'4'}} justifyContent={{base:'center', md:'flex-start'}}>                    
-                            <DateModal date={date} setDate={handleDateChange}/>                                      
-                            <DurationModal duration={duration} setDuration={handleDurationChange}/>                 
-                            <GuestsModal guests={guests} setGuests={handleGuestsChange}/>
-                            <LocationModal location={location} setLocation={handleLocationChange}/>                    
+                        <Box display='flex' flexDirection={{base:'row', md:'column'}} gap={{base:'8', md:'0'}} justifyContent='flex-start' alignItems='center' overflowX='scroll' w={{base:'100%', md:'25%'}}>                    
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2' ml={{base:'5', md:'1'}}>
+                                    <HiOutlineCalendar size='30' />
+                                    <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" 
+                                    w={{base:'20', md:'22'}}>
+                                        {formatDateTime(date) || 'Fecha'}
+                                    </Text>
+                                </Button>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
+                                    <TbClockHour8 size='30' />
+                                    <Text bg='white' border="1px" borderRadius="md" fontSize="sm" color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
+                                        {duration || 'Duración'}
+                                    </Text>
+                                </Button>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
+                                    <HiOutlineUserGroup size='30' />
+                                    <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
+                                        {guests || 'Invitados'}
+                                    </Text>
+                                </Button>
+                                <Button variant="ghost" colorScheme="white" display="flex" flexDirection="column" alignItems="center" maxW="25%" minH='20' mx='2'>
+                                    <HiOutlineGlobe size='30' />
+                                    <Text bg='white' border="1px" borderRadius="md" fontSize="sm"  color="gray.500" fontWeight="500" mt={2} textAlign="center" w={{base:'20',md:'22'}}>
+                                        {location.city || 'Ciudad'}
+                                    </Text>
+                                </Button>
+                                     
                         </Box>
                         <Card width='100%' bg='rgba(204, 148, 159, .12)' minH='430' h='50vh'>
                             <CardHeader width='100%'>
@@ -307,10 +323,7 @@ const EventInfoCard = () => {
                         </Box>
                     </Box>
                 </form>
-            </CardBody>
-            <CardFooter flexDirection='column' gap='2' width='90%' alignItems='center' mt='-8'>            
-                {/* alert cancelar modificaciones */}
-            </CardFooter>
+            </CardBody>            
             </Card>
         </Box>
         </Container>
