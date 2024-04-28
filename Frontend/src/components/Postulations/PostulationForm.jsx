@@ -16,15 +16,17 @@ const PostulationForm = ({ isOpen, onClose, eventVocations, eventId, eventData }
     const navigate = useNavigate()
 
     useEffect(() => { 
+        if (eventData) {
         console.log(eventData)       
         const storedVocations = JSON.parse(localStorage.getItem('vocations'));
         if (storedVocations) {
             setVocations(storedVocations)
-        }
+        }}
     }, [eventData])
-    useEffect(() => {       
-        const matchedVocations = vocations.filter(vocation => eventVocations.some(eventVocation => eventVocation.id === vocation.id))
-        setMatchingVocations(matchedVocations)
+    useEffect(() => { 
+        if (vocations){     
+        const matchedVocations = vocations?.filter(vocation => eventVocations.some(eventVocation => eventVocation.id === vocation.id))
+        setMatchingVocations(matchedVocations)}
     }, [vocations, eventVocations])
 
     const validationSchema = Yup.object().shape({
@@ -86,7 +88,7 @@ const PostulationForm = ({ isOpen, onClose, eventVocations, eventId, eventData }
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>
-        {matchingVocations.map((vocation, index) => (
+        {matchingVocations.length >0 ? matchingVocations.map((vocation, index) => (
             <Button
                 key={index}
                 variant={selectedVocation && selectedVocation.id === vocation.id ? "outline" : "ghost"}                
@@ -95,7 +97,7 @@ const PostulationForm = ({ isOpen, onClose, eventVocations, eventId, eventData }
             >
                 {vocation.name}
             </Button>
-        ))}
+        )) : <Text>Especialidades</Text>}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody p='4'>
@@ -106,8 +108,9 @@ const PostulationForm = ({ isOpen, onClose, eventVocations, eventId, eventData }
                     </Center>
                 </CardHeader>
                 <CardBody mt='-6' fontFamily='body'>
-                    <Box>
-                    <Tabs color='#263049' h='20vh'>
+                    {eventData &&
+                    <Box color='#263049'>
+                    <Tabs >
                         <TabList>
                             <Tab>Nombre y Tipo Evento</Tab>                           
                             <Tab>Descripción</Tab>
@@ -115,22 +118,22 @@ const PostulationForm = ({ isOpen, onClose, eventVocations, eventId, eventData }
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Nombre del Cliente:</Text><Text>{eventData.clientName}</Text></Box>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Nombre del Evento:</Text><Text> {eventData.name}</Text></Box>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Tipo de Evento:</Text><Text>{eventData.eventType.name}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Nombre del Cliente:</Text><Text>{eventData?.clientName || ''}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Nombre del Evento:</Text><Text> {eventData?.name || ''}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Tipo de Evento:</Text><Text>{eventData?.eventType?.name || ''}</Text></Box>
                             </TabPanel> 
                             <TabPanel>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Descripción:</Text><Text>{eventData.description}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Descripción:</Text><Text>{eventData?.description || ''}</Text></Box>
                             </TabPanel>
                             <TabPanel>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Fecha y Hora:</Text><Text>{eventData.initDate}</Text></Box>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Duración:</Text><Text>{eventData.duration}</Text></Box>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Cantidad de Invitados:</Text><Text>{eventData.guests}</Text></Box>
-                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Ciudad:</Text><Text>{eventData.city}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Fecha y Hora:</Text><Text>{eventData?.initDate || ''}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Duración:</Text><Text>{eventData?.duration || ''}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Cantidad de Invitados:</Text><Text>{eventData?.guests || ''}</Text></Box>
+                                <Box display='flex' gap='2'><Text fontWeight='semibold'>Ciudad:</Text><Text>{eventData?.city || ''}</Text></Box>
                             </TabPanel>                            
                         </TabPanels>
                     </Tabs>                        
-                    </Box>
+                    </Box>}
                     <form onSubmit={handleSubmit}>    
                     <Box display='flex' flexDirection='column' alignItems='center' gap='6' >
                         <Box w='full'>

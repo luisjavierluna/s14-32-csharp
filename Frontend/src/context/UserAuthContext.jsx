@@ -14,9 +14,7 @@ export const UserAuthProvider = ({ children }) => {
     localStorage.setItem('contractorProfileImage', user.contractor.profileImage)
     localStorage.setItem('userId', user.id)
     localStorage.setItem('vocations', JSON.stringify(user.contractor.vocations))       
-    setUserName(user.firstName)
-    console.log(user)
-    console.log(user.firstName) 
+    setUserName(user.firstName)    
   }
 
   const handleLogout = () => {    

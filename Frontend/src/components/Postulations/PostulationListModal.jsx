@@ -10,52 +10,53 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
 
     useEffect(() => {
         fetchData();
-    }, [postulations]);
+    }, [postulations])
 
     const fetchData = async () => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token')
     
             const responseContractors = await axios.get('https://www.eventplanner.somee.com/api/Contractor/GetAll', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
+            })
     
             const filteredContractors = responseContractors.data.filter(contractor =>
                 postulations.map(postulation => postulation.contractorId).includes(contractor.id)
-            );
+            )
     
-            setContractors(filteredContractors);
+            setContractors(filteredContractors)
     
             const responsePostulations = await axios.get('https://www.eventplanner.somee.com/api/Postulation/GetAll', {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
+            })
     
             const filteredPostulations = responsePostulations.data.filter(postulation =>
                 postulations.map(post => post.id).includes(postulation.id)
-            );
+            )
             console.log('postulationdata!', filteredPostulations)
             setPostulationData(filteredPostulations)
         } catch (error) {
-            console.error('Error al obtener información del evento:', error.message);
+            console.error('Error al obtener información del evento:', error.message)
         }
-    };
+    }
     
 
     const handleAccept = async (id) => {
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem('token')
             const response = await axios.put(`https://www.eventplanner.somee.com/api/Postulation/accept/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
-            fetchData();
+            })
+            console.log('Respuesta Accept: ', response)
+            fetchData()
         } catch (error) {
-            console.error('Error al enviar los cambios:', error.message);
+            console.error('Error al enviar los cambios:', error.message)
         }
     };
 
@@ -66,31 +67,32 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
-            });
-            fetchData();
+            })
+            console.log('Respuesta Refuse: ', response)
+            fetchData()
         } catch (error) {
-            console.error('Error al enviar los cambios:', error.message);
+            console.error('Error al enviar los cambios:', error.message)
         }
     };
 
     const renderPostulations = () => {
         return postulations.map((postulation, index) => {
-            const contractor = contractors.find(contractor => contractor.id === postulation.contractorId);
+            const contractor = contractors.find(contractor => contractor.id === postulation.contractorId)
 
             return (
                 <CardBody key={index} width='100%' mt='-4' fontFamily='body' px='6' display='flex' flexDirection='column'>
                     <Box>
                         <Heading size='lg' fontFamily='heading'>{postulation.vocationName || 'Especialidad'}</Heading>
                     </Box>
-                    <Box key={index} display='flex' justifyContent='center' gap='4' mt='8'>
+                    <Box key={index} display='flex' flexDirection={{base:'column', md:'row'}} justifyContent='center' alignItems='center' gap='4' mt='8'>
                         <Box>
-                            <Image src={contractor?.profileImage || ImageAvatar} borderRadius='xl' w='60' h='60' />
+                            <Image src={contractor?.profileImage || ImageAvatar} borderRadius='xl' w={{base:'52', md:'60'}} h={{base:'52', md:'60'}} />
                         </Box>
-                        <Box w='60' h='60' bg='rgba(204, 148, 159, .2)' borderRadius='xl' p='2' display='flex' flexDirection='column' justifyContent='space-evenly'>
+                        <Box w={{base:'52', md:'60'}} h={{base:'52', md:'60'}} bg='rgba(204, 148, 159, .2)' borderRadius='xl' p='2' display='flex' flexDirection='column' justifyContent='space-evenly'>
                             <Box>
                                 <Text textAlign='center' fontSize='xl' fontWeight='semibold'>{contractor?.businessName || 'Razon Social'}</Text>
                             </Box>                            
-                            <Text h='10vh' overflowY='scroll'>{postulationData[0]?.message || 'Mensaje de la postulación...'}</Text>
+                            <Text h='10vh' overflowY='scroll'>{postulationData?postulationData[0].message : 'Mensaje de la postulación...'}</Text>
                             <Box display='flex' alignItems='center' gap='2'>
                                 <HiOutlineCurrencyDollar size='25' />
                                 <Text>{postulation.budget || '30000'}</Text>
@@ -109,14 +111,14 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
                             </Box>
                         </Box>
                     </Box>
-                    <CardFooter display='flex' gap='2' width='90%' alignItems='center' justifyContent='center' >
+                    <CardFooter display='flex' gap='2' width='100%' alignItems='center' justifyContent='center' >
                         <Button bg='#263049' color='white' w='24' onClick={() => handleAccept(postulation.id)}>Contratar</Button>
                         <Button bg='rgba(224, 7, 7, .47)' color='white' w='24' onClick={() => handleRefuse(postulation.id)}>Rechazar</Button>
                     </CardFooter>
                 </CardBody>
-            );
-        });
-    };
+            )
+        })
+    }
 
     return (
         <Box display={isOpen ? 'block' : 'none'} position="fixed" zIndex="9999" top="0" bottom="0" left="0" right="0" bg="rgba(0, 0, 0, 0.5)" onClick={onClose}>
