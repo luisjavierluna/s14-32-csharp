@@ -135,7 +135,7 @@ const PostulableEvents = () => {
               )}
             </Box>                  
           )) :           
-            <Text fontSize='4xl'>No hay eventos disponibles</Text>             
+            <Text fontSize='4xl'>No hay eventos disponibles. </Text>             
         }
         </CardBody>        
     </Card>

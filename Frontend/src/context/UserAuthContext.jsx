@@ -13,7 +13,7 @@ export const UserAuthProvider = ({ children }) => {
     localStorage.setItem('profileImage', user.profileImage)         
     localStorage.setItem('contractorProfileImage', user.contractor.profileImage)
     localStorage.setItem('userId', user.id)
-    localStorage.setItem('vocations', JSON.stringify(user.contractor.vocations))       
+    localStorage.setItem('vocations', JSON.stringify(user.contractor.vocations))        
     setUserName(user.firstName)    
   }
 
@@ -24,7 +24,8 @@ export const UserAuthProvider = ({ children }) => {
     localStorage.removeItem('profileImage')
     localStorage.removeItem('contractorProfileImage') 
     localStorage.removeItem('userId') 
-    localStorage.removeItem('vocations') 
+    localStorage.removeItem('vocations')     
+    localStorage.removeItem('events') 
     setUserName(null)
   }
     

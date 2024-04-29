@@ -12,7 +12,7 @@ export default function Register () {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showPassword2, setShowPassword2] = useState(false)
-  const [imageUrl, setImageUrl] = useState('image') 
+  const [imageUrl, setImageUrl] = useState('https://res.cloudinary.com/diclhd7dz/image/upload/v1714418751/utmkjhn0ecfxwtryghxn.png') 
   const navigate = useNavigate()
 
   const validationSchema = Yup.object().shape({
@@ -96,6 +96,7 @@ export default function Register () {
         phoneNumber: newValues.phone, 
         profileImage: imageUrl,
       }
+      console.log(requestBody)
       await axios.post('https://www.eventplanner.somee.com/api/Acounts/SignIn', requestBody)   
       console.log(requestBody)
       navigate('/login')
@@ -143,6 +144,8 @@ export default function Register () {
                   <Box display='flex' flexDirection={{base:'column', lg:'row'}}  justifyContent='center' alignItems='center' gap='4'>
                     <Button variant='outline' borderRadius='3xl' fontSize='xs' boxSize='fit-content' color='#CC949F' py='1' onClick={handleImgSubmit}>Cargar Foto</Button>
                     <Input placeholder='Seleccionar Archivo' size='sm' w='80%' type='file' accept=".jpg, .jpeg, .png, .webp"  border='none'/>
+                    {imageUrl !== 'https://res.cloudinary.com/diclhd7dz/image/upload/v1714418751/utmkjhn0ecfxwtryghxn.png' &&
+                    <Text color='#263049' borderWidth='2px' p='1' textAlign='center'>Imagen cargada correctamente</Text>}
                   </Box>
               </Box>
               <Box textAlign='center' mt='4'>
