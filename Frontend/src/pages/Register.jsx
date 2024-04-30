@@ -9,10 +9,11 @@ import axios from 'axios'
 export default function Register () {  
   const [values, setValues] = useState({ email: '', password: '', password2: '', firstName: '', lastName: '', areacode: 0, phone: 0 })
   const [errors, setErrors] = useState({})
+  const [phoneError, setPhoneError] = useState()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showPassword2, setShowPassword2] = useState(false)
-  const [imageUrl, setImageUrl] = useState('image') 
+  const [imageUrl, setImageUrl] = useState('https://res.cloudinary.com/diclhd7dz/image/upload/v1714418751/utmkjhn0ecfxwtryghxn.png') 
   const navigate = useNavigate()
 
   const validationSchema = Yup.object().shape({
@@ -39,7 +40,7 @@ export default function Register () {
     firstName: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
     lastName: Yup.string().min(3, 'Mínimo 3 caractares').max(20, 'Máximo 20 caracteres').required('Campo requerido'),
     areacode: Yup.number().min(2, 'Mínimo 2 caractares').required('Campo requerido'),
-    phone: Yup.number().min(5, 'Mínimo 5 caractares').required('Campo requerido'),
+    phone: Yup.number().min(5, 'Mínimo 5 caractares').required('Campo requerido'),    
   })
 
   const togglePasswordVisibility = () => {
@@ -82,24 +83,30 @@ export default function Register () {
     event.preventDefault()
     try {
       const phoneNumber = `${values.areacode}${values.phone}`
-      const newValues = { ...values, phone: phoneNumber }
+      if (phoneNumber.length > 10) {
+        setPhoneError('La suma del código de área y el número de teléfono no puede superar los 10 caracteres')
+        return                
+      } else {
+        setPhoneError('')      
+        const newValues = { ...values, phone: phoneNumber }
 
-      await validationSchema.validate(newValues, { abortEarly: false })
-      setIsSubmitting(true)      
-      console.log(newValues) 
-      const requestBody = {
-        email: newValues.email,
-        firstName: newValues.firstName,
-        lastName: newValues.lastName,
-        password: newValues.password,
-        confirmPassword: newValues.password2, 
-        phoneNumber: newValues.phone, 
-        profileImage: imageUrl,
-      }
-      await axios.post('https://www.eventplanner.somee.com/api/Acounts/SignIn', requestBody)   
-      console.log(requestBody)
-      navigate('/login')
-    } catch (error) {
+        await validationSchema.validate(newValues, { abortEarly: false })
+        setIsSubmitting(true)      
+        console.log(newValues) 
+        const requestBody = {
+          email: newValues.email,
+          firstName: newValues.firstName,
+          lastName: newValues.lastName,
+          password: newValues.password,
+          confirmPassword: newValues.password2, 
+          phoneNumber: newValues.phone, 
+          profileImage: imageUrl,
+        }
+        console.log(requestBody)
+        await axios.post('https://www.eventplanner.somee.com/api/Acounts/SignIn', requestBody)   
+        console.log(requestBody)
+        navigate('/login')
+    }} catch (error) {
       const formErrors = {}
       if (error.inner) {
         error.inner.forEach((err) => {
@@ -139,10 +146,15 @@ export default function Register () {
                       <LoginInput id='lastName' name='Apellido' type='text' placeholder='Rodriguez'onChange={handleChange} errors={errors}/>
                       <LoginInput id='areacode' name='Código de area' type='number' placeholder='011' onChange={handleChange} errors={errors}/>
                       <LoginInput id='phone' name='Teléfono' type='number' placeholder='46239758' onChange={handleChange} errors={errors}/>
+                      {phoneError && (
+                        <Text color="red.500" fontSize="sm">{phoneError}</Text>
+                      )}
                   </Grid>
                   <Box display='flex' flexDirection={{base:'column', lg:'row'}}  justifyContent='center' alignItems='center' gap='4'>
                     <Button variant='outline' borderRadius='3xl' fontSize='xs' boxSize='fit-content' color='#CC949F' py='1' onClick={handleImgSubmit}>Cargar Foto</Button>
                     <Input placeholder='Seleccionar Archivo' size='sm' w='80%' type='file' accept=".jpg, .jpeg, .png, .webp"  border='none'/>
+                    {imageUrl !== 'https://res.cloudinary.com/diclhd7dz/image/upload/v1714418751/utmkjhn0ecfxwtryghxn.png' &&
+                    <Text color='#263049' borderWidth='2px' p='1' textAlign='center'>Imagen cargada correctamente</Text>}
                   </Box>
               </Box>
               <Box textAlign='center' mt='4'>
@@ -154,6 +166,7 @@ export default function Register () {
                   </Text>
                 </Flex>
                 <LoginButton bgcolor='#263049' color='white' name='Confirmar' isLoading={isSubmitting}/>
+                {errors && <Text color='red'>Error al cargar usuario</Text>}
                 <Text fontSize='xs' p='2'>            
                     ¿Ya tienes una cuenta? {' '}
                     <Link fontSize='xs' fontWeight='700' color='#263049' href='/login'>Click aquí para iniciar sesión.</Link>         

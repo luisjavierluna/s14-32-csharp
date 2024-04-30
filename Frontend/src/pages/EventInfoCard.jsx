@@ -150,9 +150,9 @@ const EventInfoCard = () => {
     }   
     
     const handleCardClick = (vocationId) => {            
-            const filteredPostulations = filterPostulationsByVocation(vocationId);
+            const filteredPostulations = filterPostulationsByVocation(vocationId)
             console.log("Postulaciones para la especialidad con ID", vocationId, ":", filteredPostulations);
-            setSelectedPostulations([...selectedPostulations, ...filteredPostulations, ...filteredPostulations])
+            setSelectedPostulations(filteredPostulations)
             onOpen() 
     }    
 

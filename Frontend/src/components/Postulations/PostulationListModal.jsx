@@ -9,41 +9,39 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
     const [postulationData, setPostulationData] = useState()
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token')
+        
+                const responseContractors = await axios.get('https://www.eventplanner.somee.com/api/Contractor/GetAll', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+        
+                const filteredContractors = responseContractors.data.filter(contractor =>
+                    postulations.map(postulation => postulation.contractorId).includes(contractor.id)
+                )
+        
+                setContractors(filteredContractors)
+        
+                const responsePostulations = await axios.get('https://www.eventplanner.somee.com/api/Postulation/GetAll', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
+        
+                const filteredPostulations = responsePostulations.data.filter(postulation =>
+                    postulations.map(post => post.id).includes(postulation.id)
+                )
+                console.log('postulationdata!', filteredPostulations)
+                setPostulationData(filteredPostulations)
+            } catch (error) {
+                console.error('Error al obtener información del evento:', error.message)
+            }
+        }    
         fetchData();
     }, [postulations])
-
-    const fetchData = async () => {
-        try {
-            const token = localStorage.getItem('token')
-    
-            const responseContractors = await axios.get('https://www.eventplanner.somee.com/api/Contractor/GetAll', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-    
-            const filteredContractors = responseContractors.data.filter(contractor =>
-                postulations.map(postulation => postulation.contractorId).includes(contractor.id)
-            )
-    
-            setContractors(filteredContractors)
-    
-            const responsePostulations = await axios.get('https://www.eventplanner.somee.com/api/Postulation/GetAll', {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-    
-            const filteredPostulations = responsePostulations.data.filter(postulation =>
-                postulations.map(post => post.id).includes(postulation.id)
-            )
-            console.log('postulationdata!', filteredPostulations)
-            setPostulationData(filteredPostulations)
-        } catch (error) {
-            console.error('Error al obtener información del evento:', error.message)
-        }
-    }
-    
 
     const handleAccept = async (id) => {
         try {
@@ -58,7 +56,7 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
         } catch (error) {
             console.error('Error al enviar los cambios:', error.message)
         }
-    };
+    }
 
     const handleRefuse = async (id) => {
         try {
@@ -73,12 +71,14 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
         } catch (error) {
             console.error('Error al enviar los cambios:', error.message)
         }
-    };
+    }
 
     const renderPostulations = () => {
+        console.log('postulations', postulations)
         return postulations.map((postulation, index) => {
             const contractor = contractors.find(contractor => contractor.id === postulation.contractorId)
-
+            console.log('contractor', contractor)
+            console.log('postulation', postulation)
             return (
                 <CardBody key={index} width='100%' mt='-4' fontFamily='body' px='6' display='flex' flexDirection='column'>
                     <Box>
@@ -88,11 +88,11 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
                         <Box>
                             <Image src={contractor?.profileImage || ImageAvatar} borderRadius='xl' w={{base:'52', md:'60'}} h={{base:'52', md:'60'}} />
                         </Box>
-                        <Box w={{base:'52', md:'60'}} h={{base:'52', md:'60'}} bg='rgba(204, 148, 159, .2)' borderRadius='xl' p='2' display='flex' flexDirection='column' justifyContent='space-evenly'>
+                        <Box w={{base:'full', md:'60'}} h={{md:'60'}} bg='rgba(204, 148, 159, .2)' borderRadius='xl' p='2' display='flex' flexDirection='column' justifyContent='space-evenly'>
                             <Box>
                                 <Text textAlign='center' fontSize='xl' fontWeight='semibold'>{contractor?.businessName || 'Razon Social'}</Text>
                             </Box>                            
-                            <Text h='10vh' overflowY='scroll'>{postulationData?postulationData[0].message : 'Mensaje de la postulación...'}</Text>
+                            <Text borderWidth='2px' m='2' h={{base:'15vh',md:'10vh'}} p='1' overflowY='scroll'>{postulationData?postulationData[0].message : 'Mensaje de la postulación...'}</Text>
                             <Box display='flex' alignItems='center' gap='2'>
                                 <HiOutlineCurrencyDollar size='25' />
                                 <Text>{postulation.budget || '30000'}</Text>
@@ -122,8 +122,15 @@ const PostulationListModal = ({ postulations, isOpen, onClose }) => {
 
     return (
         <Box display={isOpen ? 'block' : 'none'} position="fixed" zIndex="9999" top="0" bottom="0" left="0" right="0" bg="rgba(0, 0, 0, 0.5)" onClick={onClose}>
-            <Card position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" width="90%" maxWidth="600px" bg="white" p='4' borderRadius="3xl" boxShadow="lg" onClick={(e) => e.stopPropagation()} color='#263049' flexDirection='column' alignItems='center' minH='50vh' maxH='80vh' overflowY='scroll'>
-                {renderPostulations()}
+            <Card position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" width="90%" maxWidth="600px" bg="white" p='4' borderRadius="3xl" boxShadow="lg" onClick={(e) => e.stopPropagation()} color='#263049' flexDirection='column' alignItems='center' minH='50vh' maxH='80vh' overflowY='auto'>
+                { postulationData && postulationData?.length > 0
+                ?
+                renderPostulations()
+                :
+                <CardBody width='100%' fontFamily='body' px='6' display='flex' flexDirection='column' alignItems='center' justifyContent='center'>
+                    <Text fontSize='4xl'>No hay postulaciones realizadas. </Text>
+                </CardBody>
+                }
             </Card>
         </Box>
     );
