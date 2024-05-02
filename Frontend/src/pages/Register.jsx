@@ -8,7 +8,7 @@ import axios from 'axios'
 
 export default function Register () {  
   const [values, setValues] = useState({ email: '', password: '', password2: '', firstName: '', lastName: '', areacode: 0, phone: 0 })
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState('')
   const [phoneError, setPhoneError] = useState()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
@@ -110,12 +110,12 @@ export default function Register () {
       const formErrors = {}
       if (error.inner) {
         error.inner.forEach((err) => {
-          formErrors[err.path] = err.message;
+          formErrors[err.path] = err.message
         })
       } else {
         formErrors.general = error.message
-      setErrors(formErrors)
-      }
+      }         
+      setErrors(formErrors)      
     }
     setIsSubmitting(false)
   }
@@ -160,13 +160,11 @@ export default function Register () {
               <Box textAlign='center' mt='4'>
                 <Flex alignItems='center' justifyContent='center'>
                   <IoCheckmarkCircleOutline size='20'/> 
-                  <Text fontSize='xs' p='2' display='flex' flexDirection={{base:'column', md:'row'}} gap='1'>                                         
-                      Acepto
-                      <Text fontSize='xs' fontWeight='700' color='#263049' cursor='text'>términos y condiciones.</Text>        
-                  </Text>
+                  <Text fontSize='xs' p='2' display='flex' flexDirection={{base:'column', md:'row'}} gap='1'>Acepto</Text>
+                  <Text fontSize='xs' fontWeight='700' color='#263049' cursor='text'>términos y condiciones.</Text>  
                 </Flex>
                 <LoginButton bgcolor='#263049' color='white' name='Confirmar' isLoading={isSubmitting}/>
-                {errors && <Text color='red'>Error al cargar usuario</Text>}
+                {errors && <Text color='red'>Error al cargar usuario</Text>}                
                 <Text fontSize='xs' p='2'>            
                     ¿Ya tienes una cuenta? {' '}
                     <Link fontSize='xs' fontWeight='700' color='#263049' href='/login'>Click aquí para iniciar sesión.</Link>         
