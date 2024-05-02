@@ -107,8 +107,9 @@ const ContractorForm = () => {
               }
           })
           console.log(requestBody)
+          console.log('Respuesta API: ', response.data)
           localStorage.setItem('contractorProfileImage', response.data.profileImage)
-          localStorage.setItem('vocations', JSON.stringify(response.data.vocations))
+          localStorage.setItem('vocations', JSON.stringify(selectedExperts))
 
           const roleResponse = await axios.post('https://www.eventplanner.somee.com/api/Acounts/ChangeRole',null,{
             headers: {
@@ -204,10 +205,8 @@ const ContractorForm = () => {
                     <Box textAlign='center' mt='4' w='100%'>
                         <Flex alignItems='center' justifyContent='center'>
                         <IoCheckmarkCircleOutline size='20'/> 
-                        <Text fontSize='xs' p='2' display='flex' flexDirection={{base:'column', md:'row'}} gap='1'>                                         
-                            Acepto
-                            <Text fontSize='xs' fontWeight='700' color='#263049' cursor='text'>términos y condiciones.</Text>        
-                        </Text>
+                        <Text fontSize='xs' p='2' display='flex' flexDirection={{base:'column', md:'row'}} gap='1'>Acepto</Text>
+                        <Text fontSize='xs' fontWeight='700' color='#263049' cursor='text'>términos y condiciones.</Text> 
                         </Flex>                        
                         <LoginButton bgcolor='#263049' color='white' name='Confirmar' isLoading={isSubmitting}/>                        
                     </Box>
