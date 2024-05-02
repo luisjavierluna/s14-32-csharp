@@ -1,20 +1,16 @@
 ﻿using eventPlannerBack.Models.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace eventPlannerBack.DAL.Interfaces
 {
     public interface IUserRepository
     {
-        Task<bool> SignIn(User modelo, string password);
+        Task<IdentityResult> SignIn(User modelo, string password);
 
-        Task<bool> UpdateByDataId(int datosId, string email);
+        Task<bool> UpdateByClientId(string clientId, string email);
 
         Task<User> GetByEmailAsync(string email);
-
-
+        Task<string> GetUserRole(User user);
+        Task<string> ChangeRole(string userId);
     }
 }

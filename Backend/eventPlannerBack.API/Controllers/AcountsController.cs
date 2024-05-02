@@ -1,36 +1,38 @@
-﻿using eventPlannerBack.BLL.Interfaces;
+﻿using eventPlannerBack.API.Exceptions;
+using eventPlannerBack.BLL.Behaviors;
+using eventPlannerBack.BLL.Interfaces;
 using eventPlannerBack.Models.Entities;
 using eventPlannerBack.Models.VModels;
 using eventPlannerBack.Models.VModels.Auth;
-using eventPlannerBack.Models.VModels.DatosDTO;
+using eventPlannerBack.Models.VModels.ContractorDTO;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace eventPlannerBack.API.Controllers
 {
-
-    
-    [EnableCors("ReglasCors")]
+    [EnableCors("CorsRules")]
     [Route("api/[controller]")]
     [ApiController]
     public class AcountsController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly SignInManager<User> _signInManager;
-        private readonly ITokenService _tokenService;
-        private readonly IGenericService<DataCreationDTO, DataDTO> _dataService;
+        private readonly IGenericService<ContractorCreationDTO, ContractorDTO> _contractorService;
+        private readonly ValidationBehavior<UserCredentialsDTO> _validationBehavior;
 
-        public AcountsController(IUserService userService,SignInManager<User> signInManager, ITokenService tokenService, IGenericService<DataCreationDTO, DataDTO> dataService)
+        public AcountsController(
+            IUserService userService,
+            SignInManager<User> signInManager, 
+            IGenericService<ContractorCreationDTO, ContractorDTO> contractorService,
+            ValidationBehavior<UserCredentialsDTO> validationBehavior)
         {
-            this._userService = userService;
-            this._signInManager = signInManager;
-            this._tokenService = tokenService;
-            this._dataService = dataService;
+            _userService = userService;
+            _signInManager = signInManager;
+            _contractorService = contractorService;
+            _validationBehavior = validationBehavior;
         }
 
         [HttpPost("SignIn")]
@@ -38,64 +40,94 @@ namespace eventPlannerBack.API.Controllers
         {
             try
             {
-                bool Result = await _userService.SignIn(model);
-               if (!Result) 
-                { 
+                var Result = await _userService.SignIn(model);
 
-                    return BadRequest("No se pudo agregar su User");
+                if (!Result.Succeeded) 
+                { 
+                    return BadRequest(Result.Errors);
                 }
 
-           
-                DataCreationDTO datas = new DataCreationDTO()
-                {
-                    Name = model.Name,
-                    Surname = model.Surname
-                };
-
-                var registeredData = await _dataService.SignIn(datas);
-
-                //model.DataId = registeredData.Id;
-                var result = await _userService.UpdateDataId(registeredData.Id, model.Email);
-
-                var token = _tokenService.GenerateToken(model.Email, 1);
-
-                AuthDTO authResponse = new() { 
-                           
-                Token = token.Result
-                };
+                AuthDTO authResponse = await _userService.GetCredentialsAsync(model.Email);
 
                 return Ok(authResponse);
-
             }
-            catch (Exception)
+            catch (Exception e)
             {
-
-                return StatusCode(500, "Error interno del servidor");
+                return StatusCode(500, e.Message);
             }
         }
-
 
         [HttpPost("Login")]
         public async Task<ActionResult<AuthDTO>> Login([FromBody] UserCredentialsDTO userCredentials)
         {
             try
             {
-                var result = await _signInManager.PasswordSignInAsync(userCredentials.Email, userCredentials.Password, isPersistent: false, lockoutOnFailure: false);
+                await _validationBehavior.ValidateFields(userCredentials);
 
-                if (!result.Succeeded) return BadRequest("Credenciales incorrectas");
-            
+                var result = await _signInManager.PasswordSignInAsync
+                    (
+                    userCredentials.Email, 
+                    userCredentials.Password, 
+                    isPersistent: false, 
+                    lockoutOnFailure: false
+                    );
 
-                return Ok(await _userService.GetCredentialsAsync(userCredentials.Email));
+                if (!result.Succeeded) return BadRequest("Wrong Credentials");
+
+                AuthDTO authResponse = await _userService.GetCredentialsAsync(userCredentials.Email);
+
+                return Ok(authResponse);
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("ChangeRole")]
+        public async Task<ActionResult<AuthDTO>> ChangeRole()
+        {
+            bool CUITConfirmed = await IsContractorCUITConfirmed();
+            if (!CUITConfirmed) return BadRequest("CUIT needs to be added to enable role change");
+
+            var claim = HttpContext.User.Claims.Where(c => c.Type == "id").FirstOrDefault();
+            var userId = claim.Value;
+
+            if (userId == null)
+                return BadRequest("Id was not provided");
+
+            var newRole = await _userService.ChangeRole(userId);
+
+            var claim2 = HttpContext.User.Claims.Where(c => c.Type == "mail").FirstOrDefault();
+            var mail = claim2.Value;
+
+            AuthDTO authResponse = await _userService.GetCredentialsAsync(mail);
+
+            return Ok(authResponse);
+        }
+
+        private async Task<bool> IsContractorCUITConfirmed()
+        {
+            try
+            {
+                var claim = HttpContext.User.Claims.Where(c => c.Type == "contractorid").FirstOrDefault();
+                var contractorId = claim.Value;
+
+                if (contractorId == null) throw new NotFoundException("Id was not provided");
+
+                var contractor = await _contractorService.GetById(contractorId);
+
+                bool isConfirmed = contractor.CUIT != null ? true : false;
+
+                return isConfirmed;
             }
             catch (Exception)
             {
 
-                return StatusCode(500, "Error interno del servidor");
+                throw;
             }
-
-
         }
-
-
     }
 }

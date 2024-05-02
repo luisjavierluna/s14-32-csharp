@@ -27,7 +27,13 @@ namespace eventPlannerBack.BLL.Service
 
                 var roles = await userManager.GetRolesAsync(user);
 
-                var claims = new List<Claim>() { new Claim("mail", email), new Claim("id", user.Id) };
+                var claims = new List<Claim>() 
+                { 
+                    new Claim("mail", email), 
+                    new Claim("id", user.Id), 
+                    new Claim("clientid", user.ClientId),
+                    new Claim("contractorid", user.ContractorId)
+                };
 
                 foreach (var role in roles)
                 {
